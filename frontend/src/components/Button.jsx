@@ -1,5 +1,7 @@
+import React from "react"
+
 export default function Button({ text, onClick, className }) {
   return (
-    <button className={className || "bg-primary"} onClick={onClick}>{text}</button>
+    <button className="btn" onClick={onClick}>{text}</button>
   )
 }

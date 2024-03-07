@@ -3,12 +3,13 @@
 @tailwind components;
 @tailwind utilities;
 
+
 :root {
   font-family: 'Montserrat', sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
-  color-scheme: light;
+  color-scheme: light dark;
   color: #231F20;
   background-color: #f1f1f1;
 
@@ -16,4 +17,36 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  margin: 0 auto;
+  text-align: center;
+}
+
+.btn {
+  @apply py-2 px-6 rounded-full bg-tertiary text-md font-medium hover:bg-tertiary-light;
+}
+
+.background-container {
+  background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.5)), url('./assets/images/banner.webp');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.login-container{
+  @apply flex justify-end items-center min-h-screen background-container;
+}
+
+.login-form {
+  @apply mr-[17px] p-10 flex flex-col gap-6 bg-primary rounded-3xl shadow-custom;
+}
+
+.login-title {
+  @apply text-xl font-extrabold text-center
+}
+
+.login-buttons-container {
+  @apply grid grid-cols-2 gap-2 place-items-center
 }

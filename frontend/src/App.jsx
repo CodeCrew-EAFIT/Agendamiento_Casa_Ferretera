@@ -1,4 +1,3 @@
-import './App.css'
 import React from 'react'
 import {
   BrowserRouter as Router,
@@ -14,17 +13,13 @@ import AddPromotion from './pages/Boss/AddPromotion'
 function App () {
   return (
     <Router>
-      <div>
-        <h1>
-          Agendamiento Casa Ferretera
-        </h1>
+
         <Routes>
           <Route path="/" element={<ChooseUser />} />
           <Route path='/horario' element={<Home />} />
           <Route path='/usuarios' element={<Users />} />
           <Route path='/agendar' element={<AddPromotion />} />
         </Routes>
-      </div>
     </Router>
   )
 }
