@@ -1,9 +1,12 @@
 import React from 'react'
+import { useUserSession } from '../utils/UserSessionContext'
+import Layout from '../containers/Layout'
 
 export default function Home () {
+  const { userType } = useUserSession()
   return (
-    <div>
-      <h1>Horario</h1>
-    </div>
+    <Layout>
+      <h1>{`Horario para el usuario ${userType}`}</h1>
+    </Layout>
   )
 }

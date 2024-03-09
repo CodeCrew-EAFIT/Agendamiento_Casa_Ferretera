@@ -25,14 +25,20 @@
 }
 
 .btn {
-  @apply py-2 px-6 rounded-full bg-tertiary text-md font-medium hover:bg-tertiary-light;
+  @apply py-2 px-6 rounded-full bg-tertiary text-lg font-medium hover:bg-tertiary-light;
 }
 
 .background-container {
-  background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.5)), url('./assets/images/banner.webp');
+  background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.5)), url('./assets/images/banner_lowres.webp');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+  transition: background-image 0.5s ease-in-out;
+}
+
+/* Cuando la imagen de fondo está cargada, actualiza a la imagen de alta resolución */
+.background-container.loaded {
+  background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.5)), url('./assets/images/banner.webp');
 }
 
 .login-container{
@@ -44,9 +50,25 @@
 }
 
 .login-title {
-  @apply text-xl font-extrabold text-center
+  @apply text-xxl font-extrabold text-center
 }
 
 .login-buttons-container {
   @apply grid grid-cols-2 gap-2 place-items-center
+}
+
+.svg-size-override svg {
+  @apply w-[28px] h-[28px]
+}
+
+.nav-container {
+  @apply flex gap-12 items-center px-12 mt-6
+}
+
+.nav {
+  @apply flex bg-secondary p-2 px-4 text-lg text-white rounded-full justify-between w-full
+}
+
+.user-container {
+  @apply flex items-center gap-1
 }
