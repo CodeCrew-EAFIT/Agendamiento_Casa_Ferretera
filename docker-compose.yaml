@@ -1,0 +1,41 @@
+version: '3.4'
+services:
+  frontend:
+    image: julianv08/fireflyfrontend:latest
+    container_name: frontend
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 2G
+        reservations:
+          cpus: '1'
+          memory: 2G
+    restart: always
+    links:
+      - backend
+    ports:
+      - 80:80
+    networks:
+      - casaferreteranet
+  backend:
+    image: julianv08/fireflybackend:latest
+    container_name: backend
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 2G
+        reservations:
+          cpus: '1'
+          memory: 2G
+    restart: always
+    volumes:
+      - ./media:/app/media 
+    ports:
+      - 8081:8081
+    networks:
+      - casaferreteranet
+networks:
+  casaferreteranet:
+    driver: bridge
