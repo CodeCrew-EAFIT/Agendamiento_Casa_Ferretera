@@ -1,7 +1,7 @@
 version: '3.4'
 services:
   frontend:
-    image: julianv08/fireflyfrontend:latest
+    image: julianv08/casaferreterafrontend:latest
     container_name: frontend
     deploy:
       resources:
@@ -19,7 +19,7 @@ services:
     networks:
       - casaferreteranet
   backend:
-    image: julianv08/fireflybackend:latest
+    image: julianv08/casaferreterabackend:latest
     container_name: backend
     deploy:
       resources:
