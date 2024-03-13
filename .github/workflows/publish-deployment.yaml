@@ -16,7 +16,7 @@ jobs:
           with:
             username: ${{ secrets.DOCKERHUB_USERNAME }}
             password: ${{ secrets.DOCKERHUB_PASSWORD }}
-        - name: Build djangoApi and publish to Docker Hub
+        - name: Build fastAPI and publish to Docker Hub
           uses: docker/build-push-action@v2
           with:
             context: backend
@@ -53,7 +53,7 @@ jobs:
             host: ${{ secrets.GCE_INSTANCE_IP_STAGING }}
             username: ${{ secrets.GCE_SSH_USERNAME }}
             key: ${{ secrets.GCE_SSH_PRIVATE_KEY }}
-            source: "docker-compose.yml"
+            source: "docker-compose.yaml"
             target: "/home/${{ secrets.GCE_SSH_USERNAME }}/"
 
         - name: SSH into GCP instance and deploy CasaFerretera
