@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useUserSession } from '../utils/UserSessionContext'
+import { useUserSession } from '../../utils/UserSessionContext.jsx'
 import PropTypes from 'prop-types'
-import NavBar from '../components/NavBar.jsx'
-import ContentContainer from './ContentContainer.jsx'
+import NavBar from '../../components/NavBar/index.jsx'
+import ContentContainer from '../Content/index.jsx'
 
 export default function Layout ({ children }) {
   const navigate = useNavigate()

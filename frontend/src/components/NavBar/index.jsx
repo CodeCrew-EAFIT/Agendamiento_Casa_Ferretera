@@ -1,20 +1,16 @@
 import React from 'react'
 import { useLocation } from 'react-router-dom'
-import { useUserSession } from '../utils/UserSessionContext'
+import { useUserSession } from '../../utils/UserSessionContext'
 import { ReactSVG } from 'react-svg'
-import logo from '../assets/images/logo-light.png'
-import customerIcon from '../assets/icons/customer.svg'
-// import shop from '../assets/icons/shop.svg'
-// import location from '../assets/icons/location.svg'
+import logo from '../../assets/images/logo-light.png'
+import customerIcon from '../../assets/icons/customer.svg'
 
 export default function NavBar () {
-  let location = useLocation()
+  const location = useLocation()
   const { userType } = useUserSession()
 
   const blockUsers = ['Administrador', 'Supervisor']
   const reportUsers = ['Administrador', 'Jefe Directo']
-
-  console.log(location.pathname)
 
   let customerName = ''
   if (userType === 'Supervisor') {
@@ -45,12 +41,12 @@ export default function NavBar () {
         <ul className='flex gap-8'>
           <li className={`cursor-pointer ${location.pathname === '/horario' ? 'font-bold' : ''}`}>Horario</li>
           {userType === 'Administrador' && <li className={`cursor-pointer ${location.pathname === '/usuarios' ? 'font-bold' : ''}`}>Usuarios</li>}
-          {userType === 'Administrador' && <li className={`cursor-pointer`}>Dashboard</li>}
-          {userType === 'Jefe Directo' && <li className={`cursor-pointer`}>Promotores</li>}
-          {userType === 'Supervisor' && <li className={`cursor-pointer`}>Calificar</li>}
-          {blockUsers.includes(userType) && <li className={`cursor-pointer`}>Bloquear</li>}
-          {reportUsers.includes(userType) && <li className={`cursor-pointer`}>Reportes</li>}
-          {userType === 'Promotor' && <li className={`cursor-pointer`}>Bitacora</li>}
+          {userType === 'Administrador' && <li className={'cursor-pointer'}>Dashboard</li>}
+          {userType === 'Jefe Directo' && <li className={'cursor-pointer'}>Promotores</li>}
+          {userType === 'Supervisor' && <li className={'cursor-pointer'}>Calificar</li>}
+          {blockUsers.includes(userType) && <li className={'cursor-pointer'}>Bloquear</li>}
+          {reportUsers.includes(userType) && <li className={'cursor-pointer'}>Reportes</li>}
+          {userType === 'Promotor' && <li className={'cursor-pointer'}>Bitacora</li>}
         </ul>
       </div>
     </div>

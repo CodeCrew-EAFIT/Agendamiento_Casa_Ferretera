@@ -2,7 +2,7 @@ import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useUserSession } from '../utils/UserSessionContext'
 import Button from '../components/Button'
-import ContentContainer from '../containers/ContentContainer'
+import ContentContainer from '../containers/Content'
 
 export default function ChooseUser () {
   const navigate = useNavigate()
