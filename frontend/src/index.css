@@ -29,7 +29,7 @@
 }
 
 .background-container {
-  background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.5)), url('./assets/images/banner_lowres.webp');
+  background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.5)), url('./assets/images/banner-lowres.webp');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
