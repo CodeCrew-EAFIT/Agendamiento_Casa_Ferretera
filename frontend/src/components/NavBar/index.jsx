@@ -46,7 +46,7 @@ export default function NavBar () {
           {userType === 'Supervisor' && <li className={'cursor-pointer'}>Calificar</li>}
           {blockUsers.includes(userType) && <li className={'cursor-pointer'}>Bloquear</li>}
           {reportUsers.includes(userType) && <li className={'cursor-pointer'}>Reportes</li>}
-          {userType === 'Promotor' && <li className={'cursor-pointer'}>Bitacora</li>}
+          {userType === 'Promotor' && <li className={'cursor-pointer'}>Bitácora</li>}
         </ul>
       </div>
     </div>
