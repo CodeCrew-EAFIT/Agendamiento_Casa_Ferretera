@@ -1,4 +1,5 @@
 import React from 'react'
+import Nav from './Nav'
 import Row from './Row'
 import Cell from './Cell'
 import TimeSlot from './TimeSlot'
@@ -22,19 +23,18 @@ export default function Calendar () {
   ))
 
   return (
-    <div>
-      <div>
-      </div>
-      <div className="flex justify-center text-secondary text-center">
-        <div className="relative">
-          {timeSlots}
+      <div className='calendar-container'>
+        <Nav />
+        <div className="calendar-table-container">
+          <div className="relative text-sm">
+            {timeSlots}
+          </div>
+          <table>
+            <tbody>
+              {tableContent}
+            </tbody>
+          </table>
         </div>
-        <table>
-          <tbody>
-            {tableContent}
-          </tbody>
-        </table>
       </div>
-    </div>
   )
 }

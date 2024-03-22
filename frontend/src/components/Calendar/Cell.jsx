@@ -4,19 +4,22 @@ import { AVAILABLE_HOURS } from '../../utils/constants'
 
 export default function Cell ({ rowCount, columnCount }) {
   const isFirstColumn = columnCount === 0
+  const isLastColumn = columnCount === 7
   const isLastRow = rowCount === AVAILABLE_HOURS.length * 2 - 2
 
   const firstColumnStyles = rowCount % 2 === 0 && 'calendar-first-column'
 
-  if (isFirstColumn) return <td className={`calendar-cell ${firstColumnStyles} border-secondary`}></td>
+  if (isFirstColumn) return <td className={`${firstColumnStyles}`}></td>
 
-  const rowCheck = rowCount % 2 === 0 ? 'calendar-cell-dotted' : 'border-x-2'
+  const rowCheck = rowCount % 2 === 0 ? 'calendar-cell-dotted' : ''
 
   const borderStyle = isLastRow
-    ? 'border-t-2 border-x-2'
+    ? 'border-t-[1.5px]'
     : rowCheck
 
-  return <td className={`calendar-cell ${borderStyle} border-secondary`}></td>
+  if (isLastColumn) return <td className={`calendar-last-column ${borderStyle}`}></td>
+
+  return <td className={`calendar-cell ${borderStyle}`}></td>
 }
 
 Cell.propTypes = {

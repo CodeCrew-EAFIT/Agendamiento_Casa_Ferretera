@@ -62,7 +62,7 @@
 }
 
 .nav-container {
-  @apply flex gap-12 items-center px-12 mt-6
+  @apply flex gap-12 items-center px-4 mt-6
 }
 
 .nav {
@@ -78,30 +78,48 @@
 }
 
 .border-dotted {
-  border-bottom: 2px dotted #718096; /* Asumiendo que #718096 es el color que deseas para el borde */
+  border-bottom: 1.5px dotted #718096;
+}
+
+.calendar-container {
+  @apply w-[985px] border-[15px] border-secondary rounded-3xl;
+}
+
+.calendar-nav {
+  @apply flex items-center justify-between h-[50px] pl-[80px] text-md text-secondary font-bold;
+}
+
+.calendar-talbe-container {
+  @apply flex justify-center text-secondary text-center;
 }
 
 .calendar-cell {
-  @apply h-[24px] w-[115px];
+  @apply h-[24px] w-[124px] border-l-[1.5px] border-secondary;
 }
 
 .calendar-cell-dotted{
-  border: 2px solid;
-  border-bottom: 2px dotted;  /* Borde inferior punteado y azul */
+  border: 1.5px solid;
+  border-bottom: 1.5px dotted;
+  border-right: 0;
+  border-color: #88868B;
 }
 
 .calendar-first-column {
-  position: relative;
+  @apply relative h-[24px] w-[80px];
+}
+
+.calendar-last-column {
+  @apply relative h-[24px] w-[134px] border-l-[1.5px] border-secondary;
 }
 
 .calendar-first-column::after {
   content: '';
   position: absolute;
   top: -1px;
-  right: 0; /* Comienza desde el lado izquierdo */
-  width: 10%; /* El ancho del pseudo-elemento representa el 20% del ancho del elemento */
-  height: 2px; /* Altura del borde, ajusta según necesites */
-  background: #88868B; /* Color del borde, cambia según necesites */
+  right: 0;
+  width: 10%;
+  height: 1.5px;
+  background: #88868B;
 }
 
 

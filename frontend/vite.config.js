@@ -15,7 +15,7 @@ export default defineConfig({
     origin: 'http://0.0.0.0:80'
   },
   test: {
-    environment: "jsdom",
+    environment: 'jsdom',
     globals: true
   }
 })

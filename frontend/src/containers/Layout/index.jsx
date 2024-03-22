@@ -16,7 +16,7 @@ export default function Layout ({ children }) {
   }, [userType, navigate])
 
   return (
-    <div>
+    <div className='w-[1000px] mx-auto'>
       <NavBar />
       <ContentContainer>
         {children}
