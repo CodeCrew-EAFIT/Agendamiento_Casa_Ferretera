@@ -5,14 +5,14 @@ export default defineConfig({
   base: '/',
   plugins: [react()],
   preview: {
-    port: 3000,
+    port: 80,
     strictPort: true
   },
   server: {
-    port: 3000,
+    port: 80,
     strictPort: true,
     host: true,
-    origin: 'http://localhost:3000'
+    origin: 'http://0.0.0.0:80'
   },
   test: {
     environment: 'jsdom',
