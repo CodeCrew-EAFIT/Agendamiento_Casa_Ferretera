@@ -61,8 +61,10 @@
   @apply w-[28px] h-[28px]
 }
 
+/* NAVBAR */
+
 .nav-container {
-  @apply flex gap-12 items-center px-4 mt-6
+  @apply flex gap-12 items-center px-4 mt-6 mb-[30px]
 }
 
 .nav {
@@ -71,6 +73,32 @@
 
 .user-container {
   @apply flex items-center gap-1
+}
+
+/* CALENDAR */
+
+.store-bar {
+  @apply mb-[30px] flex justify-between items-center
+}
+
+.store-select-container {
+  @apply relative flex items-center justify-between w-[544px] h-[52px] border-[3.5px] border-secondary rounded-full text-left cursor-pointer
+}
+
+.store-select {
+  @apply flex items-center justify-between w-full h-full pl-[23px]
+}
+
+.expand-arrow-container svg {
+  @apply w-[18px] h-[18px]
+}
+
+.store-dropdown {
+  @apply absolute z-20 top-11 left-4 bg-primary border-[3.5px] border-secondary rounded-md w-[500px]
+}
+
+.store-option {
+  @apply text-xl cursor-pointer hover:bg-secondary hover:text-primary p-2
 }
 
 .calendar {
@@ -82,11 +110,11 @@
 }
 
 .calendar-container {
-  @apply w-[985px] border-[15px] border-secondary rounded-3xl;
+  @apply w-[985px] border-[15px] border-secondary rounded-3xl
 }
 
 .calendar-nav {
-  @apply flex items-center justify-between h-[50px] pl-[80px] text-md text-secondary font-bold;
+  @apply flex items-center justify-between h-[50px] pl-[80px] text-md text-secondary font-bold
 }
 
 .calendar-talbe-container {

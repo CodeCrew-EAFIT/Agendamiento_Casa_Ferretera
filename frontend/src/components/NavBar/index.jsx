@@ -9,8 +9,8 @@ export default function NavBar () {
   const location = useLocation()
   const { userType } = useUserSession()
 
-  const blockUsers = ['Administrador', 'Supervisor']
-  const reportUsers = ['Administrador', 'Jefe Directo']
+  const BLOCK_USERS = ['Administrador', 'Supervisor']
+  const REPORT_USERS = ['Administrador', 'Jefe Directo']
 
   let customerName = ''
   if (userType === 'Supervisor') {
@@ -41,11 +41,11 @@ export default function NavBar () {
         <ul className='flex gap-8'>
           <li className={`cursor-pointer ${location.pathname === '/horario' ? 'font-bold' : ''}`}>Horario</li>
           {userType === 'Administrador' && <li className={`cursor-pointer ${location.pathname === '/usuarios' ? 'font-bold' : ''}`}>Usuarios</li>}
+          {BLOCK_USERS.includes(userType) && <li className={'cursor-pointer'}>Bloquear</li>}
           {userType === 'Administrador' && <li className={'cursor-pointer'}>Dashboard</li>}
           {userType === 'Jefe Directo' && <li className={'cursor-pointer'}>Promotores</li>}
           {userType === 'Supervisor' && <li className={'cursor-pointer'}>Calificar</li>}
-          {blockUsers.includes(userType) && <li className={'cursor-pointer'}>Bloquear</li>}
-          {reportUsers.includes(userType) && <li className={'cursor-pointer'}>Reportes</li>}
+          {REPORT_USERS.includes(userType) && <li className={'cursor-pointer'}>Reportes</li>}
           {userType === 'Promotor' && <li className={'cursor-pointer'}>Bitacora</li>}
         </ul>
       </div>
