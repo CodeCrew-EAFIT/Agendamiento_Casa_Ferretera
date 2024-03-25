@@ -1,52 +1,54 @@
 import React from 'react'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { useUserSession } from '../../utils/UserSessionContext'
 import { ReactSVG } from 'react-svg'
 import logo from '../../assets/images/logo-light.png'
 import customerIcon from '../../assets/icons/customer.svg'
+import { ADMIN, CHIEF, SUPERVISOR, PROMOTER, ADMIN_USERS, BLOCK_USERS, USER_TO_NAME } from '../../utils/constants'
 
 export default function NavBar () {
   const location = useLocation()
-  const { userType } = useUserSession()
+  const navigate = useNavigate()
+  const { userType, setUserSession } = useUserSession()
 
-  const BLOCK_USERS = ['Administrador', 'Supervisor']
-  const REPORT_USERS = ['Administrador', 'Jefe Directo']
+  const customerName = USER_TO_NAME[userType]
 
-  let customerName = ''
-  if (userType === 'Supervisor') {
-    customerName = 'Juan Fernando G.'
-  }
-  if (userType === 'Administrador') {
-    customerName = 'Admin.'
-  }
-  if (userType === 'Jefe Directo') {
-    customerName = 'Carolina S.'
-  }
-  if (userType === 'Promotor') {
-    customerName = 'Maria Paula A.'
+  const isAdmin = userType === ADMIN
+  const isChief = userType === CHIEF
+  const isSupervisor = userType === SUPERVISOR
+  const isPromoter = userType === PROMOTER
+  const isBlockUser = BLOCK_USERS.includes(userType)
+  const isAdminUser = ADMIN_USERS.includes(userType)
+
+  const scheduleStyle = location.pathname.includes('/horario') ? 'font-bold' : ''
+  const userStyle = location.pathname.includes('/usuarios') ? 'font-bold' : ''
+
+  const handleLogout = () => {
+    setUserSession(null)
   }
 
   return (
     <div className='nav-container'>
-      <img className='w-[95px]' src={logo} alt='logo' />
+      <img className='w-[95px] cursor-pointer' src={logo} alt='logo' onClick={() => navigate('/horario')} />
       <div className='nav'>
         <div className='user-container'>
           <ReactSVG
             src={customerIcon}
             wrapper='span'
-            className='svg-size-override'
+            className='svg-size-override cursor-pointer'
+            onClick={handleLogout}
           />
           <p>{customerName}</p>
         </div>
         <ul className='flex gap-8'>
-          <li className={`cursor-pointer ${location.pathname === '/horario' ? 'font-bold' : ''}`}>Horario</li>
-          {userType === 'Administrador' && <li className={`cursor-pointer ${location.pathname === '/usuarios' ? 'font-bold' : ''}`}>Usuarios</li>}
-          {BLOCK_USERS.includes(userType) && <li className={'cursor-pointer'}>Bloquear</li>}
-          {userType === 'Administrador' && <li className={'cursor-pointer'}>Dashboard</li>}
-          {userType === 'Jefe Directo' && <li className={'cursor-pointer'}>Promotores</li>}
-          {userType === 'Supervisor' && <li className={'cursor-pointer'}>Calificar</li>}
-          {REPORT_USERS.includes(userType) && <li className={'cursor-pointer'}>Reportes</li>}
-          {userType === 'Promotor' && <li className={'cursor-pointer'}>Bitacora</li>}
+          <li className={`cursor-pointer ${scheduleStyle}`} onClick={() => navigate('/horario')}>Horario</li>
+          {isAdmin && <li className={`cursor-pointer ${userStyle}`}>Usuarios</li>}
+          {isBlockUser && <li className={'cursor-pointer'}>Bloquear</li>}
+          {isAdmin && <li className={'cursor-pointer'}>Dashboard</li>}
+          {isChief && <li className={'cursor-pointer'}>Promotores</li>}
+          {isSupervisor && <li className={'cursor-pointer'}>Calificar</li>}
+          {isAdminUser && <li className={'cursor-pointer'}>Reportes</li>}
+          {isPromoter && <li className={'cursor-pointer'}>Bitacora</li>}
         </ul>
       </div>
     </div>

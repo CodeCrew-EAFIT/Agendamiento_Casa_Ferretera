@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useUserSession } from '../utils/UserSessionContext'
 import Button from '../components/Button'
@@ -6,12 +6,19 @@ import ContentContainer from '../containers/Content'
 
 export default function ChooseUser () {
   const navigate = useNavigate()
-  const { setUserSession } = useUserSession()
+  const { userType, setUserSession } = useUserSession()
+  const [userChanged, setUserChanged] = useState(false)
 
   const handleUserSelection = (type) => {
     setUserSession(type)
-    navigate('/horario')
+    setUserChanged(true)
   }
+
+  useEffect(() => {
+    if (userType && userChanged) {
+      navigate('/horario')
+    }
+  }, [userType, navigate, userChanged])
 
   return (
     <ContentContainer className='login-container'>

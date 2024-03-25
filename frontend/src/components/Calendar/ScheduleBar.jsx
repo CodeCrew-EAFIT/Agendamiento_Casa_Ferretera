@@ -1,9 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react'
-import expandArrow from '../../assets/icons/expand-arrow.svg'
 import { ReactSVG } from 'react-svg'
+import { useNavigate } from 'react-router-dom'
+import expandArrow from '../../assets/icons/expand-arrow.svg'
 import Button from '../Button'
+import { AVAILABLE_LOCATIONS_ARRAY, AVAILABLE_LOCATIONS_PATH_DICT } from '../../utils/constants'
 
 export default function ScheduleBar () {
+  const navigate = useNavigate()
   const [selectedBranch, setSelectedBranch] = useState('')
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
   const dropdownRef = useRef(null)
@@ -26,6 +29,12 @@ export default function ScheduleBar () {
     setIsDropdownOpen(false)
   }
 
+  const handleSubmit = () => {
+    if (selectedBranch) {
+      navigate(`/horario/agendar/${AVAILABLE_LOCATIONS_PATH_DICT[selectedBranch]}`)
+    }
+  }
+
   return (
     <div className="store-bar">
       <div className="store-select-container" onClick={toggleDropdown}>
@@ -36,7 +45,7 @@ export default function ScheduleBar () {
           <ReactSVG src={expandArrow} className="expand-arrow-container pr-[15px]"/>
           {isDropdownOpen && (
             <div className="store-dropdown">
-              {['Amador', 'América', 'Apartadó', 'Centro', 'Envigado', 'Itagüí', 'La Ceja', 'Palacé', 'Rionegro'].map((branch) => (
+              {AVAILABLE_LOCATIONS_ARRAY.map((branch) => (
                 <div
                   key={branch}
                   onClick={() => handleOptionClick(branch)}
@@ -49,7 +58,7 @@ export default function ScheduleBar () {
           )}
         </div>
       </div>
-      <Button text="Agendar promotoría" onClick={() => console.log('Add Schedule')} />
+      <Button text="Agendar promotoría" onClick={handleSubmit} />
     </div>
   )
 }

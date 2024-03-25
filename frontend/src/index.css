@@ -150,5 +150,46 @@
   background: #88868B;
 }
 
+/* SHEDULE */
+
+.schedule-container {
+  @apply grid grid-cols-4 bg-secondary rounded-[30px] p-[14px] gap-[15px]
+}
+
+.schedule-item {
+  @apply bg-primary rounded-[10px]
+}
+
+.schedule-form {
+  @apply flex flex-col items-center gap-[45px]
+}
+
+.schedule-input-container {
+  @apply flex items-center ml-[20px]
+}
+
+.schedule-input {
+  @apply w-[300px] h-[54px] flex items-center justify-between border-[3.5px] border-secondary rounded-full
+}
+
+.schedule-icon svg {
+  @apply w-[50px] h-[50px]
+}
+
+.schedule-calendar-title {
+  @apply text-lg text-secondary font-bold py-2
+}
+
+.schedule-calendar-hours-container {
+  @apply mb-3 border-b border-secondary
+}
+
+.schedule-calendar-cell {
+  @apply grid grid-cols-5 border-t border-secondary
+}
+
+.schedule-calendar-hour {
+  @apply text-center text-md text-secondary border-r border-secondary p-1
+}
 
 
