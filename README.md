@@ -180,7 +180,10 @@ src/
 - Procurar hacer los mensajes de los commits pequeños pero que sean entendibles
 
 ### 4. **Nomenclatura de commits**
-- Se debe seguir la sigueinte estructura para realizar los commit: **<commitType>:<briefDescription>**.
+Se debe seguir la siguiente estructura para realizar los commit: 
+```
+  <commitType> : <briefDescription>
+```
 Hay diferentes tipos de commits: 
 
 - **feature:** nueva funcionalidad.
