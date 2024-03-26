@@ -182,7 +182,7 @@ src/
 ### 4. **Nomenclatura de commits**
 Se debe seguir la siguiente estructura para realizar los commit: 
 ```
-**<commitType> : <briefDescription>**
+  <commitType> : <briefDescription>
 ```
 Hay diferentes tipos de commits: 
 
