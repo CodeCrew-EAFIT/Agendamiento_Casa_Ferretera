@@ -41,6 +41,31 @@
   background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.5)), url('./assets/images/banner.webp');
 }
 
+/* SELECT */
+
+.select-container {
+  @apply relative flex items-center justify-between h-[52px] border-[3.5px] border-secondary rounded-full text-left cursor-pointer
+}
+
+.select {
+  @apply flex items-center justify-between w-full h-full pl-[23px]
+}
+
+.expand-arrow-container svg {
+  @apply w-[18px] h-[18px]
+}
+
+.dropdown {
+  @apply absolute z-20 top-[100%] left-[20px] bg-primary border-[3.5px] border-secondary rounded-md
+}
+
+.option {
+  @apply text-xl cursor-pointer hover:bg-secondary hover:text-primary p-2
+}
+
+
+/* LOGIN */
+
 .login-container{
   @apply flex justify-end items-center min-h-screen background-container;
 }
@@ -79,26 +104,6 @@
 
 .store-bar {
   @apply mb-[30px] flex justify-between items-center
-}
-
-.store-select-container {
-  @apply relative flex items-center justify-between w-[544px] h-[52px] border-[3.5px] border-secondary rounded-full text-left cursor-pointer
-}
-
-.store-select {
-  @apply flex items-center justify-between w-full h-full pl-[23px]
-}
-
-.expand-arrow-container svg {
-  @apply w-[18px] h-[18px]
-}
-
-.store-dropdown {
-  @apply absolute z-20 top-11 left-4 bg-primary border-[3.5px] border-secondary rounded-md w-[500px]
-}
-
-.store-option {
-  @apply text-xl cursor-pointer hover:bg-secondary hover:text-primary p-2
 }
 
 .calendar {
@@ -161,15 +166,11 @@
 }
 
 .schedule-form {
-  @apply flex flex-col items-center gap-[45px]
+  @apply flex flex-col items-center gap-[50px]
 }
 
 .schedule-input-container {
-  @apply flex items-center ml-[20px]
-}
-
-.schedule-input {
-  @apply w-[300px] h-[54px] flex items-center justify-between border-[3.5px] border-secondary rounded-full
+  @apply flex items-center
 }
 
 .schedule-icon svg {

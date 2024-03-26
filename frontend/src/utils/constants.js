@@ -80,3 +80,16 @@ export const AVAILABLE_LOCATIONS_PATH_DICT = {
   Palacé: 'palace',
   Rionegro: 'rionegro'
 }
+
+export const INPUT_PLACEHOLDERS = {
+  location: 'Escoger sede',
+  date: 'Fecha',
+  startTime: 'Hora inicio',
+  endTime: 'Hora final',
+  promoter: 'Promotor'
+}
+
+export const SAMPLE_PROMOTERS = [
+  'Maria Paula A.',
+  'Juan Felipe B.'
+]
