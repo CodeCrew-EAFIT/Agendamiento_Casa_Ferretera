@@ -158,7 +158,7 @@
 /* SHEDULE */
 
 .schedule-container {
-  @apply grid grid-cols-4 bg-secondary rounded-[30px] p-[14px] gap-[15px]
+  @apply grid grid-cols-3 bg-secondary rounded-[30px] p-[14px] gap-[15px]
 }
 
 .schedule-item {
@@ -166,7 +166,7 @@
 }
 
 .schedule-form {
-  @apply flex flex-col items-center gap-[50px]
+  @apply flex flex-col items-center gap-[30px]
 }
 
 .schedule-input-container {
@@ -186,7 +186,7 @@
 }
 
 .schedule-calendar-cell {
-  @apply grid grid-cols-5 border-t border-secondary
+  @apply grid grid-cols-5 border-t border-secondary h-[47px]
 }
 
 .schedule-calendar-hour {
@@ -194,7 +194,10 @@
 }
 
 .schedule-box {
-  @apply w-[181px] absolute right-0 flex items-center justify-center bg-tertiary rounded-[10px] shadow-[5px_5px_5px_0_rgba(0,0,0,0.25)] transition-all duration-500
+  @apply w-[244px] absolute right-0 flex items-center justify-center bg-tertiary rounded-[10px] shadow-[5px_5px_5px_0_rgba(0,0,0,0.25)] transition-all duration-500
 }
 
+.schedule-dropdown {
+  @apply overflow-auto max-h-[200px] left-[50%] w-[92%] translate-x-[-50%]
+}
 

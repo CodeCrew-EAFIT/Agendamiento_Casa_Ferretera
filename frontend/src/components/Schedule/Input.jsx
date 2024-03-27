@@ -1,12 +1,10 @@
 import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
-import { ReactSVG } from 'react-svg'
 import { INPUT_PLACEHOLDERS } from '../../utils/constants'
 import Select from '../Select'
 
 export default function Input ({
   name,
-  icon,
   arrowIcon,
   ...props
 }) {
@@ -28,14 +26,13 @@ export default function Input ({
   }, [chosenOption])
 
   return (
-    <div className="schedule-input-container">
-      {icon && <ReactSVG src={icon} className="schedule-icon mr-[10px]" />}
+    <div className="schedule-input-container w-full">
         <Select
           content={displayContent}
           optionsArray={optionsArray}
           selectedValue={chosenOption}
           setSelectedValue={setChosenOption}
-          expandArrow={name === 'promoter' ? arrowIcon : ''}
+          expandArrow={arrowIcon}
           width={true}
         />
     </div>
@@ -44,7 +41,6 @@ export default function Input ({
 
 Input.propTypes = {
   name: PropTypes.string,
-  icon: PropTypes.string,
   arrowIcon: PropTypes.string,
   value: PropTypes.object,
   setValue: PropTypes.func,

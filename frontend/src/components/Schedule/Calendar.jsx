@@ -7,11 +7,10 @@ import Box from './Box'
 
 export default function Calendar ({ formData }) {
   const [formattedDay, setFormattedDay] = useState('')
-  const [middleHour, setMiddleHour] = useState(5)
   const [startIndex, setStartIndex] = useState(null)
   const [endIndex, setEndIndex] = useState(null)
 
-  const displayHours = AVAILABLE_HOURS_SIMPLIFIED.slice(middleHour - 4, middleHour + 5)
+  const displayHours = AVAILABLE_HOURS_SIMPLIFIED
 
   useEffect(() => {
     const day = formData.date ? new Date(formData.date + 'T00:00:00') : new Date()
@@ -23,10 +22,6 @@ export default function Calendar ({ formData }) {
   useEffect(() => {
     if (!formData.startTime) return
     const indexStart = AVAILABLE_HOURS.indexOf(formData.startTime)
-    console.log(indexStart)
-    if (indexStart === 0) setMiddleHour(4)
-    else if (indexStart < 5) setMiddleHour(5)
-    else setMiddleHour(7)
     setStartIndex(indexStart)
 
     if (!formData.endTime) return
@@ -38,7 +33,7 @@ export default function Calendar ({ formData }) {
     <div>
       <p className="schedule-calendar-title">{formattedDay}</p>
       <div className="schedule-calendar-hours-container relative">
-        {startIndex !== null && endIndex !== null ? <Box start={startIndex} end={endIndex} position={middleHour} /> : null}
+        {startIndex !== null && endIndex !== null ? <Box start={startIndex} end={endIndex} /> : null}
         {displayHours.map((hour, index) => (
           <div key={index} className="schedule-calendar-cell">
             <div className="schedule-calendar-hour">

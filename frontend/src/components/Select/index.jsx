@@ -31,7 +31,7 @@ export default function Select ({
   }
 
   return (
-    <div className={`select-container ${width ? 'w-[300px]' : 'w-[544px]'}`} onClick={toggleDropdown}>
+    <div className={`select-container ${width ? 'w-full' : 'w-[544px]'}`} onClick={toggleDropdown}>
       <div className="select" ref={dropdownRef}>
         <p className="text-xl">{selectedValue || content}</p>
         {expandArrow && (
@@ -41,7 +41,7 @@ export default function Select ({
           />
         )}
         {isDropdownOpen && (
-          <div className={`dropdown ${width ? 'overflow-auto max-h-[200px] w-[256px]' : 'w-[500px]'}`}>
+          <div className={`dropdown ${width ? 'schedule-dropdown w-[516px]' : 'w-[500px]'}`}>
             {optionsArray.map((branch) => (
               <div
                 key={branch}

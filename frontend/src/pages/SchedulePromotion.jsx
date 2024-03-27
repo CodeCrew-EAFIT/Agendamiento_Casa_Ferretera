@@ -17,6 +17,12 @@ export default function SchedulePromotion () {
   })
 
   useEffect(() => {
+    if (!AVAILABLE_LOCATIONS_DICT[location]) {
+      navigate('/horario')
+    }
+  }, [location])
+
+  useEffect(() => {
     if (location !== formData.location) {
       navigate(
         `/horario/agendar/${AVAILABLE_LOCATIONS_PATH_DICT[formData.location]}`
@@ -27,7 +33,7 @@ export default function SchedulePromotion () {
   return (
     <Layout>
       <div className='schedule-container'>
-        <div className='col-span-3 schedule-item'><Form formData={formData} setFormData={setFormData}/></div>
+        <div className='col-span-2 schedule-item'><Form formData={formData} setFormData={setFormData}/></div>
         <div className='col-span-1 schedule-item'><Calendar formData={formData} /></div>
       </div>
     </Layout>
