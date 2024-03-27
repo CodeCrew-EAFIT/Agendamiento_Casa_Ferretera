@@ -16,8 +16,8 @@ import Button from '../Button'
 import DateInput from './DateInput'
 
 export default function Form ({ formData, setFormData }) {
-  let startTimeArray = AVAILABLE_HOURS
-  let endTimeArray = AVAILABLE_HOURS
+  let startTimeArray = AVAILABLE_HOURS.slice(0, 11)
+  let endTimeArray = AVAILABLE_HOURS.slice(1)
 
   if (formData.endTime) {
     const index = AVAILABLE_HOURS.indexOf(formData.endTime)
