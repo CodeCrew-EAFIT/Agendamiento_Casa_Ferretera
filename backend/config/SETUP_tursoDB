@@ -1,0 +1,91 @@
+"""
+A short example showing how to connect to a remote libsql or Turso database
+
+Set the LIBSQL_URL and LIBSQL_AUTH_TOKEN environment variables to point to a database.
+"""
+import libsql_experimental as libsql
+from dotenv import load_dotenv
+import os
+
+
+load_dotenv()
+
+
+### REMOTE DB
+#print("URL", os.getenv('DATABASE_URL'))
+#print("Token", os.getenv('AUTH_TOKEN'))
+#conn = libsql.connect(database=os.getenv('DATABASE_URL'), auth_token=os.getenv("AUTH_TOKEN"))
+
+
+## LOCAL DB
+conn = libsql.connect(database=os.getenv('LOCAL_DB'))
+
+
+# IGNORE FKEY CONSTRAINT (USED TEMPORARILY TO INSERT DUMMY DATA)
+conn.execute("PRAGMA foreign_keys=OFF;")
+
+
+## DROP TABLES
+#conn.execute("DROP TABLE Rating;")
+#conn.execute("DROP TABLE Promotion;")
+#conn.execute("DROP TABLE Evidence;")
+#conn.execute("DROP TABLE Location;")
+#conn.execute("DROP TABLE Booking;")
+#conn.execute("DROP TABLE Brand;")
+#conn.execute("DROP TABLE User;")
+
+
+## CREATE TABLES
+# conn.execute("CREATE TABLE IF NOT EXISTS Brand (brand_id INT PRIMARY KEY, name CHAR(20) NOT NULL);")
+# conn.execute("CREATE TABLE IF NOT EXISTS User (user_id INT PRIMARY KEY, name CHAR(20) NOT NULL, password CHAR(20) NOT NULL, email CHAR(25) NOT NULL, phone_number CHAR(25) NOT NULL, brand_id INT, type TEXT CHECK(type IN ('admin', 'promoter', 'supervisor', 'promoters direct superior')) NOT NULL, FOREIGN KEY (brand_id) REFERENCES Brand(brand_id));")
+# conn.execute("CREATE TABLE IF NOT EXISTS Booking (booking_id INT PRIMARY KEY, location_id INT NOT NULL, start_date DATETIME NOT NULL, end_date DATETIME NOT NULL, created_at DATETIME NOT NULL, user_id_created_by INT NOT NULL, updated_at DATETIME, user_id_updated_by INT, change_reason char(200), FOREIGN KEY (location_id) REFERENCES Location(location_id), FOREIGN KEY (user_id_updated_by) REFERENCES User(user_id), FOREIGN KEY (user_id_created_by) REFERENCES User(user_id));")
+# conn.execute("CREATE TABLE IF NOT EXISTS Location (location_id INT PRIMARY KEY, supervisor_user_id INT NOT NULL, name CHAR(20) NOT NULL, FOREIGN KEY (supervisor_user_id) REFERENCES User(user_id));")
+# conn.execute("CREATE TABLE IF NOT EXISTS Promotion (promotion_id INT PRIMARY KEY, booking_id INT NOT NULL, promoter_user_id INT NOT NULL, state TEXT CHECK(state IN ('booked', 'completed', 'canceled')) NOT NULL, FOREIGN KEY (booking_id) REFERENCES Booking(booking_id), FOREIGN KEY (promoter_user_id) REFERENCES User(user_id));")
+# conn.execute("CREATE TABLE IF NOT EXISTS Evidence (evidence_id INT PRIMARY KEY, promotion_id INT NOT NULL, promoter_user_id INT NOT NULL, evidence CHAR(200), promoter_comment CHAR(200) NOT NULL, FOREIGN KEY (promotion_id) REFERENCES Promotion(promotion_id), FOREIGN KEY (promoter_user_id) REFERENCES User(user_id));")
+# conn.execute("CREATE TABLE IF NOT EXISTS Rating (rating_id INT PRIMARY KEY, promoter_user_id INT NOT NULL, supervisor_user_id INT NOT NULL, promotion_id INT NOT NULL, mid_rating INT NOT NULL,supervisor_comment CHAR(200) NOT NULL, category_1 INT NOT NULL, category_2 INT NOT NULL, category_3 INT NOT NULL, FOREIGN KEY (supervisor_user_id) REFERENCES User(user_id), FOREIGN KEY (promoter_user_id) REFERENCES User(user_id), FOREIGN KEY (promotion_id) REFERENCES Promotion(promotion_id));")
+
+
+## ADD DUMMY DATA
+# #Brand
+# conn.execute("INSERT INTO Brand (brand_id, name) VALUES (1, 'Casa Ferretera'),(2, 'Dmarca1'),(3, 'Dmarca2');")
+# #User
+# conn.execute("INSERT INTO User (user_id, name, password, email, phone_number, brand_id, type) VALUES (1, 'Admin1', 'Admin1*', 'admin1@gmail.com', '1111111111', 1, 'admin'),(2, 'Supervisor1', 'Supervisor1*', 'supervisor1@gmail.com', '2222222222', 1, 'supervisor'),(3, 'Promoter1', 'Promoter1*', 'promoter1@gmail.com', '3333333333', 2, 'promoter'),(4, 'Supervisor2', 'Supervisor2*', 'Supervisor2@gmail.com', '4444444444', 1, 'supervisor'),(5, 'Promoter2', 'Promoter2*', 'promoter2@gmail.com', '5555555555', 3, 'promoter'),(6, 'PDirectSuperior1', 'PDirectSuperior1*', 'pdirectsuperior1@gmail.com', '6666666666', 2, 'promoters direct superior'),(7, 'PDirectSuperior2', 'PDirectSuperior2*', 'pdirectsuperior2@gmail.com', '7777777777', 3, 'promoters direct superior');")
+# #Location
+# conn.execute("INSERT INTO Location (location_id, supervisor_user_id, name) VALUES (1, 2, 'Sede1'),(2, 4, 'Sede2'),(3, 4, 'Sede3');")
+# #Promotion
+# conn.execute("INSERT INTO Promotion (promotion_id, booking_id, promoter_user_id, state) VALUES (1, 1, 3, 'completed'),(2, 2, 5, 'completed'),(3, 3, 3, 'booked'),(4, 4, 5, 'booked'),(5, 5, 3, 'booked'),(6, 6, 5, 'booked');")
+# #Booking
+# conn.execute("INSERT INTO Booking (booking_id, location_id, start_date, end_date, created_at, user_id_created_by, updated_at, user_id_updated_by, change_reason) VALUES(1, 1, '2024-03-19 08:00:00', '2024-03-19 17:00:00', '2024-03-15 23:00:00', 6, NULL, NULL, NULL),(2, 2, '2024-03-20 08:00:00', '2024-03-20 17:00:00', '2024-03-15 22:00:00', 7, NULL, NULL, NULL),(3, 3, '2024-04-26 9:00:00', '2024-04-19 17:30:00', '2024-03-19 20:00:00', 6, NULL, NULL, NULL),(4, 1, '2024-04-27 08:00:00', '2024-04-19 17:00:00', '2024-03-19 22:00:00', 7, NULL, NULL, NULL),(5, 2, '2024-04-26 9:00:00', '2024-04-19 17:30:00', '2024-03-19 20:00:00', 6, NULL, NULL, NULL),(6, 3, '2024-04-27 9:00:00', '2024-04-19 17:30:00', '2024-03-19 15:00:00', 7, NULL, NULL, NULL);")
+# #Evidence
+# conn.execute("INSERT INTO Evidence (evidence_id, promotion_id, promoter_user_id, evidence, promoter_comment) VALUES(1, 1, 3, 'Evidence 1', 'Promoter 1 comment'),(2, 2, 5, 'Evidence 2', 'Promoter 2 comment');")
+# #Rating
+# conn.execute("INSERT INTO Rating (rating_id, promoter_user_id, supervisor_user_id, promotion_id, mid_rating, supervisor_comment, category_1, category_2, category_3) VALUES (1, 3, 2, 1, 3, 'comment for Promotion 1', 3, 3, 3),(2, 5, 4, 2, 4, 'comment for Promotion 2', 5, 3, 4);")
+
+
+## EX QUERYS
+#print("Marcas: ",conn.execute("select * from Brand").fetchall())
+#print("Usuarios: ",conn.execute("select * from User").fetchall())
+#print("Sedes: ",conn.execute("select * from Location").fetchall())
+
+
+
+#print("Booking por sede 1: ",conn.execute("SELECT *FROM Booking WHERE location_id = 1;").fetchall())
+#print("Booking por jefe directo que agendo (6): ",conn.execute("SELECT * FROM Booking WHERE user_id_created_by = 6;").fetchall())
+
+
+#print("Promotion por estado completado: ",conn.execute("SELECT * FROM Promotion WHERE state = 'completed';").fetchall())
+#print("Promotion por estado agendado: ",conn.execute("SELECT * FROM Promotion WHERE state = 'booked';").fetchall())
+#print("Promotion por promotor (Promotor1): ",conn.execute("SELECT * FROM Promotion WHERE promoter_user_id = 3;").fetchall())
+
+
+
+#print("Evidence por promotor (Promotor1): ",conn.execute("SELECT * FROM Evidence WHERE promoter_user_id = 3;").fetchall())
+#print("Evidence por promotor (Promotor2): ",conn.execute("SELECT * FROM Evidence WHERE promoter_user_id = 5;").fetchall())
+
+
+#print("Rating por supervisor: ",conn.execute("SELECT * FROM Rating WHERE supervisor_user_id = 2;").fetchall())
+#print("Rating por promotor (Promotor1): ",conn.execute("SELECT * FROM Rating WHERE promoter_user_id = 3;").fetchall())
+
+
+
+conn.commit()
