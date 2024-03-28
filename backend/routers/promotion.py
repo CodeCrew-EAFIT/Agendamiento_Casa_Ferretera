@@ -8,7 +8,7 @@ promotion = APIRouter()
 # Route to fetch a promotion given a promotion_id
 
 @promotion.get("/promotion/{promotion_id}")
-async def fetchPromotions(promotion_id: int): #, authenticated_user: None = Depends(authenticateUser)):
+async def fetchPromotion(promotion_id: int): #, authenticated_user: None = Depends(authenticateUser)):
     promotions = getPromotion(promotion_id)
     return promotions
 
@@ -16,7 +16,7 @@ async def fetchPromotions(promotion_id: int): #, authenticated_user: None = Depe
 # Route to fetch promotions given a promoter_user_id
 
 @promotion.get("/promotions-by-promoter-id/{promoter_user_id}")
-async def fetchPromotions(promoter_user_id: int): #, authenticated_user: None = Depends(authenticateUser)):
+async def fetchPromotionsByPromoterId(promoter_user_id: int): #, authenticated_user: None = Depends(authenticateUser)):
     promotions = getPromotionsByPromoterId(promoter_user_id)
     return promotions
 
