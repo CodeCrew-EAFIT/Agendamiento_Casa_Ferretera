@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import {
   AVAILABLE_LOCATIONS_ARRAY,
-  AVAILABLE_HOURS,
+  AVAILABLE_HOURS_SPECIFIC,
   SAMPLE_PROMOTERS
 } from '../../utils/constants'
 import Input from './Input'
@@ -11,17 +11,17 @@ import Button from '../Button'
 import DateInput from './DateInput'
 
 export default function Form ({ formData, setFormData }) {
-  let startTimeArray = AVAILABLE_HOURS.slice(0, 11)
-  let endTimeArray = AVAILABLE_HOURS.slice(1)
+  let startTimeArray = AVAILABLE_HOURS_SPECIFIC.slice(0, AVAILABLE_HOURS_SPECIFIC.length-1)
+  let endTimeArray = AVAILABLE_HOURS_SPECIFIC.slice(1)
 
   if (formData.endTime) {
-    const index = AVAILABLE_HOURS.indexOf(formData.endTime)
-    startTimeArray = AVAILABLE_HOURS.slice(0, index)
+    const index = AVAILABLE_HOURS_SPECIFIC.indexOf(formData.endTime)
+    startTimeArray = AVAILABLE_HOURS_SPECIFIC.slice(0, index)
   }
 
   if (formData.startTime) {
-    const index = AVAILABLE_HOURS.indexOf(formData.startTime)
-    endTimeArray = AVAILABLE_HOURS.slice(index + 1)
+    const index = AVAILABLE_HOURS_SPECIFIC.indexOf(formData.startTime)
+    endTimeArray = AVAILABLE_HOURS_SPECIFIC.slice(index + 1)
   }
 
   return (

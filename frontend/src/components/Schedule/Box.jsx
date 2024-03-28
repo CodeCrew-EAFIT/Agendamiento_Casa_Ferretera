@@ -12,8 +12,8 @@ export default function Box ({ start, end }) {
   return (
     <div
       style={{
-        height: `${47 * height}px`,
-        top: `${47 * start + 1}px`
+        height: `${23.5 * height}px`,
+        top: `${23.5 * start + 1}px`
       }}
       className='schedule-box ease'>
       <p className='text-xl font-bold'>STANLEY</p>

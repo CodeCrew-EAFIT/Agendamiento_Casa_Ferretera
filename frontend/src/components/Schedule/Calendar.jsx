@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
-import { AVAILABLE_HOURS_SIMPLIFIED, AVAILABLE_HOURS } from '../../utils/constants'
+import { AVAILABLE_HOURS_SIMPLIFIED, AVAILABLE_HOURS_SPECIFIC } from '../../utils/constants'
 import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
 import Box from './Box'
@@ -21,11 +21,11 @@ export default function Calendar ({ formData }) {
 
   useEffect(() => {
     if (!formData.startTime) return
-    const indexStart = AVAILABLE_HOURS.indexOf(formData.startTime)
+    const indexStart = AVAILABLE_HOURS_SPECIFIC.indexOf(formData.startTime)
     setStartIndex(indexStart)
 
     if (!formData.endTime) return
-    const indexEnd = AVAILABLE_HOURS.indexOf(formData.endTime)
+    const indexEnd = AVAILABLE_HOURS_SPECIFIC.indexOf(formData.endTime)
     setEndIndex(indexEnd)
   }, [formData.startTime, formData.endTime])
 
