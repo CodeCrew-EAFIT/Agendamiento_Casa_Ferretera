@@ -22,6 +22,7 @@ async def createPromotion(request: CreatePromotionRequest): #, authenticated_use
 
     booking = request.booking
 
+    available = checkAvailability(booking.booking_date, booking.start_time, booking.end_time, booking.location_id)
     '''time_obj = datetime.strptime(booking.start_time, "%H:%M:%S")
     hour = time_obj.hour
     minute = time_obj.minute
@@ -30,9 +31,12 @@ async def createPromotion(request: CreatePromotionRequest): #, authenticated_use
     print(minute)
     print(second)'''
 
+    '''
     result = createBooking(booking) 
     bookingId = result.inserted_primary_key[0]
     result2 = createPromotion(bookingId, request.promoter_user_id) 
+    
+    '''
 
     return {'data': 'Promotion correctly scheduled'}
 
