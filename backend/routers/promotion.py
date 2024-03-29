@@ -1,7 +1,9 @@
 from services.promotion import *
+from services.booking import *
 from fastapi import APIRouter, Depends
 from middlewares.authenticateUser import authenticateUser
-from schemas.promotion import Promotion
+from schemas.additionalSchemas import CreatePromotionRequest
+
 
 promotion = APIRouter()
 
@@ -11,6 +13,29 @@ promotion = APIRouter()
 async def fetchPromotion(promotion_id: int): #, authenticated_user: None = Depends(authenticateUser)):
     promotions = getPromotion(promotion_id)
     return promotions
+
+
+# Route to create a promotion and consequently a booking
+
+@promotion.post("/create-promotion")
+async def createPromotion(request: CreatePromotionRequest): #, authenticated_user: None = Depends(authenticateUser)):
+
+    booking = request.booking
+
+    '''time_obj = datetime.strptime(booking.start_time, "%H:%M:%S")
+    hour = time_obj.hour
+    minute = time_obj.minute
+    second = time_obj.second
+    print(hour)
+    print(minute)
+    print(second)'''
+
+    result = createBooking(booking) 
+    bookingId = result.inserted_primary_key[0]
+    result2 = createPromotion(bookingId, request.promoter_user_id) 
+
+    return {'data': 'Promotion correctly scheduled'}
+
 
 
 # Route to fetch promotions given a promoter_user_id
