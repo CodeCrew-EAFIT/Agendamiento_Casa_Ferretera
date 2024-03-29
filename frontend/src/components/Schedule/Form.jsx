@@ -1,37 +1,37 @@
-import React, { useState } from "react";
-import PropTypes from "prop-types";
+import React, { useState } from 'react'
+import PropTypes from 'prop-types'
 import {
   AVAILABLE_LOCATIONS_ARRAY,
   AVAILABLE_HOURS_SPECIFIC,
-  SAMPLE_PROMOTERS,
-} from "../../utils/constants";
-import Input from "./Input";
-import expandedArrow from "../../assets/icons/expand-arrow.svg";
-import Button from "../Button";
-import DateInput from "./DateInput";
-import PopUp from "./PopUp";
+  SAMPLE_PROMOTERS
+} from '../../utils/constants'
+import Input from './Input'
+import expandedArrow from '../../assets/icons/expand-arrow.svg'
+import Button from '../Button'
+import DateInput from './DateInput'
+import PopUp from './PopUp'
 
-export default function Form({ formData, setFormData }) {
-  const [togglePopUp, setTogglePopUp] = useState(false);
+export default function Form ({ formData, setFormData }) {
+  const [togglePopUp, setTogglePopUp] = useState(false)
 
   let startTimeArray = AVAILABLE_HOURS_SPECIFIC.slice(
     0,
     AVAILABLE_HOURS_SPECIFIC.length - 1
-  );
-  let endTimeArray = AVAILABLE_HOURS_SPECIFIC.slice(1);
+  )
+  let endTimeArray = AVAILABLE_HOURS_SPECIFIC.slice(1)
 
   if (formData.endTime) {
-    const index = AVAILABLE_HOURS_SPECIFIC.indexOf(formData.endTime);
-    startTimeArray = AVAILABLE_HOURS_SPECIFIC.slice(0, index);
+    const index = AVAILABLE_HOURS_SPECIFIC.indexOf(formData.endTime)
+    startTimeArray = AVAILABLE_HOURS_SPECIFIC.slice(0, index)
   }
 
   if (formData.startTime) {
-    const index = AVAILABLE_HOURS_SPECIFIC.indexOf(formData.startTime);
-    endTimeArray = AVAILABLE_HOURS_SPECIFIC.slice(index + 1);
+    const index = AVAILABLE_HOURS_SPECIFIC.indexOf(formData.startTime)
+    endTimeArray = AVAILABLE_HOURS_SPECIFIC.slice(index + 1)
   }
 
   const handlePopUp = () => {
-    setTogglePopUp(prev=>!prev);
+    setTogglePopUp(prev => !prev)
   }
 
   return (
@@ -44,7 +44,7 @@ export default function Form({ formData, setFormData }) {
             <div className="w-full">
               <p className="font-bold text-lg pb-[10px]">Sede seleccionada:</p>
               <Input
-                name={"location"}
+                name={'location'}
                 value={formData}
                 setValue={setFormData}
                 optionsArray={AVAILABLE_LOCATIONS_ARRAY}
@@ -60,14 +60,14 @@ export default function Form({ formData, setFormData }) {
               </p>
               <div className="flex justify-between gap-[12px] w-full">
                 <Input
-                  name={"startTime"}
+                  name={'startTime'}
                   arrowIcon={expandedArrow}
                   value={formData}
                   setValue={setFormData}
                   optionsArray={startTimeArray}
                 />
                 <Input
-                  name={"endTime"}
+                  name={'endTime'}
                   arrowIcon={expandedArrow}
                   value={formData}
                   setValue={setFormData}
@@ -78,7 +78,7 @@ export default function Form({ formData, setFormData }) {
             <div className="w-full">
               <p className="font-bold text-lg pb-[10px]">Promotor asignado:</p>
               <Input
-                name={"promoter"}
+                name={'promoter'}
                 arrowIcon={expandedArrow}
                 value={formData}
                 setValue={setFormData}
@@ -92,10 +92,10 @@ export default function Form({ formData, setFormData }) {
         </div>
       </div>
     </>
-  );
+  )
 }
 
 Form.propTypes = {
   formData: PropTypes.object.isRequired,
-  setFormData: PropTypes.func.isRequired,
-};
+  setFormData: PropTypes.func.isRequired
+}
