@@ -6,7 +6,7 @@ from .user import user
 evidence = Table(
     'Evidence',
     meta,
-    Column('evidence_id', Integer, primary_key=True),
+    Column('evidence_id', Integer, primary_key=True, autoincrement=True),
     Column('promotion_id', Integer, ForeignKey('Promotion.promotion_id'), nullable=False),
     Column('promoter_user_id', Integer, ForeignKey('User.user_id'), nullable=False),
     Column('evidence', String(200)),

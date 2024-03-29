@@ -5,7 +5,7 @@ from .brand import brand
 user = Table(
     'User',
     meta,
-    Column('user_id', Integer, primary_key=True),
+    Column('user_id', Integer, primary_key=True, autoincrement=True),
     Column('name', String(20), nullable=False),
     Column('password', String(20), nullable=False),
     Column('email', String(25), nullable=False),

@@ -6,7 +6,7 @@ from .promotion import promotion
 rating = Table(
     'Rating',
     meta,
-    Column('rating_id', Integer, primary_key=True),
+    Column('rating_id', Integer, primary_key=True, autoincrement=True),
     Column('promoter_user_id', Integer, ForeignKey('User.user_id'), nullable=False),
     Column('supervisor_user_id', Integer, ForeignKey('User.user_id'), nullable=False),
     Column('promotion_id', Integer, ForeignKey('Promotion.promotion_id'), nullable=False),

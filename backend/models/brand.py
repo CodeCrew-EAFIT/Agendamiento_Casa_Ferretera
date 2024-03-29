@@ -4,7 +4,7 @@ from config.db import meta, engine
 brand = Table(
     'Brand',
     meta,
-    Column('brand_id', Integer, primary_key=True),
+    Column('brand_id', Integer, primary_key=True, autoincrement=True),
     Column('name', String(20), nullable=False),
 )
 
