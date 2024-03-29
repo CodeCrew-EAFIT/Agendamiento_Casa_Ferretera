@@ -3,10 +3,10 @@ from typing import List, Optional
 from pydantic import BaseModel
 
 class RoleEnum(str, Enum):
-    admin = "administrator"
-    promoter = "promoter"
+    adminstrador = "administrador"
+    promotor = "promotor"
     supervisor = "supervisor"
-    direct_promoter_boss = "direct_promoter_boss"
+    jefe_directo = "jefe_directo"
 
 class UserBase(BaseModel):
     name: str

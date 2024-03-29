@@ -4,10 +4,10 @@ from config.db import Base
 import enum
 
 class Role(enum.Enum):
-    administrator = "administrator"
-    promoter = "promoter"
+    administrador = "administrador"
+    promotor = "promotor"
     supervisor = "supervisor"
-    direct_promoter_boss = "direct_promoter_boss"
+    jefe_directo = "jefe directo"
 
 class User(Base): 
     __tablename__ = "User"

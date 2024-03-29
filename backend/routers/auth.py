@@ -27,8 +27,6 @@ async def register_user(user: UserCreate, db: Session = Depends(get_db)):
 @authRouter.get("/users/me", dependencies=[Depends(token.JWTBearer())], response_model=UserBase)
 async def read_users_me(request: Request, db: Session = Depends(get_db)):
     authorizationToken = request.headers.get('Authorization').split(' ')[1]
-    print(authorizationToken)
     payload = token.decode_token(authorizationToken)
-    print(payload)
     user = auth.get_user_by_id(db, payload["id"])
     return user

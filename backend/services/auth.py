@@ -11,7 +11,6 @@ def get_user_by_id(db: Session, user_id: int):
 
 def create_user(db: Session, user: UserCreate):
     hashed_password = get_password_hash(user.hashed_password)
-    print(user.role.value)
     db_user = User(
         name=user.name,
         role=user.role.value,  # Acceder al valor del Enum

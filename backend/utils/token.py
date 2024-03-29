@@ -43,7 +43,6 @@ class JWTBearer(HTTPBearer):
         isTokenValid = False
         try:
             payload = decode_token(jwtoken)
-            print(payload)
         except:
             payload = None
         if payload:
