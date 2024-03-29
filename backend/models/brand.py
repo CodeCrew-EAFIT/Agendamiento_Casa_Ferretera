@@ -1,11 +1,13 @@
-from sqlalchemy import Table, Column, Integer, Float, String, DateTime, ForeignKey, CheckConstraint, MetaData
-from config.db import meta, engine
+from sqlalchemy import Table, Column, Integer, String
+from sqlalchemy.orm import relationship
+from config.db import Base
 
-brand = Table(
-    'Brand',
-    meta,
-    Column('brand_id', Integer, primary_key=True, autoincrement=True),
-    Column('name', String(20), nullable=False),
-)
 
-meta.create_all(engine)
+class Brand(Base):
+    __tablename__ = "Brand"
+
+    brand_id = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    brand_name = Column(String(20), nullable=False)
+
+    #Relationships
+    user = relationship("User", back_populates="brands")

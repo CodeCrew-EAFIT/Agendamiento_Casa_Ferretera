@@ -1,21 +1,21 @@
-from sqlalchemy import Table, Column, Integer, String, DateTime, ForeignKey, CheckConstraint, MetaData, Date, Time
-from config.db import meta, engine
-from .location import location
-from .user import user
+from sqlalchemy import Table, Column, Integer, String, DateTime, ForeignKey
+from sqlalchemy.orm import relationship
+from config.db import Base
 
-booking = Table(
-    'Booking',
-    meta,
-    Column('booking_id', Integer, primary_key=True, autoincrement=True),
-    Column('location_id', Integer, ForeignKey('Location.location_id'), nullable=False),
-    Column('booking_date', Date, nullable=False),
-    Column('start_time', String(8), nullable=False),
-    Column('end_time', String(8), nullable=False),
-    Column('created_at', DateTime, nullable=False),
-    Column('user_id_created_by', Integer, ForeignKey('User.user_id'), nullable=False),
-    Column('updated_at', DateTime),
-    Column('user_id_updated_by', Integer, ForeignKey('User.user_id')),
-    Column('change_reason', String(200)),
-)
+class Booking(Base):
+    __tablename__ = "Booking"
+    
+    booking_id = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    location_id = Column(Integer, ForeignKey('Location.location_id'), nullable=False)
+    start_date = Column(DateTime, nullable=True)
+    end_date = Column(DateTime, nullable=True)
+    created_at = Column(DateTime, nullable=True)
+    user_id_created_by = Column(Integer, ForeignKey('User.user_id'), nullable=False)
+    updated_at = Column(DateTime)
+    user_id_updated_by = Column(Integer, ForeignKey('User.user_id'))
+    change_reason = Column(String)
 
-meta.create_all(engine)
+    # Relationships
+    location = relationship("Location", back_populates="booking")
+    blocked = relationship("Blocked_date", back_populates="booking")
+    promotion = relationship("Promotion", back_populates="booking")

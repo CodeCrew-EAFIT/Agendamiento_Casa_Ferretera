@@ -1,9 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-export default function Row ({ children }) {
+export default function Row ({ children, height }) {
   return (
-      <tr className="h-[26px] text-center">
+      <tr className={`${height ? 'h-[13px]' : 'h-[26px]'} text-center`}>
         {React.Children.map(children, (child, index) =>
           React.cloneElement(child, { isFirstColumn: index === 0 })
         )}

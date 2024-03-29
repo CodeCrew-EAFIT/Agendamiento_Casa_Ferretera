@@ -28,6 +28,9 @@ module.exports = {
     extend: {
       boxShadow: {
         custom: '14px 17px 15.6px 0px #00000040' // 'custom' es el nombre de tu sombra, puedes cambiarlo
+      },
+      backdropBlur: {
+        'extra-sm': '1px'
       }
     }
   },

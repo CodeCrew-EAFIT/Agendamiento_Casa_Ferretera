@@ -1,16 +1,16 @@
-from sqlalchemy import Table, Column, Integer, Float, String, DateTime, ForeignKey, CheckConstraint, MetaData
-from config.db import meta, engine
-from .promotion import promotion
-from .user import user
+from sqlalchemy import Table, Column, Integer, String, ForeignKey
+from sqlalchemy.orm import relationship
+from config.db import Base
 
-evidence = Table(
-    'Evidence',
-    meta,
-    Column('evidence_id', Integer, primary_key=True, autoincrement=True),
-    Column('promotion_id', Integer, ForeignKey('Promotion.promotion_id'), nullable=False),
-    Column('promoter_user_id', Integer, ForeignKey('User.user_id'), nullable=False),
-    Column('evidence', String(200)),
-    Column('promoter_comment', String(200), nullable=False),
-)
+class Evidence(Base):
+    __tablename__ = "Evidence"
 
-meta.create_all(engine)
+    evidence_id = Column(Integer, primary_key=True, autoincrement=True)
+    promotion_id = Column(Integer, ForeignKey('Promotion.promotion_id'), nullable=False)
+    promoter_user_id = Column(Integer, ForeignKey('User.user_id'), nullable=False)
+    evidence = Column(String(200))
+    promoter_comment = Column(String(200), nullable=False)
+
+    #Relationships
+    user = relationship("User", back_populates="evidence")
+    promotion = relationship("Promotion", back_populates="evidence")

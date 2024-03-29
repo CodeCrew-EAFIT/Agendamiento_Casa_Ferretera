@@ -1,23 +1,19 @@
-from sqlalchemy import Table, Column, Integer, Float, String, DateTime, ForeignKey, CheckConstraint, MetaData
-from config.db import meta, engine
-from .user import user
-from .promotion import promotion
+from sqlalchemy import Table, Column, Integer, String, ForeignKey
+from sqlalchemy.orm import relationship
+from config.db import Base
 
-rating = Table(
-    'Rating',
-    meta,
-    Column('rating_id', Integer, primary_key=True, autoincrement=True),
-    Column('promoter_user_id', Integer, ForeignKey('User.user_id'), nullable=False),
-    Column('supervisor_user_id', Integer, ForeignKey('User.user_id'), nullable=False),
-    Column('promotion_id', Integer, ForeignKey('Promotion.promotion_id'), nullable=False),
-    Column('mid_rating', Integer, nullable=False),
-    Column('supervisor_comment', String(200), nullable=False),
-    Column('category_1', Integer, nullable=False),
-    Column('category_2', Integer, nullable=False),
-    Column('category_3', Integer, nullable=False),
-)
+class Rating(Base):
+    __tablename__ = "Rating"
 
-meta.create_all(engine)
+    rating_id = Column(Integer, primary_key=True, autoincrement=True)
+    promoter_user_id = Column(Integer, ForeignKey('User.user_id'), nullable=False)
+    supervisor_user_id = Column(Integer, ForeignKey('User.user_id'), nullable=False)
+    promotion_id = Column(Integer, ForeignKey('Promotion.promotion_id'), nullable=False)
+    mid_rating = Column(Integer, nullable=False)
+    supervisor_comment = Column(String(200), nullable=False)
+    category_1 = Column(Integer, nullable=False)
+    category_2 = Column(Integer, nullable=False)
+    category_3 = Column(Integer, nullable=False)
 
-
-
+    #Relationships
+    promotion = relationship("Promotion", back_populates="ratings")

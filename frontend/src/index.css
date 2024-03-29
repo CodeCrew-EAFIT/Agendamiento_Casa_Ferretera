@@ -24,9 +24,13 @@
   text-align: center;
 }
 
+/* BUTTON */
+
 .btn {
   @apply py-2 px-6 rounded-full bg-tertiary text-lg font-medium hover:bg-tertiary-light;
 }
+
+/* BACKGROUND */
 
 .background-container {
   background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.5)), url('./assets/images/banner-lowres.webp');
@@ -36,10 +40,54 @@
   transition: background-image 0.5s ease-in-out;
 }
 
-/* Cuando la imagen de fondo está cargada, actualiza a la imagen de alta resolución */
 .background-container.loaded {
   background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.5)), url('./assets/images/banner.webp');
 }
+
+/* CONTAINER */
+.default-container {
+  @apply w-full border-[15px] border-secondary rounded-3xl
+}
+
+.input-container {
+  @apply relative flex items-center justify-between h-[52px] border-[3.5px] border-secondary rounded-full text-left cursor-pointer
+}
+
+/* INPUT */
+
+.text-input {
+  @apply text-xl w-[90%] bg-primary focus:outline-none mr-2
+}
+
+.text-input::placeholder {
+  color: black;
+  opacity: 1; /* opcional, para asegurarte de que el color es completamente opaco */
+}
+
+/* SELECT */
+
+.select {
+  @apply flex items-center justify-between w-full h-full pl-[23px]
+}
+
+.expand-arrow-container svg {
+  @apply w-[18px] h-[18px]
+}
+
+.plus-icon svg {
+  @apply w-[30px] h-[30px]
+}
+
+.dropdown {
+  @apply absolute z-20 top-[100%] left-[20px] bg-primary border-[3.5px] border-secondary rounded-md
+}
+
+.option {
+  @apply text-xl cursor-pointer hover:bg-secondary hover:text-primary p-2
+}
+
+
+/* LOGIN */
 
 .login-container{
   @apply flex justify-end items-center min-h-screen background-container;
@@ -61,8 +109,10 @@
   @apply w-[28px] h-[28px]
 }
 
+/* NAVBAR */
+
 .nav-container {
-  @apply flex gap-12 items-center px-12 mt-6
+  @apply flex gap-12 items-center mt-6 mb-[30px]
 }
 
 .nav {
@@ -73,36 +123,129 @@
   @apply flex items-center gap-1
 }
 
+/* CALENDAR */
+
+.store-bar {
+  @apply mb-[30px] flex justify-between items-center
+}
+
 .calendar {
   @apply grid grid-cols-7 gap-1;
 }
 
 .border-dotted {
-  border-bottom: 2px dotted #718096; /* Asumiendo que #718096 es el color que deseas para el borde */
+  border-bottom: 1.5px dotted #718096;
+}
+
+.calendar-nav {
+  @apply flex items-center justify-between h-[50px] w-[818px] text-md text-secondary font-bold ml-[75px]
+}
+
+.calendar-talbe-container {
+  @apply flex justify-center text-secondary text-center;
 }
 
 .calendar-cell {
-  @apply h-[24px] w-[115px];
+  @apply h-[24px] w-[121px] border-l-[1.5px] border-secondary;
 }
 
 .calendar-cell-dotted{
-  border: 2px solid;
-  border-bottom: 2px dotted;  /* Borde inferior punteado y azul */
+  border: 1.5px solid;
+  border-bottom: 1.5px dotted;
+  border-right: 0;
+  border-color: #88868B;
 }
 
 .calendar-first-column {
-  position: relative;
+  @apply relative h-[24px] w-[78px];
+}
+
+.calendar-last-column {
+  @apply relative h-[24px] w-[134px] border-l-[1.5px] border-secondary;
 }
 
 .calendar-first-column::after {
   content: '';
   position: absolute;
   top: -1px;
-  right: 0; /* Comienza desde el lado izquierdo */
-  width: 10%; /* El ancho del pseudo-elemento representa el 20% del ancho del elemento */
-  height: 2px; /* Altura del borde, ajusta según necesites */
-  background: #88868B; /* Color del borde, cambia según necesites */
+  right: 0;
+  width: 10%;
+  height: 1.5px;
+  background: #88868B;
 }
 
+/* SHEDULE */
 
+.schedule-container {
+  @apply grid grid-cols-3 bg-secondary rounded-[30px] p-[14px] gap-[15px]
+}
 
+.schedule-item {
+  @apply bg-primary rounded-[10px]
+}
+
+.schedule-form {
+  @apply flex flex-col items-center gap-[30px]
+}
+
+.schedule-input-container {
+  @apply flex items-center
+}
+
+.schedule-icon svg {
+  @apply w-[50px] h-[50px]
+}
+
+.schedule-calendar-title {
+  @apply text-lg text-secondary font-bold py-2
+}
+
+.schedule-calendar-hours-container {
+  @apply mb-3 border-b border-secondary
+}
+
+.schedule-calendar-cell {
+  @apply grid grid-cols-5 border-t border-secondary h-[47px]
+}
+
+.schedule-calendar-hour {
+  @apply text-center text-md text-secondary border-r border-secondary p-1
+}
+
+.schedule-box {
+  @apply w-[232px] absolute right-0 flex items-center justify-center bg-tertiary rounded-[10px] shadow-[5px_5px_5px_0_rgba(0,0,0,0.25)] transition-all duration-500
+}
+
+.schedule-dropdown {
+  @apply overflow-auto max-h-[200px] left-[50%] w-[92%] translate-x-[-50%]
+}
+
+/* USERS */
+
+.user-panel {
+  @apply overflow-hidden bg-secondary rounded-3xl border-[15px] border-secondary
+}
+
+.user-header {
+  @apply px-6 pb-3 text-left text-[18px] text-primary font-bold
+}
+
+.user-cell {
+  @apply bg-primary pl-6 py-4 whitespace-nowrap text-[15px]
+}
+
+.last-user-cell {
+  @apply flex items-center justify-between
+}
+
+.user-panel-bottom-nav {
+  @apply w-full py-4 flex items-center justify-between bg-primary
+}
+
+.bottom-nav-button {
+  @apply flex items-center gap-1 cursor-pointer
+}
+
+.bottom-nav-page-button {
+  @apply flex justify-center items-center w-8 h-8 cursor-pointer
+}
