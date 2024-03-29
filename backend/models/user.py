@@ -1,17 +1,27 @@
-from sqlalchemy import Table, Column, Integer, Float, String, DateTime, ForeignKey, CheckConstraint, MetaData
-from config.db import meta, engine
-from .brand import brand
+from sqlalchemy import Table, Column, Integer, String, ForeignKey, Enum
+from sqlalchemy.orm import relationship
+from config.db import Base
+import enum
 
-user = Table(
-    'User',
-    meta,
-    Column('user_id', Integer, primary_key=True),
-    Column('name', String(20), nullable=False),
-    Column('password', String(20), nullable=False),
-    Column('email', String(25), nullable=False),
-    Column('phone_number', String(25), nullable=False),
-    Column('brand_id', Integer, ForeignKey('Brand.brand_id')),
-    Column('type', String, CheckConstraint('type IN ("admin", "promoter", "supervisor", "promoters direct superior")'), nullable=False),
-)
+class Role(enum.Enum):
+    administrator = "administrator"
+    promoter = "promoter"
+    supervisor = "supervisor"
+    direct_promoter_boss = "direct_promoter_boss"
 
-meta.create_all(engine)
+class User(Base): 
+    __tablename__ = "User"
+    
+    user_id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, nullable=False)
+    role = Column(Enum(Role))
+    hashed_password = Column(String, nullable=False)
+    email = Column(String, nullable=False, unique=True)
+    phone_number = Column(String, nullable=False, unique=True)
+    brand_id = Column(Integer, ForeignKey('Brand.brand_id'))
+
+    # relationships
+    brands = relationship("Brand", back_populates="user")
+    location = relationship("Location", back_populates="user")
+    promotions = relationship("Promotion", back_populates="user")
+    evidence = relationship("Evidence", back_populates="user")

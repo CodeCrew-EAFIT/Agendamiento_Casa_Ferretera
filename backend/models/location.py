@@ -1,13 +1,15 @@
-from sqlalchemy import Table, Column, Integer, Float, String, DateTime, ForeignKey, CheckConstraint, MetaData
-from config.db import meta, engine
-from .user import user
+from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy.orm import relationship
+from config.db import Base
+from models.user import User
 
-location = Table(
-    'Location',
-    meta,
-    Column('location_id', Integer, primary_key=True),
-    Column('supervisor_user_id', Integer, ForeignKey('User.user_id'), nullable=False),
-    Column('name', String(20), nullable=False),
-)
+class Location(Base):
+    __tablename__ = "Location"
 
-meta.create_all(engine)
+    location_id = Column(Integer, primary_key=True, index=True)
+    supervisor_user_id = Column(Integer, ForeignKey('User.user_id'), nullable=False)
+    location_name = Column(String, nullable=False)
+
+    #Relationships
+    user = relationship("User", back_populates="location")
+    booking = relationship("Booking", back_populates="location")
