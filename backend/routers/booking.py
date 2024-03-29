@@ -9,5 +9,5 @@ booking = APIRouter()
 
 @booking.get("/booking/{booking_id}")
 async def fetchBooking(booking_id: int): #, authenticated_user: None = Depends(authenticateUser)):
-    promotions = getBooking(booking_id)
-    return promotions
+    bookings = getBooking(booking_id)
+    return bookings
