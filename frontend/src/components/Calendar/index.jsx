@@ -15,15 +15,15 @@ export default function Calendar () {
   ))
 
   const tableContent = [...Array(rowsNumber)].map((_, i) => (
-    <Row key={i} count={i}>
+    <Row key={i} height={i === (rowsNumber-1)}>
       {[...Array(colsNumber)].map((_, j) => (
-        <Cell key={j} rowCount={i} columnCount={j} />
+        <Cell key={j} rowCount={i} columnCount={j} height={i === (rowsNumber-1)} />
       ))}
     </Row>
   ))
 
   return (
-      <div className='calendar-container'>
+      <div className='default-container'>
         <Nav />
         <div className="calendar-table-container">
           <div className="relative text-sm">

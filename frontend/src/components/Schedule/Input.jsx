@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { INPUT_PLACEHOLDERS } from '../../utils/constants'
-import Select from '../Select'
+import Select from '../Input/Select'
 
 export default function Input ({
   name,

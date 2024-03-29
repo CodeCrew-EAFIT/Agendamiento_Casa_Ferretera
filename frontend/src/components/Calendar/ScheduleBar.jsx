@@ -6,7 +6,7 @@ import {
   AVAILABLE_LOCATIONS_ARRAY,
   AVAILABLE_LOCATIONS_PATH_DICT
 } from '../../utils/constants'
-import Select from '../Select'
+import Select from '../Input/Select'
 
 export default function ScheduleBar () {
   const navigate = useNavigate()
@@ -29,7 +29,7 @@ export default function ScheduleBar () {
         selectedValue={selectedBranch}
         setSelectedValue={setSelectedBranch}
       />
-      <Button text="Agendar promotoría" onClick={handleSubmit} />
+      <Button onClick={handleSubmit}>Agendar promotoría</Button>
     </div>
   )
 }

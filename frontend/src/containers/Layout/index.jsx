@@ -5,7 +5,7 @@ import ContentContainer from '../Content/index.jsx'
 
 export default function Layout ({ children }) {
   return (
-    <div className='w-[1000px] mx-auto'>
+    <div className='w-[1024px] px-[49px] mx-auto'>
       <NavBar />
       <ContentContainer>
         {children}

@@ -14,7 +14,7 @@ export default function Cell ({ rowCount, columnCount }) {
   const rowCheck = rowCount % 2 === 0 ? 'calendar-cell-dotted' : ''
 
   const borderStyle = isLastRow
-    ? 'border-t-[1.5px]'
+    ? 'border-t-[1.5px] max-h-[13px]'
     : rowCheck
 
   if (isLastColumn) return <td className={`calendar-last-column ${borderStyle}`}></td>

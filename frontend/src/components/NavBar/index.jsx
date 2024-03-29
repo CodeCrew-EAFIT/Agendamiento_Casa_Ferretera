@@ -42,7 +42,7 @@ export default function NavBar () {
         </div>
         <ul className='flex gap-8'>
           <li className={`cursor-pointer ${scheduleStyle}`} onClick={() => navigate('/horario')}>Horario</li>
-          {isAdmin && <li className={`cursor-pointer ${userStyle}`}>Usuarios</li>}
+          {isAdmin && <li className={`cursor-pointer ${userStyle}`} onClick={() => navigate('/usuarios')}>Usuarios</li>}
           {isBlockUser && <li className={'cursor-pointer'}>Bloquear</li>}
           {isAdmin && <li className={'cursor-pointer'}>Dashboard</li>}
           {isChief && <li className={'cursor-pointer'}>Promotores</li>}

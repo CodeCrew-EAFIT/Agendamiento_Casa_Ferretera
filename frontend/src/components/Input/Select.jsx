@@ -31,7 +31,7 @@ export default function Select ({
   }
 
   return (
-    <div className={`select-container ${width ? 'w-full' : 'w-[544px]'}`} onClick={toggleDropdown}>
+    <div className={`input-container ${width ? 'w-full' : 'w-[544px]'}`} onClick={toggleDropdown}>
       <div className="select" ref={dropdownRef}>
         <p className="text-xl">{selectedValue || content}</p>
         {expandArrow && (

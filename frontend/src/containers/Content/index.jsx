@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 export default function ContentContainer ({ children, className, ...rest }) {
   return (
-      <div className={`px-[13px] ${className}`} {...rest}>
+      <div className={`${className}`} {...rest}>
         {children}
       </div>
   )

@@ -23,7 +23,6 @@ export const AVAILABLE_HOURS = [
   '11:00 AM',
   '12:00 PM',
   '1:00 PM',
-  '1:30 PM',
   '2:00 PM',
   '3:00 PM',
   '4:00 PM',
@@ -119,4 +118,133 @@ export const INPUT_PLACEHOLDERS = {
 export const SAMPLE_PROMOTERS = [
   'Maria Paula A.',
   'Juan Felipe B.'
+]
+
+export const SAMPLE_USER_DATA = [
+  {
+    name: 'Carolina Sierra',
+    email: 'carolina.sierra@gmail.com',
+    role: 'Jefe Directo',
+    store: 'Stanley',
+  },
+  {
+    name: 'Juan Fernando Gutierrez',
+    email: 'juanfergut@gmail.com',
+    role: 'Supervisor',
+    store: 'Sede Palacé',
+  },
+  {
+    name: 'Maria Paula Ayala',
+    email: 'mpayalal@eafit.edu.co',
+    role: 'Promotor',
+    store: 'Stanley',
+  },
+  {
+    name: 'Sara Lopez',
+    email: 'saral@casaferretera.com',
+    role: 'Supervisor',
+    store: 'Sede Envigado',
+  },
+  {
+    name: 'Felipe Cárdenas',
+    email: 'felipec@casaferretera.com',
+    role: 'Supervisor',
+    store: 'Sede Apartadó',
+  },
+  {
+    name: 'Andrés García',
+    email: 'andresg@casaferretera.com',
+    role: 'Administrador',
+    store: 'Administrador',
+  },
+  {
+    name: 'Ana Maria Martinez',
+    email: 'anam@casaferretera.com',
+    role: 'Administrador',
+    store: 'Administrador',
+  },
+  {
+    name: 'Diana Sofia Sierra',
+    email: 'd.sofia_21@bandd.com',
+    role: 'Jefe Directo',
+    store: 'Black+Decker',
+  },
+  {
+    name: 'Camila Ramirez',
+    email: 'camila_ramirez@bandd.com',
+    role: 'Promotor',
+    store: 'Black+Decker',
+  },
+  {
+    name: 'XXX',
+    email: 'xxx@gmail.com',
+    role: 'XXXXX',
+    store: 'XXXXXXXX',
+  },
+  {
+    name: 'XXX',
+    email: 'xxx@gmail.com',
+    role: 'XXXXX',
+    store: 'XXXXXXXX',
+  },
+  {
+    name: 'XXX',
+    email: 'xxx@gmail.com',
+    role: 'XXXXX',
+    store: 'XXXXXXXX',
+  },
+  {
+    name: 'XXX',
+    email: 'xxx@gmail.com',
+    role: 'XXXXX',
+    store: 'XXXXXXXX',
+  },
+  {
+    name: 'XXX',
+    email: 'xxx@gmail.com',
+    role: 'XXXXX',
+    store: 'XXXXXXXX',
+  },
+  {
+    name: 'XXX',
+    email: 'xxx@gmail.com',
+    role: 'XXXXX',
+    store: 'XXXXXXXX',
+  },
+  {
+    name: 'XXX',
+    email: 'xxx@gmail.com',
+    role: 'XXXXX',
+    store: 'XXXXXXXX',
+  },
+  {
+    name: 'XXX',
+    email: 'xxx@gmail.com',
+    role: 'XXXXX',
+    store: 'XXXXXXXX',
+  },
+  {
+    name: 'XXX',
+    email: 'xxx@gmail.com',
+    role: 'XXXXX',
+    store: 'XXXXXXXX',
+  },
+  {
+    name: 'XXX',
+    email: 'xxx@gmail.com',
+    role: 'XXXXX',
+    store: 'XXXXXXXX',
+  },
+  {
+    name: 'XXX',
+    email: 'xxx@gmail.com',
+    role: 'XXXXX',
+    store: 'XXXXXXXX',
+  },
+  {
+    name: 'XXX',
+    email: 'xxx@gmail.com',
+    role: 'XXXXX',
+    store: 'XXXXXXXX',
+  },
 ]

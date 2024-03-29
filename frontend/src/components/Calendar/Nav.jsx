@@ -54,7 +54,7 @@ export default function TableHeader () {
                 {isToday(day)}
             </th>
             ))}
-            <th className="flex items-center w-[134px]">
+            <th className="flex items-center justify-between w-[134px] pr-[0.5px]">
             <div>
                 {weekDays[6]}
                 {isToday(weekDays[6])}

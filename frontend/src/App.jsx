@@ -7,7 +7,7 @@ import {
 import { UserSessionProvider } from './utils/UserSessionContext'
 import ChooseUser from './pages/ChooseUser'
 import Home from './pages/Home'
-import Users from './pages/Admin/Users'
+import UserPanel from './pages/Admin/UserPanel'
 import SchedulePromotion from './pages/SchedulePromotion'
 import ProtectedRoute from './components/ProtectedRoute'
 import { USER_TYPES, ADMIN_USERS, ADMIN } from './utils/constants'
@@ -42,7 +42,7 @@ function App () {
             path="/usuarios"
             element={
               <ProtectedRoute
-                element={<Users />}
+                element={<UserPanel />}
                 allowedUsers={[ADMIN]}
                 redirectTo="/horario"
               />
