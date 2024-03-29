@@ -1,17 +1,17 @@
-import React, { useRef, useEffect } from 'react';
-import PropTypes from 'prop-types';
-import { ReactSVG } from 'react-svg';
+import React from 'react'
+import PropTypes from 'prop-types'
+import { ReactSVG } from 'react-svg'
 
-export default function TextInput({
+export default function TextInput ({
   placeholder,
   icon,
   ...props
 }) {
-  const { value, setValue, width } = props;
+  const { value, setValue, width } = props
 
   const handleChange = (event) => {
-    setValue(event.target.value);
-  };
+    setValue(event.target.value)
+  }
 
   return (
     <div className={`input-container cursor-normal ${width ? 'w-full' : 'w-[544px]'}`}>
@@ -25,7 +25,7 @@ export default function TextInput({
         />
       </div>
     </div>
-  );
+  )
 }
 
 TextInput.propTypes = {
@@ -33,5 +33,5 @@ TextInput.propTypes = {
   value: PropTypes.string.isRequired,
   setValue: PropTypes.func.isRequired,
   width: PropTypes.bool,
-  expandArrow: PropTypes.string
-};
+  icon: PropTypes.string
+}

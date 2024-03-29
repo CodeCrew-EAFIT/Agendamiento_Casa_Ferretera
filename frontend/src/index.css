@@ -27,7 +27,11 @@
 /* BUTTON */
 
 .btn {
-  @apply py-2 px-6 rounded-full bg-tertiary text-lg font-medium hover:bg-tertiary-light;
+  @apply py-2 px-4 rounded-full bg-tertiary text-lg font-medium hover:bg-tertiary-light;
+}
+
+.btn-secondary {
+  @apply bg-primary border-2 border-tertiary hover:bg-primary
 }
 
 /* BACKGROUND */
@@ -248,4 +252,28 @@
 
 .bottom-nav-page-button {
   @apply flex justify-center items-center w-8 h-8 cursor-pointer
+}
+
+.pop-up-container {
+  @apply w-[536px] h-[436px] absolute z-20 top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] text-xl bg-primary rounded-[15px]
+}
+
+.pop-up-nav {
+  @apply relative w-full h-[114px] bg-tertiary rounded-t-[15px]
+}
+
+.pop-up-title {
+  @apply h-full flex items-center justify-center text-[25px]
+}
+
+.pop-up-body {
+  @apply text-center flex flex-col items-center justify-center text-lg
+}
+
+.pop-up-buttons {
+  @apply flex justify-center gap-[42px] mt-[40px]
+}
+
+.blur-screen {
+  @apply w-full h-full absolute top-[100px] left-[50%] translate-x-[-50%] z-10 backdrop-blur-extra-sm
 }

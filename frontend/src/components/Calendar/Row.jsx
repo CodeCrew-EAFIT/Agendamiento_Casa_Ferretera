@@ -12,5 +12,6 @@ export default function Row ({ children, height }) {
 };
 
 Row.propTypes = {
-  children: PropTypes.node.isRequired
+  children: PropTypes.node.isRequired,
+  height: PropTypes.bool
 }
