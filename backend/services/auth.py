@@ -3,15 +3,15 @@ from models.user import User
 from schemas.auth import UserCreate
 from utils.security import get_password_hash
 
-def get_user(db: Session, email: str):
+def getUser(db: Session, email: str):
     return db.query(User).filter(User.email == email).first()
 
-def get_user_by_id(db: Session, user_id: int):
-    return db.query(User).filter(User.user_id == user_id).first()
+def getUserById(db: Session, userId: int):
+    return db.query(User).filter(User.user_id == userId).first()
 
-def create_user(db: Session, user: UserCreate):
+def createUser(db: Session, user: UserCreate):
     hashed_password = get_password_hash(user.hashed_password)
-    db_user = User(
+    dbUser = User(
         name=user.name,
         role=user.role.value,  # Acceder al valor del Enum
         hashed_password=hashed_password,
@@ -19,7 +19,7 @@ def create_user(db: Session, user: UserCreate):
         phone_number=user.phone_number,
         brand_id=user.brand_id
     )
-    db.add(db_user)
+    db.add(dbUser)
     db.commit()
-    db.refresh(db_user)
-    return db_user
+    db.refresh(dbUser)
+    return dbUser

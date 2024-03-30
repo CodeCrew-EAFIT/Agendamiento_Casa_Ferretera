@@ -5,11 +5,11 @@ from middlewares.authenticateUser import authenticateUser
 from schemas.additionalSchemas import CreatePromotionRequest
 
 
-promotion = APIRouter()
+promotionRouter = APIRouter()
 
 # Route to fetch a promotion given a promotion_id
 
-@promotion.get("/promotion/{promotion_id}")
+@promotionRouter.get("/promotion/{promotion_id}")
 async def fetchPromotion(promotion_id: int): #, authenticated_user: None = Depends(authenticateUser)):
     promotions = getPromotion(promotion_id)
     return promotions
@@ -17,34 +17,25 @@ async def fetchPromotion(promotion_id: int): #, authenticated_user: None = Depen
 
 # Route to create a promotion and consequently a booking
 
-@promotion.post("/create-promotion")
+@promotionRouter.post("/create-promotion")
 async def createPromotion(request: CreatePromotionRequest): #, authenticated_user: None = Depends(authenticateUser)):
 
     booking = request.booking
-
     available = checkAvailability(booking.booking_date, booking.start_time, booking.end_time, booking.location_id)
-    '''time_obj = datetime.strptime(booking.start_time, "%H:%M:%S")
-    hour = time_obj.hour
-    minute = time_obj.minute
-    second = time_obj.second
-    print(hour)
-    print(minute)
-    print(second)'''
 
-    '''
-    result = createBooking(booking) 
-    bookingId = result.inserted_primary_key[0]
-    result2 = createPromotion(bookingId, request.promoter_user_id) 
-    
-    '''
-
-    return {'data': 'Promotion correctly scheduled'}
+    if available:
+        result = createBooking(booking) 
+        bookingId = result.booking_id
+        result2 = createPromotionFunc(bookingId, request.promoter_user_id)
+        return {'message': 'The promotion has been successfully scheduled.'}
+    else:
+        return {'message': 'It is not possible to schedule a promotion due to conflicts with a promotion on the same time range.'}
 
 
 
 # Route to fetch promotions given a promoter_user_id
 
-@promotion.get("/promotions-by-promoter-id/{promoter_user_id}")
+@promotionRouter.get("/promotions-by-promoter-id/{promoter_user_id}")
 async def fetchPromotionsByPromoterId(promoter_user_id: int): #, authenticated_user: None = Depends(authenticateUser)):
     promotions = getPromotionsByPromoterId(promoter_user_id)
     return promotions
@@ -52,7 +43,7 @@ async def fetchPromotionsByPromoterId(promoter_user_id: int): #, authenticated_u
 
 # Test route
 
-@promotion.get("/")
+@promotionRouter.get("/")
 async def testFunction():
     print("This is a test")
     return {"data": "This is a test x2"}

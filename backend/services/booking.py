@@ -1,74 +1,80 @@
 from fastapi import HTTPException
-from sqlalchemy import select, column, exists
 from services.convertToDictionary import convertToDictionary
-from models.booking import booking as bookingTable
+from models.booking import Booking as BookingTable
 from schemas.booking import Booking
-from config.db import conn
-from datetime import date, datetime
+from datetime import date, time, datetime
+from config.db import get_db
+import pytz
 
+# Function to get a datetime with Colombia timezone
+
+def getColombiaTimezoneDatetime():
+    colombiaTz = pytz.timezone('America/Bogota')  
+    currentTimeNaive = datetime.now()
+    currentTimeInColombia = currentTimeNaive.astimezone(colombiaTz)
+    return currentTimeInColombia
 
 # Function to create a booking given a Booking object
 
 def createBooking(booking: Booking):
 
-    bookingDict = {
-        "location_id": booking.location_id,
-        "booking_date": booking.booking_date,
-        "start_time": booking.start_time,
-        "end_time": booking.end_time,
-        "created_at": booking.created_at,
-        "user_id_created_by": booking.user_id_created_by,
-        "updated_at": booking.updated_at,
-        "user_id_updated_by": booking.user_id_updated_by,
-        "change_reason": booking.change_reason
-    }
-    
-    result = conn.execute(bookingTable.insert().values(bookingDict))
-    conn.commit()
-    return result
+    dbBooking = BookingTable(
+        location_id = booking.location_id,
+        booking_date = booking.booking_date,
+        start_time = booking.start_time,
+        end_time = booking.end_time,
+        created_at = getColombiaTimezoneDatetime(),
+        user_id_created_by = booking.user_id_created_by,
+        updated_at = booking.updated_at,
+        user_id_updated_by = booking.user_id_updated_by,
+        change_reason = booking.change_reason
+    )
+
+    db = get_db()
+    db.add(dbBooking)
+    db.commit()
+    db.refresh(dbBooking)
+
+    return dbBooking
 
 
 # Function to fetch a booking given a booking_id
 
 def getBooking(bookingId: int):
-    query = select(bookingTable).where(bookingTable.c.booking_id == bookingId)
-    promotion = conn.execute(query).first()
-    if promotion is not None:
-        results = convertToDictionary(promotion)
-        return results
+
+    db = get_db()
+    booking = db.query(BookingTable).filter(BookingTable.booking_id == bookingId).first()
+    
+    if booking is not None:
+        return booking
     else:
         raise HTTPException(status_code=404, detail="Not Found")
     
 
 # Function to check the availabily of a location given the date, start time and end time
     
-def checkAvailability(date: date, startTime2: str, endTime2: str, locationId: int):
-    query = select(bookingTable).where(bookingTable.c.booking_date == date, bookingTable.c.location_id == locationId)
-    bookings = conn.execute(query).fetchall()
-    bookingsDict = convertToDictionary(bookings)
+def checkAvailability(date: date, startTime2: time, endTime2: time, locationId: int):
+
+    db = get_db()
+    bookings = db.query(BookingTable).filter(BookingTable.booking_date == date, BookingTable.location_id == locationId).all()
+
     available = True
 
-    for booking in bookingsDict:
-        startTime = booking['start_time']
-        endTime = booking['end_time']
-        print(f'{startTime} - {endTime}')
+    for booking in bookings:
+        startTime = booking.start_time
+        endTime = booking.end_time
 
-        startTimeObj = datetime.strptime(startTime, "%H:%M:%S")
-        startTimeObj2  = datetime.strptime(startTime2, "%H:%M:%S")
-        hourDiff = startTimeObj.hour - startTimeObj2.hour
-        minuteDiff = startTimeObj.minute - startTimeObj2.minute
-        secondDiff = startTimeObj.second - startTimeObj2.second
-        print(f'{hourDiff} | {minuteDiff} | {secondDiff}')
+        statement1 = startTime < startTime2.replace(tzinfo=None)
+        statement2 = endTime > endTime2.replace(tzinfo=None)
+        statement3 = startTime > startTime2.replace(tzinfo=None)
+        statement4 = endTime < endTime2.replace(tzinfo=None)
+        statement5 = startTime2.replace(tzinfo=None) < endTime
+        statement6 = startTime < endTime2.replace(tzinfo=None)
 
-        if hourDiff <= 0:
-            print('La hora programada es después de la hora ya establecida')
-        elif minuteDiff <=0: 
-            print('La hora programada es después de la hora ya establecida')
-        elif secondDiff <= 0:
-            print('La hora programada es después de la hora ya establecida')
-        else: 
-            print('La hora programada es antes que la establecida')
+        if (statement1 and statement2) or (statement3 and statement4) or (statement1 and statement4 and statement5) or (statement3 and statement2 and statement6):
+            available = False
+            print("No puedes reservar, porque está ocupado")
+        else:
+            print("Puedes reservar...")
 
-    print(bookingsDict[0]['booking_date'])
-
-    return bookings
+    return available

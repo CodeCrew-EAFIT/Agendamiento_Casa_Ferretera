@@ -1,5 +1,6 @@
-from sqlalchemy import Table, Column, Integer, String, DateTime, ForeignKey
+from sqlalchemy import Table, Column, Integer, String, DateTime, ForeignKey, Date, Time
 from sqlalchemy.orm import relationship
+from datetime import date
 from config.db import Base
 
 class Booking(Base):
@@ -7,8 +8,9 @@ class Booking(Base):
     
     booking_id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     location_id = Column(Integer, ForeignKey('Location.location_id'), nullable=False)
-    start_date = Column(DateTime, nullable=True)
-    end_date = Column(DateTime, nullable=True)
+    booking_date = Column(Date, nullable=True)
+    start_time = Column(Time, nullable=True)
+    end_time = Column(Time, nullable=True)
     created_at = Column(DateTime, nullable=True)
     user_id_created_by = Column(Integer, ForeignKey('User.user_id'), nullable=False)
     updated_at = Column(DateTime)
