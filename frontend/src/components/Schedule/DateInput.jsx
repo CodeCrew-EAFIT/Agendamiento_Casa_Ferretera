@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
-import { addDays } from 'date-fns' // Importar addDays para manejar la fecha
+import { addDays } from 'date-fns'
 
 export default function DateInput ({ value, setValue }) {
   const [chosenDate, setChosenDate] = useState(value.date || null)
@@ -30,17 +30,15 @@ export default function DateInput ({ value, setValue }) {
 
   return (
     <div className="schedule-input-container" onClick={handleContainerClick}>
-      <div className="input-container w-full">
-        <div className="select">
-          <input
-            ref={dateInputRef}
-            className="text-xl bg-primary"
-            type="date"
-            value={chosenDate ? chosenDate.toISOString().split('T')[0] : ''}
-            onChange={handleDateChange}
-            min={minDate}
-          />
-        </div>
+      <div className="input-container w-full pl-5 cursor-pointer">
+        <input
+          ref={dateInputRef}
+          className="text-xl bg-primary filter-none cursor-pointer"
+          type="date"
+          value={chosenDate ? chosenDate.toISOString().split('T')[0] : ''}
+          onChange={handleDateChange}
+          min={minDate}
+        />
       </div>
     </div>
   )

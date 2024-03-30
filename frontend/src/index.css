@@ -3,7 +3,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
 :root {
   font-family: 'Montserrat', sans-serif;
   line-height: 1.5;
@@ -23,6 +22,12 @@
   margin: 0 auto;
   text-align: center;
 }
+
+input[type='date']::-webkit-calendar-picker-indicator {
+  filter: invert(50%) sepia(0) saturate(0) hue-rotate(180deg) brightness(0.8) contrast(1);
+  cursor: pointer;
+}
+
 
 /* BUTTON */
 
