@@ -7,6 +7,7 @@ class EnumState(enum.Enum):
     booked = "booked"
     completed = "completed"
     canceled = "canceled"
+    rated = "rated"
 
 class Promotion(Base):
     __tablename__ = "Promotion"
