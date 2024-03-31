@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from routers.promotion import promotionRouter
 from routers.booking import bookingRouter
+from routers.user import userRouter
 from routers.auth import authRouter
 from config.db import Base, engine
 from models import *
@@ -14,6 +15,7 @@ Base.metadata.create_all(bind=engine)
 app = FastAPI()
 app.include_router(promotionRouter)
 app.include_router(bookingRouter)
+app.include_router(userRouter)
 app.include_router(authRouter)
 app.add_middleware(
     CORSMiddleware,
