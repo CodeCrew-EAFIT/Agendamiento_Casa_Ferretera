@@ -16,18 +16,21 @@ export default function PopUp ({ formData, handleClosePopUp }) {
         />
         <div className="pop-up-title">
           <div className="mx-[80px]">
-            ¿Los documentos de <strong>{formData.promoter}</strong> están al día?
+            ¿Los documentos de <strong>{formData.promoter}</strong> están al
+            día?
           </div>
         </div>
       </div>
       <div className="w-full px-[80px] py-[33px]">
         <div className="pop-up-body">
-            <ReactSVG src={documentIcon} className="w-[144px] h-[144px]" />
-            <p>Seguridad Social</p>
+          <ReactSVG src={documentIcon} className="w-[144px] h-[144px]" />
+          <p>Seguridad Social</p>
         </div>
         <div className="pop-up-buttons">
-            <Button onClick={handleClosePopUp} white={true}>No, cambiar</Button>
-            <Button onClick={true}>Sí, agendar</Button>
+          <Button onClick={handleClosePopUp} white={true}>
+            No, cambiar
+          </Button>
+          <Button onClick={() => console.log('Agendar')}>Sí, agendar</Button>
         </div>
       </div>
     </div>

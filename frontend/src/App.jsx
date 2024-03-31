@@ -9,8 +9,10 @@ import ChooseUser from './pages/ChooseUser'
 import Home from './pages/Home'
 import UserPanel from './pages/Admin/UserPanel'
 import SchedulePromotion from './pages/SchedulePromotion'
+import Binnacle from './pages/Binnacle'
 import ProtectedRoute from './components/ProtectedRoute'
-import { USER_TYPES, ADMIN_USERS, ADMIN } from './utils/constants'
+import { USER_TYPES, ADMIN_USERS, ADMIN, PROMOTER } from './utils/constants'
+import Evidence from './pages/Evidence'
 
 function App () {
   return (
@@ -44,6 +46,26 @@ function App () {
               <ProtectedRoute
                 element={<UserPanel />}
                 allowedUsers={[ADMIN]}
+                redirectTo="/horario"
+              />
+            }
+          />
+          <Route
+            path="/bitacora"
+            element={
+              <ProtectedRoute
+                element={<Binnacle />}
+                allowedUsers={[PROMOTER]}
+                redirectTo="/horario"
+              />
+            }
+          />
+          <Route
+            path="/bitacora/:id"
+            element={
+              <ProtectedRoute
+                element={<Evidence />}
+                allowedUsers={[PROMOTER]}
                 redirectTo="/horario"
               />
             }

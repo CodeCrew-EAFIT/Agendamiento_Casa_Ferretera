@@ -115,10 +115,7 @@ export const INPUT_PLACEHOLDERS = {
   promoter: 'Promotor'
 }
 
-export const SAMPLE_PROMOTERS = [
-  'Maria Paula A.',
-  'Juan Felipe B.'
-]
+export const SAMPLE_PROMOTERS = ['Maria Paula A.', 'Juan Felipe B.']
 
 export const SAMPLE_USER_DATA = [
   {
@@ -246,5 +243,57 @@ export const SAMPLE_USER_DATA = [
     email: 'xxx@gmail.com',
     role: 'XXXXX',
     store: 'XXXXXXXX'
+  }
+]
+
+export const SAMPLE_PROMOTION_DATA = [
+  {
+    id: 1,
+    name: 'Stanley',
+    date: '2024-04-06',
+    promoter: 'Maria Paula A.',
+    location: 'Amador'
+  },
+  {
+    id: 2,
+    name: 'Black + Decker',
+    date: '2024-03-12',
+    promoter: 'Daniel Salazar',
+    location: 'América'
+  },
+  {
+    id: 3,
+    name: 'Stanley',
+    date: '2024-03-11',
+    promoter: 'Camila Valencia',
+    location: 'Apartadó'
+  },
+  {
+    id: 4,
+    name: 'Sata',
+    date: '2024-03-11',
+    promoter: 'Sandra Gomez',
+    location: 'Centro'
+  },
+  {
+    id: 5,
+    name: 'Furius',
+    date: '2024-03-15',
+    promoter: 'Martin Fernandez',
+    location: 'Envigado'
+  },
+  {
+    id: 6,
+    name: 'Dewalt',
+    date: '2024-03-14',
+    promoter: 'Juan Camilo Diaz',
+    location: 'Itagüí'
+  },
+  {
+    id: 7,
+    name: 'Stanley',
+    date: '2024-03-21',
+    promoter: 'Santiago Jaramillo',
+    location: 'La Ceja'
   }
 ]

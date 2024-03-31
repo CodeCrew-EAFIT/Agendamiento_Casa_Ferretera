@@ -132,6 +132,20 @@ input[type='date']::-webkit-calendar-picker-indicator {
   @apply flex items-center gap-1
 }
 
+/* BOTTOM NAV */
+
+.bottom-nav {
+  @apply w-full flex items-center justify-between
+}
+
+.bottom-nav-button {
+  @apply flex items-center gap-1 cursor-pointer
+}
+
+.bottom-nav-page-button {
+  @apply flex justify-center items-center w-8 h-8 cursor-pointer
+}
+
 /* CALENDAR */
 
 .store-bar {
@@ -247,18 +261,6 @@ input[type='date']::-webkit-calendar-picker-indicator {
   @apply flex items-center justify-between
 }
 
-.user-panel-bottom-nav {
-  @apply w-full py-4 flex items-center justify-between bg-primary
-}
-
-.bottom-nav-button {
-  @apply flex items-center gap-1 cursor-pointer
-}
-
-.bottom-nav-page-button {
-  @apply flex justify-center items-center w-8 h-8 cursor-pointer
-}
-
 .pop-up-container {
   @apply w-[536px] h-[436px] absolute z-20 top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] text-xl bg-primary rounded-[15px]
 }
@@ -281,4 +283,18 @@ input[type='date']::-webkit-calendar-picker-indicator {
 
 .blur-screen {
   @apply w-full h-full absolute top-[100px] left-[50%] translate-x-[-50%] z-10 backdrop-blur-extra-sm
+}
+
+/* PROMOTIONS BOARD */
+
+.promotions-board {
+  @apply w-[926px] h-[550px] bg-secondary rounded-[30px] p-[41px] pb-0 flex flex-col items-center justify-between
+}
+
+.promotions-board-container {
+  @apply h-[416px] grid grid-cols-3 gap-x-[110px] gap-y-[60px]
+}
+
+.promotion-box {
+  @apply w-[197px] h-[178px] bg-tertiary flex flex-col items-center justify-center rounded-[10px] text-[18px] cursor-pointer
 }

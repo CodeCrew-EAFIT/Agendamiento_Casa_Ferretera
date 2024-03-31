@@ -96,7 +96,7 @@ export default function Users ({ searchValue }) {
         {userData}
       </tbody>
     </table>
-      <div className="user-panel-bottom-nav">
+      <div className="bottom-nav bg-primary py-4">
         <div
           className="bottom-nav-button pl-6"
           onClick={handlePrev}

@@ -20,9 +20,6 @@ export default function NavBar () {
   const isBlockUser = BLOCK_USERS.includes(userType)
   const isAdminUser = ADMIN_USERS.includes(userType)
 
-  const scheduleStyle = location.pathname.includes('/horario') ? 'font-bold' : ''
-  const userStyle = location.pathname.includes('/usuarios') ? 'font-bold' : ''
-
   const handleLogout = () => {
     setUserSession(null)
   }
@@ -41,14 +38,14 @@ export default function NavBar () {
           <p>{customerName}</p>
         </div>
         <ul className='flex gap-8'>
-          <li className={`cursor-pointer ${scheduleStyle}`} onClick={() => navigate('/horario')}>Horario</li>
-          {isAdmin && <li className={`cursor-pointer ${userStyle}`} onClick={() => navigate('/usuarios')}>Usuarios</li>}
+          <li className={`cursor-pointer ${location.pathname.includes('/horario') ? 'font-bold' : ''}`} onClick={() => navigate('/horario')}>Horario</li>
+          {isAdmin && <li className={`cursor-pointer ${location.pathname.includes('/usuarios') ? 'font-bold' : ''}`} onClick={() => navigate('/usuarios')}>Usuarios</li>}
           {isBlockUser && <li className={'cursor-pointer'}>Bloquear</li>}
           {isAdmin && <li className={'cursor-pointer'}>Dashboard</li>}
           {isChief && <li className={'cursor-pointer'}>Promotores</li>}
           {isSupervisor && <li className={'cursor-pointer'}>Calificar</li>}
           {isAdminUser && <li className={'cursor-pointer'}>Reportes</li>}
-          {isPromoter && <li className={'cursor-pointer'}>Bitacora</li>}
+          {isPromoter && <li className={`cursor-pointer ${location.pathname.includes('/bitacora') ? 'font-bold' : ''}`} onClick={() => navigate('/bitacora')}>Bitácora</li>}
         </ul>
       </div>
     </div>

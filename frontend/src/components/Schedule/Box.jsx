@@ -22,7 +22,6 @@ export default function Box ({ start, end }) {
 }
 
 Box.propTypes = {
-  position: PropTypes.number.isRequired,
   start: PropTypes.number.isRequired,
   end: PropTypes.number.isRequired
 }

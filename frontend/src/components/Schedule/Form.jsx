@@ -38,6 +38,7 @@ export default function Form ({ formData, setFormData }) {
       formData.endTime &&
       formData.promoter
     ) {
+      console.log(formData)
       setTogglePopUp(true)
     }
   }
