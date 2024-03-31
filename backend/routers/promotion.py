@@ -7,6 +7,17 @@ from schemas.additionalSchemas import CreatePromotionRequest
 
 promotionRouter = APIRouter()
 
+
+# Route to fetch all promotions
+
+# # Return only the completed promotions !!!
+
+@promotionRouter.get("/all-promotions")
+async def fetchAllPromotions(): #, authenticated_user: None = Depends(authenticateUser)):
+    allPromotions = getAllPromotions()
+    return allPromotions
+
+
 # Route to fetch a promotion given a promotion_id
 
 @promotionRouter.get("/promotion/{promotion_id}")

@@ -1,9 +1,16 @@
 from fastapi import HTTPException
-from services.convertToDictionary import convertToDictionary
 from models.promotion import Promotion
 from models.user import User
 from config.db import get_db
 
+
+# Function to fetch all promotions
+
+def getAllPromotions():
+    db = get_db()
+    allPromotions = db.query(Promotion).all()
+    return allPromotions
+    
 
 # Function to create a promotion
 
