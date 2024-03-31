@@ -1,5 +1,4 @@
 from fastapi import HTTPException
-from services.convertToDictionary import convertToDictionary
 from models.booking import Booking as BookingTable
 from schemas.booking import Booking
 from datetime import date, time, datetime
@@ -36,6 +35,14 @@ def createBooking(booking: Booking):
     db.refresh(dbBooking)
 
     return dbBooking
+
+
+# Function to fetch all bookings
+
+def getAllBookings():
+    db = get_db()
+    allBookings = db.query(BookingTable).all()
+    return allBookings
 
 
 # Function to fetch a booking given a booking_id

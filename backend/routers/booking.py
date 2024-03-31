@@ -5,6 +5,14 @@ from middlewares.authenticateUser import authenticateUser
 
 bookingRouter = APIRouter()
 
+# Route to fetch all promotions
+
+@bookingRouter.get("/all-bookings")
+async def fetchAllBookings(): #, authenticated_user: None = Depends(authenticateUser)):
+    allBookings = getAllBookings()
+    return allBookings
+
+
 # Route to fetch a booking given a booking_id
 
 @bookingRouter.get("/booking/{booking_id}")
