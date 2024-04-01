@@ -6,12 +6,30 @@ from middlewares.getIdFromHeader import getIdFromHeader
 
 userRouter = APIRouter()
 
-# Route to fetch all promotions
+
+# Route to fetch all users
+
+@userRouter.get("/all-users")
+async def fetchAllUsersByRole(): #, authenticated_user: None = Depends(authenticateUser)):
+    allUsers = getAllUsers()
+    return allUsers
+
+
+# Route to fetch all user given the role
 
 @userRouter.get("/all-users-by-role/{role}")
 async def fetchAllUsersByRole(role: str): #, authenticated_user: None = Depends(authenticateUser)):
-    allUsers = getAllUsersByRole(role)
-    return allUsers
+    allUsersByRole = getAllUsersByRole(role)
+    return allUsersByRole
+
+
+
+# Route to fetch all user given the brand
+
+@userRouter.get("/all-promoters-by-brand/{brand_name}")
+async def fetchAllPromotersByBrand(brand_name: str): #, authenticated_user: None = Depends(authenticateUser)):
+    allPromotersByBrand = getAllPromotersByBrand(brand_name)
+    return allPromotersByBrand
 
 
 # Route to fetch a booking given a booking_id

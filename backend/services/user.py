@@ -1,9 +1,22 @@
 from fastapi import HTTPException
 from models.user import User as UserTable
+from models.brand import Brand
 from config.db import get_db
 
 
-# Function to fetch all bookings
+
+# Function to fetch all users
+
+def getAllUsers():
+    db = get_db()
+    allUsers = db.query(UserTable).all()
+    if len(allUsers) is not 0:
+        return allUsers
+    else:
+        raise HTTPException(status_code=404, detail="Not Found")
+
+
+# Function to fetch all users given the role
 
 def getAllUsersByRole(role: str):
     db = get_db()
@@ -14,7 +27,26 @@ def getAllUsersByRole(role: str):
         raise HTTPException(status_code=404, detail="Not Found")
 
 
-# Function to fetch a booking given a booking_id
+# Function to fetch all promoters given the brand
+
+def getAllPromotersByBrand(brandName: str):
+    db = get_db()
+    brandExists = db.query(Brand).filter(Brand.brand_name == brandName).scalar()
+    if brandExists:
+        brandId, = db.query(Brand.brand_id).filter(Brand.brand_name == brandName).first()
+        allPromotersByBrand = db.query(UserTable).filter(UserTable.role == 'promotor', UserTable.brand_id == brandId).all()
+        if len(allPromotersByBrand) != 0:
+            return allPromotersByBrand
+        else:
+            raise HTTPException(status_code=404, detail="Not Found")
+
+        return promotions
+    else:
+        raise HTTPException(status_code=404, detail="Not Found")
+
+
+
+# Function to fetch an user given an user id
 
 def getUserById(userId: int):
 
