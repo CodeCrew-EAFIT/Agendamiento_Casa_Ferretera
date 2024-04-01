@@ -16,6 +16,7 @@ class Promotion(Base):
     booking_id = Column(Integer, ForeignKey('Booking.booking_id'), nullable=False)
     promoter_user_id = Column(Integer, ForeignKey('User.user_id'), nullable=False)
     promotion_state = Column(Enum(EnumState))
+    has_evidence = Column(Integer, default=0)
 
     #Relationships
     booking = relationship("Booking", back_populates="promotion")
