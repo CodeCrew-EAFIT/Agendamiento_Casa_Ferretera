@@ -21,7 +21,7 @@ def getAllUsers():
 def getAllUsersByRole(role: str):
     db = get_db()
     allUsers = db.query(UserTable).filter(UserTable.role == role).all()
-    if len(allUsers) is not 0:
+    if len(allUsers) != 0:
         return allUsers
     else:
         raise HTTPException(status_code=404, detail="Not Found")
