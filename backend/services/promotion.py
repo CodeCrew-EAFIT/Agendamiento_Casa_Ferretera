@@ -23,8 +23,8 @@ def getPastAndFutureDate():
 def getAllPromotions(): 
     db = get_db()
     oneMonthAgo, oneMonthFuture = getPastAndFutureDate()
-    bookings = db.query(Booking).filter(Booking.booking_date >= oneMonthAgo, Booking.booking_date <= oneMonthFuture).all()
-    allPromotions = db.query(Promotion).join(bookings, Promotion.booking_id == Booking.booking_id).all()
+    allPromotions = db.query(Promotion).join(Booking, Promotion.booking_id == Booking.booking_id
+    ).filter(Booking.booking_date >= oneMonthAgo, Booking.booking_date <= oneMonthFuture).all()
     return allPromotions
     
 
