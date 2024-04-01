@@ -13,11 +13,12 @@ evidenceRouter = APIRouter()
 async def postEvidence(request: Evidence, authenticated_user_id: str = Depends(getIdFromHeader)):
     userRole = getUserRole(authenticated_user_id)
     if userRole == "promotor":
-        createEvidence(request, authenticated_user_id)    
+        createEvidence(request, authenticated_user_id)
+        updateRatedPromotionEv(request.promotion_id)   
     else:
         raise HTTPException(status_code=403, detail="Forbidden Access")
      
-    return {'message': 'The promotion has been successfully rated.'}
+    return {'message': 'Evidence created.'}
 
 
 @evidenceRouter.get("/promotions-pending-evidence")

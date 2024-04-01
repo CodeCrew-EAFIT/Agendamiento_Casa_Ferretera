@@ -39,7 +39,7 @@ def checkValidState(promotion_id):
 def getPromotionsToRate():
     returnlist = []
     db = get_db()
-    promotionsToRate = db.query(Promotion).filter(Promotion.promotion_state == "booked").all()
+    promotionsToRate = db.query(Promotion).filter(Promotion.promotion_state == "completed").all()
     for pro in promotionsToRate:
         book = db.query(Booking).join(Promotion, Booking.booking_id == Promotion.booking_id).filter(Promotion.promotion_id==pro.promotion_id).first()
         bran = db.query(Brand).join(User, Brand.brand_id == User.brand_id).join(Promotion, User.user_id == Promotion.promoter_user_id).filter(Promotion.promotion_id == pro.promotion_id).first()
@@ -68,13 +68,17 @@ def getPromotionsPending():
 
 def updateRatedPromotion(promotion_id):
     db = get_db()
-    promotion = db.query().filter(Promotion.promotion_id == promotion_id).first()
-    print(promotion)
+    promotion = db.query(Promotion).filter(Promotion.promotion_id == promotion_id).first()
     promotion.promotion_state = "rated"
     db.commit()
     return "Updated promotion"
 
-
+def updateRatedPromotionEv(promotion_id):
+    db = get_db()
+    promotion = db.query(Promotion).filter(Promotion.promotion_id == promotion_id).first()
+    promotion.has_evidence = 1
+    db.commit()
+    return "Updated promotion"
 
 
 # Function to create a promotion
