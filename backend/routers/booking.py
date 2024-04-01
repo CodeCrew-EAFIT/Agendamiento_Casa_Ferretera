@@ -1,7 +1,7 @@
 from services.promotion import *
 from services.booking import *
 from fastapi import APIRouter, Depends
-from middlewares.authenticateUser import authenticateUser
+from services.getUserRole import *
 
 bookingRouter = APIRouter()
 

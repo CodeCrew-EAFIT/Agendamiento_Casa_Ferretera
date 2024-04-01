@@ -2,7 +2,7 @@ from services.promotion import *
 from services.booking import *
 from services.user import *
 from fastapi import APIRouter, Depends
-from middlewares.authenticateUser import authenticateUser
+from middlewares.getIdFromHeader import getIdFromHeader
 
 userRouter = APIRouter()
 
