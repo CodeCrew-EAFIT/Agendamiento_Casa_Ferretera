@@ -2,6 +2,7 @@ from fastapi import HTTPException
 from models.promotion import Promotion
 from models.booking import Booking
 from models.user import User
+from models.location import Location
 from config.db import get_db
 from datetime import date, timedelta
 
@@ -19,33 +20,10 @@ def getPastAndFutureDate():
 def getAllPromotions(): 
     db = get_db()
     oneMonthAgo, oneMonthFuture = getPastAndFutureDate()
-    bookings = db.query(Booking).filter(Booking.booking_date >= oneMonthAgo, Booking.booking_date <= oneMonthFuture).all()
-    allPromotions = db.query(Promotion).join(bookings, Promotion.booking_id == Booking.booking_id).all()
+    allPromotions = db.query(Promotion).join(Booking, Promotion.booking_id == Booking.booking_id
+    ).filter(Booking.booking_date >= oneMonthAgo, Booking.booking_date <= oneMonthFuture).all()
+
     return allPromotions
-    
-
-def checkValidState(promotion_id):
-    db = get_db()
-    promotion = db.query(Promotion).filter(Promotion.promotion_id == promotion_id).first()
-    if promotion.promotion_state.value != "completed":
-        return False
-    else:
-        return True
-
-
-def getPromotionsToRate():
-    db = get_db()
-    promotionsToRate = db.query(Promotion).filter(Promotion.promotion_state == "booked").all()
-    return promotionsToRate
-
-def updateRatedPromotion(promotion_id):
-    db = get_db()
-    promotion = db.query(Promotion).filter(Promotion.promotion_id == promotion_id).first()
-    print(promotion)
-    promotion.promotion_state = "rated"
-    db.commit()
-    return "Updated promotion"
-
 
 
 
@@ -87,8 +65,52 @@ def getPromotionsByPromoterId(promoterUserId: int):
     promoterExists = db.query(User).filter(User.user_id == promoterUserId, User.role == 'promotor').scalar()
     if promoterExists:
         oneMonthAgo, oneMonthFuture = getPastAndFutureDate()
-        promotions = db.query(Promotion).filter(Promotion.promoter_user_id == promoterUserId, Promotion.date >= oneMonthAgo, Promotion.date <= oneMonthFuture).all()  
-        print(promotions)
+        promotions = db.query(Promotion).join(Booking, Promotion.booking_id == Booking.booking_id
+        ).filter(Booking.booking_date >= oneMonthAgo, Booking.booking_date <= oneMonthFuture, Promotion.promoter_user_id == promoterUserId).all()
+
         return promotions
     else:
         raise HTTPException(status_code=404, detail="Not Found")
+    
+
+
+# Function to fetch promotions given a location name
+    
+def getPromotionsByLocationName(locationName: str):
+    db = get_db()
+    locationExists = db.query(Location).filter(Location.location_name == locationName).scalar()
+    if locationExists:
+        locationId, = db.query(Location.location_id).filter(Location.location_name == locationName).first()
+        oneMonthAgo, oneMonthFuture = getPastAndFutureDate()
+        promotions = db.query(Promotion).join(Booking, Promotion.booking_id == Booking.booking_id
+        ).filter(Booking.booking_date >= oneMonthAgo, Booking.booking_date <= oneMonthFuture, Booking.location_id == locationId).all()
+
+        return promotions
+    else:
+        raise HTTPException(status_code=404, detail="Not Found")
+    
+
+
+def checkValidState(promotion_id):
+    db = get_db()
+    promotion = db.query(Promotion).filter(Promotion.promotion_id == promotion_id).first()
+    if promotion.promotion_state.value != "completed":
+        return False
+    else:
+        return True
+
+
+def getPromotionsToRate():
+    db = get_db()
+    promotionsToRate = db.query(Promotion).filter(Promotion.promotion_state == "booked").all()
+    return promotionsToRate
+
+
+
+def updateRatedPromotion(promotion_id):
+    db = get_db()
+    promotion = db.query(Promotion).filter(Promotion.promotion_id == promotion_id).first()
+    print(promotion)
+    promotion.promotion_state = "rated"
+    db.commit()
+    return "Updated promotion"
