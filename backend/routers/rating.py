@@ -23,7 +23,8 @@ async def postRating(request: Rating, authenticated_user_id: str = Depends(getId
     userRole = getUserRole(authenticated_user_id)
     validPromotion = checkValidState(request.promotion_id)
     if userRole == "supervisor" and validPromotion:
-        createRating(request, authenticated_user_id)
+        promoterId = getPromoterId(request.promotion_id)
+        createRating(request, authenticated_user_id, promoterId)
     
     elif not validPromotion:
         raise HTTPException(status_code=400, detail="Promotion not valid for rating")

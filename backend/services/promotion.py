@@ -80,6 +80,12 @@ def updateRatedPromotionEv(promotion_id):
     db.commit()
     return "Updated promotion"
 
+def getPromoterId(promotion_id):
+    print("PROMOTOR ID", promotion_id)
+    db = get_db()
+    promotion = db.query(Promotion).filter(Promotion.promotion_id == promotion_id).first()
+    return promotion.promoter_user_id
+
 
 # Function to create a promotion
 
