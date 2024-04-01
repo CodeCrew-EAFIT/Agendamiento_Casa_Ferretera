@@ -1,0 +1,21 @@
+from services.evidence import *
+from services.getUserRole import getUserRole
+from services.booking import *
+from fastapi import APIRouter, Depends
+from middlewares.getIdFromHeader import getIdFromHeader
+from schemas.evidence import Evidence
+
+evidenceRouter = APIRouter()
+
+
+@evidenceRouter.post("/create-evidence")
+async def postEvidence(request: Evidence, authenticated_user_id: str = Depends(getIdFromHeader)):
+    userRole = getUserRole(authenticated_user_id)
+    if userRole == "promotor":
+        createEvidence(request, authenticated_user_id)    
+    else:
+        raise HTTPException(status_code=403, detail="Forbidden Access")
+     
+    return {'message': 'The promotion has been successfully rated.'}
+
+
