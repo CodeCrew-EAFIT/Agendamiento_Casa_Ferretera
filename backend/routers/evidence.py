@@ -1,6 +1,7 @@
 from services.evidence import *
 from services.getUserRole import getUserRole
 from services.booking import *
+from services.promotion import *
 from fastapi import APIRouter, Depends
 from middlewares.getIdFromHeader import getIdFromHeader
 from schemas.evidence import Evidence
@@ -18,4 +19,13 @@ async def postEvidence(request: Evidence, authenticated_user_id: str = Depends(g
      
     return {'message': 'The promotion has been successfully rated.'}
 
+
+@evidenceRouter.get("/promotions-pending-evidence")
+async def fetchPromotionsToRate(authenticated_user: None = Depends(getIdFromHeader)):
+    userRole = getUserRole(authenticated_user)
+    if userRole == "supervisor":
+        promotionsToRate = getPromotionsPending()
+        return promotionsToRate
+    else:
+        raise HTTPException(status_code=403, detail="Forbidden Access")
 
