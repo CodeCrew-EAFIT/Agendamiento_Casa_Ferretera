@@ -84,7 +84,6 @@ def updateRatedPromotionEv(promotion_id):
 
 
 def getPromoterId(promotion_id):
-    print("PROMOTOR ID", promotion_id)
     db = get_db()
     promotion = db.query(Promotion).filter(Promotion.promotion_id == promotion_id).first()
     return promotion.promoter_user_id
@@ -164,9 +163,18 @@ def checkValidState(promotion_id):
 
 
 def getPromotionsToRate():
+    returnlist = []
     db = get_db()
-    promotionsToRate = db.query(Promotion).filter(Promotion.promotion_state == "booked").all()
-    return promotionsToRate
+    promotionsToRate = db.query(Promotion).filter(Promotion.promotion_state == "completed").all()
+    for pro in promotionsToRate:
+        book = db.query(Booking).join(Promotion, Booking.booking_id == Promotion.booking_id).filter(Promotion.promotion_id==pro.promotion_id).first()
+        bran = db.query(Brand).join(User, Brand.brand_id == User.brand_id).join(Promotion, User.user_id == Promotion.promoter_user_id).filter(Promotion.promotion_id == pro.promotion_id).first()
+        responsedic = {"promotion_id ":pro.promotion_id,
+                     "date": book.booking_date,
+                     "brand":bran.brand_name}
+        returnlist.append(responsedic)
+
+    return returnlist
 
 
 
