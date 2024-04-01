@@ -39,8 +39,6 @@ def getAllPromotersByBrand(brandName: str):
             return allPromotersByBrand
         else:
             raise HTTPException(status_code=404, detail="Not Found")
-
-        return promotions
     else:
         raise HTTPException(status_code=404, detail="Not Found")
 

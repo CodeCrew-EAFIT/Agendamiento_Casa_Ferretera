@@ -18,7 +18,7 @@ def getPastAndFutureDate():
     return oneMonthAgo, oneMonthFuture
     
 
-# Function to fetch all promotions
+# Function to get all promotions
 
 def getAllPromotions(): 
     db = get_db()
@@ -28,6 +28,9 @@ def getAllPromotions():
     return allPromotions
     
 
+
+# Function to check the state of a promotion given its id
+
 def checkValidState(promotion_id):
     db = get_db()
     promotion = db.query(Promotion).filter(Promotion.promotion_id == promotion_id).first()
@@ -36,6 +39,9 @@ def checkValidState(promotion_id):
     else:
         return True
 
+
+
+# Function to get all promotions pending rate
 
 def getPromotionsToRate():
     returnlist = []
@@ -52,6 +58,8 @@ def getPromotionsToRate():
     return returnlist
 
 
+# Function to get all promotions pending evidence
+
 def getPromotionsPending():
     returnlist = []
     db = get_db()
@@ -67,6 +75,8 @@ def getPromotionsPending():
     return returnlist
 
 
+# Function to update the state of a promotion to 'rated' given its id
+
 def updateRatedPromotion(promotion_id):
     db = get_db()
     promotion = db.query(Promotion).filter(Promotion.promotion_id == promotion_id).first()
@@ -75,6 +85,8 @@ def updateRatedPromotion(promotion_id):
     return "Updated promotion"
 
 
+# Function to update the state of promotion's evidence to '1' given its id
+
 def updateRatedPromotionEv(promotion_id):
     db = get_db()
     promotion = db.query(Promotion).filter(Promotion.promotion_id == promotion_id).first()
@@ -82,6 +94,8 @@ def updateRatedPromotionEv(promotion_id):
     db.commit()
     return "Updated promotion"
 
+
+# Function to get the promoter's id given a promotion id
 
 def getPromoterId(promotion_id):
     db = get_db()
@@ -151,37 +165,3 @@ def getPromotionsByLocationName(locationName: str):
     else:
         raise HTTPException(status_code=404, detail="Not Found")
     
-
-
-def checkValidState(promotion_id):
-    db = get_db()
-    promotion = db.query(Promotion).filter(Promotion.promotion_id == promotion_id).first()
-    if promotion.promotion_state.value != "completed":
-        return False
-    else:
-        return True
-
-
-def getPromotionsToRate():
-    returnlist = []
-    db = get_db()
-    promotionsToRate = db.query(Promotion).filter(Promotion.promotion_state == "completed").all()
-    for pro in promotionsToRate:
-        book = db.query(Booking).join(Promotion, Booking.booking_id == Promotion.booking_id).filter(Promotion.promotion_id==pro.promotion_id).first()
-        bran = db.query(Brand).join(User, Brand.brand_id == User.brand_id).join(Promotion, User.user_id == Promotion.promoter_user_id).filter(Promotion.promotion_id == pro.promotion_id).first()
-        responsedic = {"promotion_id ":pro.promotion_id,
-                     "date": book.booking_date,
-                     "brand":bran.brand_name}
-        returnlist.append(responsedic)
-
-    return returnlist
-
-
-
-def updateRatedPromotion(promotion_id):
-    db = get_db()
-    promotion = db.query(Promotion).filter(Promotion.promotion_id == promotion_id).first()
-    print(promotion)
-    promotion.promotion_state = "rated"
-    db.commit()
-    return "Updated promotion"
