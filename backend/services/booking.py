@@ -15,7 +15,7 @@ def getColombiaTimezoneDatetime():
 
 # Function to create a booking given a Booking object
 
-def createBooking(booking: Booking):
+def createBooking(booking: Booking, user_id):
 
     dbBooking = BookingTable(
         location_id = booking.location_id,
@@ -23,10 +23,7 @@ def createBooking(booking: Booking):
         start_time = booking.start_time,
         end_time = booking.end_time,
         created_at = getColombiaTimezoneDatetime(),
-        user_id_created_by = booking.user_id_created_by,
-        updated_at = booking.updated_at,
-        user_id_updated_by = booking.user_id_updated_by,
-        change_reason = booking.change_reason
+        user_id_created_by = user_id
     )
 
     db = get_db()
@@ -71,12 +68,12 @@ def checkAvailability(date: date, startTime2: time, endTime2: time, locationId: 
         startTime = booking.start_time
         endTime = booking.end_time
 
-        statement1 = startTime < startTime2.replace(tzinfo=None)
-        statement2 = endTime > endTime2.replace(tzinfo=None)
-        statement3 = startTime > startTime2.replace(tzinfo=None)
-        statement4 = endTime < endTime2.replace(tzinfo=None)
-        statement5 = startTime2.replace(tzinfo=None) < endTime
-        statement6 = startTime < endTime2.replace(tzinfo=None)
+        statement1 = startTime <= startTime2.replace(tzinfo=None)
+        statement2 = endTime >= endTime2.replace(tzinfo=None)
+        statement3 = startTime >= startTime2.replace(tzinfo=None)
+        statement4 = endTime <= endTime2.replace(tzinfo=None)
+        statement5 = startTime2.replace(tzinfo=None) <= endTime
+        statement6 = startTime <= endTime2.replace(tzinfo=None)
 
         if (statement1 and statement2) or (statement3 and statement4) or (statement1 and statement4 and statement5) or (statement3 and statement2 and statement6):
             available = False
