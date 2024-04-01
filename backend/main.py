@@ -4,6 +4,8 @@ from routers.promotion import promotionRouter
 from routers.booking import bookingRouter
 from routers.user import userRouter
 from routers.auth import authRouter
+from routers.rating import ratingRouter
+from routers.evidence import evidenceRouter
 from config.db import Base, engine
 from models import *
 
@@ -17,6 +19,8 @@ app.include_router(promotionRouter)
 app.include_router(bookingRouter)
 app.include_router(userRouter)
 app.include_router(authRouter)
+app.include_router(ratingRouter)
+app.include_router(evidenceRouter)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
