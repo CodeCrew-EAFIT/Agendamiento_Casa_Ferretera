@@ -1,22 +1,11 @@
-import React, { useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { useUserSession } from '../../utils/UserSessionContext.jsx'
+import React from 'react'
 import PropTypes from 'prop-types'
 import NavBar from '../../components/NavBar/index.jsx'
 import ContentContainer from '../Content/index.jsx'
 
 export default function Layout ({ children }) {
-  const navigate = useNavigate()
-  const { userType } = useUserSession()
-
-  useEffect(() => {
-    if (userType === null) {
-      navigate('/')
-    }
-  }, [userType, navigate])
-
   return (
-    <div>
+    <div className='w-[1024px] px-[49px] mx-auto'>
       <NavBar />
       <ContentContainer>
         {children}
