@@ -5,7 +5,7 @@ import closeIcon from '../../assets/icons/close.svg'
 import documentIcon from '../../assets/icons/document.svg'
 import Button from '../Button'
 
-export default function PopUp ({ formData, handleClosePopUp }) {
+export default function PopUp ({ formData, handleClosePopUp, handlePost }) {
   return (
     <div className="pop-up-container text-black shadow-[15px_15px_6px_0_rgba(0,0,0,0.25)]">
       <div className="pop-up-nav">
@@ -30,7 +30,7 @@ export default function PopUp ({ formData, handleClosePopUp }) {
           <Button onClick={handleClosePopUp} white={true}>
             No, cambiar
           </Button>
-          <Button onClick={() => console.log('Agendar')}>Sí, agendar</Button>
+          <Button onClick={handlePost}>Sí, agendar</Button>
         </div>
       </div>
     </div>
@@ -39,5 +39,6 @@ export default function PopUp ({ formData, handleClosePopUp }) {
 
 PopUp.propTypes = {
   formData: PropTypes.object.isRequired,
-  handleClosePopUp: PropTypes.func.isRequired
+  handleClosePopUp: PropTypes.func.isRequired,
+  handlePost: PropTypes.func.isRequired
 }

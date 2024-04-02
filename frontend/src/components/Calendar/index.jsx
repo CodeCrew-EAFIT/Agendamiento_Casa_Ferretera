@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { parseISO, getDay } from 'date-fns'
 import Nav from './Nav'
 import Row from './Row'
@@ -7,7 +8,7 @@ import TimeSlot from './TimeSlot'
 
 import { AVAILABLE_HOURS, SAMPLE_PROMOTION_DATA } from '../../utils/constants'
 
-export default function Calendar () {
+export default function Calendar ({ promotionData }) {
   const rowsNumber = AVAILABLE_HOURS.length * 2 - 1
   const colsNumber = 8
 
@@ -53,4 +54,8 @@ export default function Calendar () {
       </div>
     </div>
   )
+}
+
+Calendar.propTypes = {
+  promotionData: PropTypes.array
 }

@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import { useNavigate } from 'react-router-dom'
 import expandArrow from '../../assets/icons/expand-arrow.svg'
 import Button from '../Button'
@@ -8,14 +9,13 @@ import {
 } from '../../utils/constants'
 import Select from '../Input/Select'
 
-export default function ScheduleBar () {
+export default function ScheduleBar ({ location, setLocation }) {
   const navigate = useNavigate()
-  const [selectedBranch, setSelectedBranch] = useState('')
 
   const handleSubmit = () => {
-    if (selectedBranch) {
+    if (location) {
       navigate(
-        `/horario/agendar/${AVAILABLE_LOCATIONS_PATH_DICT[selectedBranch]}`
+        `/horario/agendar/${AVAILABLE_LOCATIONS_PATH_DICT[location]}`
       )
     }
   }
@@ -26,10 +26,15 @@ export default function ScheduleBar () {
         content={'Escoger sede'}
         optionsArray={AVAILABLE_LOCATIONS_ARRAY}
         expandArrow={expandArrow}
-        selectedValue={selectedBranch}
-        setSelectedValue={setSelectedBranch}
+        selectedValue={location}
+        setSelectedValue={setLocation}
       />
       <Button onClick={handleSubmit}>Agendar promotoría</Button>
     </div>
   )
+}
+
+ScheduleBar.propTypes = {
+  location: PropTypes.string,
+  setLocation: PropTypes.func
 }

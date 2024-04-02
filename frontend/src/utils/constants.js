@@ -1,3 +1,17 @@
+export const API_URL = 'http://127.0.0.1:8000'
+
+export const PROMOTER_BRAND = 'dewalt'
+
+export const PROMOTER_USER = {
+  name: 'Promoter1',
+  role: 'promotor',
+  email: 'promoter1@gmail.com',
+  brand: 'dewalt',
+  user_id: 11,
+  hashed_password: 'Promoter1*',
+  phone_number: '1212121212'
+}
+
 export const ADMIN = 'Administrador'
 export const SUPERVISOR = 'Supervisor'
 export const PROMOTER = 'Promotor'
@@ -56,6 +70,32 @@ export const AVAILABLE_HOURS_SPECIFIC = [
   '6:00 PM'
 ]
 
+export const AVAILABLE_HOURS_MILITARY = {
+  '7:00 AM': '07:00',
+  '7:30 AM': '07:30',
+  '8:00 AM': '08:00',
+  '8:30 AM': '08:30',
+  '9:00 AM': '09:00',
+  '9:30 AM': '09:30',
+  '10:00 AM': '10:00',
+  '10:30 AM': '10:30',
+  '11:00 AM': '11:00',
+  '11:30 AM': '11:30',
+  '12:00 PM': '12:00',
+  '12:30 PM': '12:30',
+  '1:00 PM': '13:00',
+  '1:30 PM': '13:30',
+  '2:00 PM': '14:00',
+  '2:30 PM': '14:30',
+  '3:00 PM': '15:00',
+  '3:30 PM': '15:30',
+  '4:00 PM': '16:00',
+  '4:30 PM': '16:30',
+  '5:00 PM': '17:00',
+  '5:30 PM': '17:30',
+  '6:00 PM': '18:00'
+}
+
 export const AVAILABLE_HOURS_SIMPLIFIED = [
   '7 AM',
   '8 AM',
@@ -105,6 +145,42 @@ export const AVAILABLE_LOCATIONS_PATH_DICT = {
   'La Ceja': 'laceja',
   Palacé: 'palace',
   Rionegro: 'rionegro'
+}
+
+export const AVAILABLE_LOCATIONS_TO_ID = {
+  Amador: 1,
+  América: 2,
+  Palacé: 3,
+  Centro: 4,
+  Itagüí: 5,
+  Envigado: 6,
+  Rionegro: 7,
+  'La Ceja': 8,
+  Apartadó: 9
+}
+
+export const ID_TO_AVAILABLE_LOCATIONS = {
+  1: 'Amador',
+  2: 'América',
+  3: 'Palacé',
+  4: 'Centro',
+  5: 'Itagüí',
+  6: 'Envigado',
+  7: 'Rionegro',
+  8: 'La Ceja',
+  9: 'Apartadó'
+}
+
+export const BRAND_TO_ID = {
+  casaferretera: 1,
+  dewalt: 2,
+  'black+decker': 3
+}
+
+export const ID_TO_BRAND = {
+  1: 'Casa Ferretera',
+  2: 'Dewalt',
+  3: 'Balck+Decker'
 }
 
 export const INPUT_PLACEHOLDERS = {

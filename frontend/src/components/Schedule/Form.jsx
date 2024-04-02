@@ -1,9 +1,17 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
+import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
+import { useUserSession } from '../../utils/UserSessionContext'
 import {
   AVAILABLE_LOCATIONS_ARRAY,
   AVAILABLE_HOURS_SPECIFIC,
-  SAMPLE_PROMOTERS
+  AVAILABLE_LOCATIONS_TO_ID,
+  ADMIN,
+  ID_TO_BRAND,
+  AVAILABLE_HOURS_MILITARY,
+  PROMOTER_BRAND,
+  API_URL
 } from '../../utils/constants'
 import Input from './Input'
 import expandedArrow from '../../assets/icons/expand-arrow.svg'
@@ -12,7 +20,13 @@ import DateInput from './DateInput'
 import PopUp from './PopUp'
 
 export default function Form ({ formData, setFormData }) {
+  const navigate = useNavigate()
+  const { userType } = useUserSession()
   const [togglePopUp, setTogglePopUp] = useState(false)
+  const [fetchedPromoters, setFetchedPromoters] = useState([])
+  const [promoters, setPromoters] = useState([])
+
+  // Time logic
 
   let startTimeArray = AVAILABLE_HOURS_SPECIFIC.slice(
     0,
@@ -22,13 +36,73 @@ export default function Form ({ formData, setFormData }) {
 
   if (formData.endTime) {
     const index = AVAILABLE_HOURS_SPECIFIC.indexOf(formData.endTime)
-    startTimeArray = AVAILABLE_HOURS_SPECIFIC.slice(0, index)
+    startTimeArray = AVAILABLE_HOURS_SPECIFIC.slice(0, index - 1)
   }
 
   if (formData.startTime) {
     const index = AVAILABLE_HOURS_SPECIFIC.indexOf(formData.startTime)
-    endTimeArray = AVAILABLE_HOURS_SPECIFIC.slice(index + 1)
+    endTimeArray = AVAILABLE_HOURS_SPECIFIC.slice(index + 2)
   }
+
+  // Fetching logic
+
+  const fetchAllPromoters = async () => {
+    try {
+      const response = await axios.get(`${API_URL}/all-users-by-role/promotor`)
+
+      setFetchedPromoters(response.data)
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  const fetchBrandPromoters = async () => {
+    try {
+      const response = await axios.get(`${API_URL}/all-promoters-by-brand/${PROMOTER_BRAND}`)
+
+      setFetchedPromoters(response.data)
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  const postPromotion = async (data) => {
+    const headers = {
+      'Content-Type': 'application/json',
+      'user-id': userType === ADMIN ? 10 : 13
+    }
+    try {
+      const response = await axios.post(`${API_URL}/create-promotion`, data, { headers })
+      console.log(response)
+      if (response.status === 200) {
+        navigate('/horario')
+      }
+    } catch (error) {
+      alert(error.response)
+      setTogglePopUp(false)
+    }
+  }
+
+  // Handlers
+
+  useEffect(() => {
+    if (userType === ADMIN) {
+      fetchAllPromoters()
+    } else {
+      fetchBrandPromoters()
+    }
+  }, [])
+
+  useEffect(() => {
+    let curatedPromoters = fetchedPromoters.map((promoter) => (promoter.name))
+    if (userType === ADMIN) {
+      curatedPromoters = fetchedPromoters.map((promoter) => {
+        const promoterContent = promoter.name + ' - ' + ID_TO_BRAND[promoter.brand_id]
+        return promoterContent
+      })
+    }
+    setPromoters(curatedPromoters)
+  }, [fetchedPromoters])
 
   const handleSubmit = () => {
     if (
@@ -38,7 +112,6 @@ export default function Form ({ formData, setFormData }) {
       formData.endTime &&
       formData.promoter
     ) {
-      console.log(formData)
       setTogglePopUp(true)
     }
   }
@@ -47,9 +120,23 @@ export default function Form ({ formData, setFormData }) {
     setTogglePopUp(false)
   }
 
+  const handlePost = async () => {
+    const data = {
+      booking: {
+        location_id: AVAILABLE_LOCATIONS_TO_ID[formData.location],
+        booking_date: formData.date,
+        start_time: AVAILABLE_HOURS_MILITARY[formData.startTime] + ':00',
+        end_time: AVAILABLE_HOURS_MILITARY[formData.endTime] + ':00'
+      },
+      promoter_user_id: fetchedPromoters[promoters.indexOf(formData.promoter)].user_id
+    }
+
+    await postPromotion(data)
+  }
+
   return (
     <>
-      {togglePopUp && <PopUp formData={formData} handleClosePopUp={handleClosePopUp}/>}
+      {togglePopUp && <PopUp formData={formData} handleClosePopUp={handleClosePopUp} handlePost={handlePost}/>}
       {togglePopUp && (
         <div
           className="blur-screen bg-transparent"
@@ -100,7 +187,7 @@ export default function Form ({ formData, setFormData }) {
                 arrowIcon={expandedArrow}
                 value={formData}
                 setValue={setFormData}
-                optionsArray={SAMPLE_PROMOTERS}
+                optionsArray={promoters}
               />
             </div>
           </div>
