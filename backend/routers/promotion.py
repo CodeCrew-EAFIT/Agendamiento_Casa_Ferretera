@@ -43,7 +43,7 @@ async def createPromotion(request: CreatePromotionRequest, authenticatedUserId: 
             result2 = createPromotionFunc(bookingId, request.promoter_user_id)
             return {'message': 'The promotion has been successfully scheduled.'}
         else:
-            return {'message': 'It is not possible to schedule a promotion due to conflicts with a promotion on the same time range.'}
+            raise HTTPException(status_code=409, detail="Conflict with existing promotion")
     else:
         raise HTTPException(status_code=403, detail="Forbidden Access")
 
