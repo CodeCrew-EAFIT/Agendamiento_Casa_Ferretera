@@ -7,18 +7,11 @@ import ContentContainer from '../containers/Content'
 export default function ChooseUser () {
   const navigate = useNavigate()
   const { userType, setUserSession } = useUserSession()
-  const [userChanged, setUserChanged] = useState(false)
 
   const handleUserSelection = (type) => {
     setUserSession(type)
-    setUserChanged(true)
+    navigate('/horario')
   }
-
-  useEffect(() => {
-    if (userType && userChanged) {
-      navigate('/horario')
-    }
-  }, [userType, navigate, userChanged])
 
   return (
     <ContentContainer className='login-container'>

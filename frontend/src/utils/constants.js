@@ -178,6 +178,7 @@ export const BRAND_TO_ID = {
 }
 
 export const ID_TO_BRAND = {
+  0: 'XXXXXXXX',
   1: 'Casa Ferretera',
   2: 'Dewalt',
   3: 'Balck+Decker'
@@ -192,6 +193,13 @@ export const INPUT_PLACEHOLDERS = {
 }
 
 export const SAMPLE_PROMOTERS = ['Maria Paula A.', 'Juan Felipe B.']
+
+export const FILLER_USER = {
+  name: 'XXX',
+  email: 'xxx@gmail.com',
+  role: 'XXXXX',
+  brand_id: 0
+}
 
 export const SAMPLE_USER_DATA = [
   {
