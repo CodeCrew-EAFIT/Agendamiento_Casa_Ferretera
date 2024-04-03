@@ -203,6 +203,11 @@ input[type='date']::-webkit-calendar-picker-indicator {
   background: #88868B;
 }
 
+/* CALENDAR BOX */
+.calendar-box {
+  @apply absolute flex items-center justify-center bg-tertiary rounded-[10px] shadow-[5px_5px_5px_0_rgba(0,0,0,0.25)] font-bold
+}
+
 /* SHEDULE */
 
 .schedule-container {

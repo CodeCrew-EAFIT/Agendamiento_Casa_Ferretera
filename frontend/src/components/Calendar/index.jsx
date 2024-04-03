@@ -69,8 +69,8 @@ export default function Calendar ({ promotionData, location, promoterPromotions 
     if (promotionLocation === location && parsedDate >= start && parsedDate <= end) {
       console.log(promotion)
       return (
-        <div className="absolute flex items-center justify-center bg-tertiary rounded-[10px] shadow-[5px_5px_5px_0_rgba(0,0,0,0.25)] font-bold"
-              style={{ left: `${75 + 115.4 * (dayOfWeek - 1)}px`, width: `${dayOfWeek === 7 ? 127 : 115.25}px`, height: `${(endTime - startTime) * 26}px`, top: `${(startTime - 1) * 26}px`}}
+        <div className="calendar-box"
+              style={{ left: `${75 + 115.4 * (dayOfWeek - 1)}px`, width: `${dayOfWeek === 7 ? 129 : 115.25}px`, height: `${(endTime - startTime) * 26}px`, top: `${(startTime - 1) * 26}px`}}
             >
               {promotion.brand_name.toUpperCase().split('+').join(' + ')}
             </div>
@@ -80,10 +80,9 @@ export default function Calendar ({ promotionData, location, promoterPromotions 
     if (userType === PROMOTER && parsedDate >= start && parsedDate <= end) {
       const promoterPromotion = promoterPromotions.find(promo => promo.booking_id === promotion.booking_id);
       const promotionLocation = ID_TO_AVAILABLE_LOCATIONS[promotion.location_id]
-      console.log(promoterPromotion)
       return ( promoterPromotion &&
-        <div className="absolute flex items-center justify-center bg-tertiary rounded-[10px] shadow-[5px_5px_5px_0_rgba(0,0,0,0.25)] font-bold text-[18px]"
-              style={{ left: `${75 + 115.4 * (dayOfWeek - 1)}px`, width: `${dayOfWeek === 7 ? 127 : 115.25}px`, height: `${(endTime - startTime) * 26}px`, top: `${(startTime - 1) * 26}px`}}
+        <div className="calendar-box text-[18px]"
+              style={{ left: `${75 + 115.4 * (dayOfWeek - 1)}px`, width: `${dayOfWeek === 7 ? 129 : 115.25}px`, height: `${(endTime - startTime) * 26}px`, top: `${(startTime - 1) * 26}px`}}
             >
               Sede {promotionLocation}
             </div>
