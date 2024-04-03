@@ -1,34 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import { ReactSVG } from 'react-svg'
-import { startOfWeek, endOfWeek, format, eachDayOfInterval, addWeeks } from 'date-fns'
+import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
 import forward from '../../assets/icons/forward-arrow.svg'
 import back from '../../assets/icons/back-arrow.svg'
 
-export default function TableHeader () {
-  const [currentDate, setCurrentDate] = useState(new Date())
-  const [weekDays, setWeekDays] = useState([])
-
-  useEffect(() => {
-    const start = startOfWeek(currentDate, { weekStartsOn: 1 })
-    const end = endOfWeek(currentDate, { weekStartsOn: 1 })
-
-    const newWeekDays = eachDayOfInterval({ start, end }).map(day =>
-      capitalize(format(day, 'EEEE dd', { locale: es }))
-    )
-
-    setWeekDays(newWeekDays)
-  }, [currentDate])
-
+export default function TableHeader ({ handleNextWeek, handlePreviousWeek, weekDays }) {
+  
   const capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1)
-
-  const handlePreviousWeek = () => {
-    setCurrentDate(prevDate => addWeeks(prevDate, -1))
-  }
-
-  const handleNextWeek = () => {
-    setCurrentDate(prevDate => addWeeks(prevDate, 1))
-  }
 
   const isToday = (day) => {
     if (capitalize(format(new Date(), 'EEEE dd', { locale: es })) === day) return <span className="mt-0">*</span>
