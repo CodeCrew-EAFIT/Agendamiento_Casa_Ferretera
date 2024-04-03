@@ -24,9 +24,9 @@ export const BLOCK_USERS = [ADMIN, SUPERVISOR]
 
 export const USER_TO_NAME = {
   [ADMIN]: 'Admin',
-  [SUPERVISOR]: 'Juan Fernando G.',
-  [CHIEF]: 'Carolina S.',
-  [PROMOTER]: 'Maria Paula A.'
+  [SUPERVISOR]: 'Amador',
+  [CHIEF]: 'Dewalt',
+  [PROMOTER]: 'Promotor Dewalt'
 }
 
 export const AVAILABLE_HOURS = [
@@ -95,6 +95,32 @@ export const AVAILABLE_HOURS_MILITARY = {
   '5:30 PM': '17:30',
   '6:00 PM': '18:00'
 }
+
+export const AVAILABLE_HOURS_MILITARY_ARRAY = [
+  '07:00:00',
+  '07:30:00',
+  '08:00:00',
+  '08:30:00',
+  '09:00:00',
+  '09:30:00',
+  '10:00:00',
+  '10:30:00',
+  '11:00:00',
+  '11:30:00',
+  '12:00:00',
+  '12:30:00',
+  '13:00:00',
+  '13:30:00',
+  '14:00:00',
+  '14:30:00',
+  '15:00:00',
+  '15:30:00',
+  '16:00:00',
+  '16:30:00',
+  '17:00:00',
+  '17:30:00',
+  '18:00:00'
+]
 
 export const AVAILABLE_HOURS_SIMPLIFIED = [
   '7 AM',
