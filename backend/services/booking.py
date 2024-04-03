@@ -1,5 +1,8 @@
 from fastapi import HTTPException
 from models.booking import Booking as BookingTable
+from models.user import User as UserTable
+from models.brand import Brand as BrandTable
+from models.promotion import Promotion as PromotionTable
 from schemas.booking import Booking
 from datetime import date, time, datetime
 from config.db import get_db
@@ -34,11 +37,27 @@ def createBooking(booking: Booking, user_id):
     return dbBooking
 
 
+def getBrandName(booking, db):
+    promoterId, = db.query(PromotionTable.promoter_user_id) \
+            .join(BookingTable, PromotionTable.booking_id == BookingTable.booking_id) \
+            .filter(BookingTable.booking_id == booking.booking_id) \
+            .first()
+    
+    brandId, = db.query(UserTable.brand_id) \
+        .join(PromotionTable, UserTable.user_id == PromotionTable.promoter_user_id) \
+        .filter(UserTable.user_id == promoterId).first()
+
+    brandName, = db.query(BrandTable.brand_name).filter(BrandTable.brand_id == brandId).first()
+    return brandName
+
+
 # Function to fetch all bookings
 
 def getAllBookings():
     db = get_db()
     allBookings = db.query(BookingTable).all()
+    for booking in allBookings:
+        booking.brand_name = getBrandName(booking, db)
     return allBookings
 
 
