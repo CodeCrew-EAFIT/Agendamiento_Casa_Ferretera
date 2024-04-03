@@ -134,6 +134,18 @@ def getPromotion(promotionId):
         raise HTTPException(status_code=404, detail="Not Found")
 
 
+
+def getAddBookingInfo(promotion, db):
+    startTime, endTime, date, locationId = db.query(Booking.start_time, Booking.end_time, Booking.booking_date, Booking.location_id) \
+            .join(Promotion, Booking.booking_id == Promotion.booking_id) \
+            .filter(Booking.booking_id == promotion.booking_id) \
+            .first()
+    
+    locationName, = db.query(Location.location_name).filter(Location.location_id == locationId).first()
+
+    return startTime, endTime, date, locationName
+
+
 # Function to fetch promotions given a promoter_user_id
     
 def getPromotionsByPromoterId(promoterUserId: int):
@@ -144,7 +156,14 @@ def getPromotionsByPromoterId(promoterUserId: int):
         promotions = db.query(Promotion).join(Booking, Promotion.booking_id == Booking.booking_id
         ).filter(Booking.booking_date >= oneMonthAgo, Booking.booking_date <= oneMonthFuture, Promotion.promoter_user_id == promoterUserId).all()
 
+        for promotion in promotions:
+            startTime, endTime, date, locationName = getAddBookingInfo(promotion, db)
+            promotion.start_time = startTime
+            promotion.end_time = endTime
+            promotion.date = date
+            promotion.location_name = locationName
         return promotions
+
     else:
         raise HTTPException(status_code=404, detail="Not Found")
     
