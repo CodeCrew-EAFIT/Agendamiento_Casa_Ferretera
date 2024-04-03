@@ -10,8 +10,9 @@ import Home from './pages/Home'
 import UserPanel from './pages/Admin/UserPanel'
 import SchedulePromotion from './pages/SchedulePromotion'
 import Binnacle from './pages/Binnacle'
+import PromoterRating from './pages/PromoterRating'
 import ProtectedRoute from './components/ProtectedRoute'
-import { USER_TYPES, ADMIN_USERS, ADMIN, PROMOTER } from './utils/constants'
+import { USER_TYPES, ADMIN_USERS, ADMIN, PROMOTER, SUPERVISOR } from './utils/constants'
 import Evidence from './pages/Evidence'
 
 function App () {
@@ -51,10 +52,30 @@ function App () {
             }
           />
           <Route
+            path='/calificar'
+            element={
+              <ProtectedRoute
+                element={<Binnacle userType={ SUPERVISOR } />}
+                allowedUsers={[SUPERVISOR]}
+                redirectTo="/horario"
+              />
+            }
+          />
+          <Route
+            path='/calificar/:id'
+            element={
+              <ProtectedRoute
+                element={<PromoterRating />}
+                allowedUsers={[SUPERVISOR]}
+                redirectTo="/horario"
+              />
+            }
+          />
+          <Route
             path="/bitacora"
             element={
               <ProtectedRoute
-                element={<Binnacle />}
+                element={<Binnacle userType={ PROMOTER }/>}
                 allowedUsers={[PROMOTER]}
                 redirectTo="/horario"
               />

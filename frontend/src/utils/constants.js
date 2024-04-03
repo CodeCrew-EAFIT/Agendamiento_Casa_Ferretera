@@ -381,3 +381,9 @@ export const SAMPLE_PROMOTION_DATA = [
     location: 'La Ceja'
   }
 ]
+
+export const RATING_QUESTIONS = [
+  '1. El promotor cumplió con su horario agendado',
+  '2. El promotor mantuvo una buena presentación personal',
+  '3. El promotor hizo un uso adecuado del celular'
+]
