@@ -22,7 +22,7 @@ export default function Home () {
   }
 
   const fetchAllPromotionsForPromoter = async () => {
-    try{
+    try {
       const promoterId = 11
       const result = await axios.get(`${API_URL}/promotions-by-promoter-id/${promoterId}`)
       setPromoterPromotions(result.data)
@@ -36,13 +36,12 @@ export default function Home () {
   }, [])
 
   useEffect(() => {
-    if (userType === SUPERVISOR){
+    if (userType === SUPERVISOR) {
       setLocation(ID_TO_AVAILABLE_LOCATIONS[1])
     }
-    if (userType === PROMOTER){
+    if (userType === PROMOTER) {
       fetchAllPromotionsForPromoter()
     }
-
   }, [userType])
 
   return (

@@ -2,16 +2,26 @@ import React, { useState } from 'react'
 import Layout from '../containers/Layout'
 import { RATING_QUESTIONS } from '../utils/constants'
 import Button from '../components/Button'
+import { useParams } from 'react-router-dom'
 
 function RatingForm () {
+  const id = parseInt(useParams().id)
   const [rating, setRating] = useState({
-    promotion_id: 0,
+    promotion_id: id,
     calification_1: 0,
     calification_2: 0,
     calification_3: 0,
     supervisor_comment: ''
   })
-  const onHandleChange = (e) => {
+
+  const onHandleChangeRadio = (e) => {
+    setRating({
+      ...rating,
+      [e.target.name]: parseInt(e.target.value)
+    })
+  }
+
+  const onHandleChangeTextArea = (e) => {
     setRating({
       ...rating,
       [e.target.name]: e.target.value
@@ -39,7 +49,7 @@ function RatingForm () {
                             type="radio"
                             name={`calification_${index + 1}`}
                             value={value}
-                            onChange={onHandleChange}
+                            onChange={onHandleChangeRadio}
                             className="h-8 w-8 accent-tertiary "
                         />
                             <label htmlFor={`calification_${index + 1}_${value}`} className="text-md">{value}</label>
@@ -50,7 +60,7 @@ function RatingForm () {
             ))}
         <div className='flex flex-col w-full justify-center items-center mb-12'>
             <label className='mb-4' htmlFor="supervisor_comment"> <b>4. Comentarios adicionales sobre el promotor</b></label>
-            <textarea className='resize-none w-7/12 h-32 border-4 rounded-3xl border-secondary' name="supervisor_comment" onChange={onHandleChange}></textarea>
+            <textarea className='resize-none w-7/12 h-32 border-4 rounded-3xl border-secondary' name="supervisor_comment" onChange={onHandleChangeTextArea}></textarea>
         </div>
         <Button>Enviar</Button>
      </form>
