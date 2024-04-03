@@ -50,9 +50,14 @@ def getPromotionsToRate():
     for pro in promotionsToRate:
         book = db.query(Booking).join(Promotion, Booking.booking_id == Promotion.booking_id).filter(Promotion.promotion_id==pro.promotion_id).first()
         bran = db.query(Brand).join(User, Brand.brand_id == User.brand_id).join(Promotion, User.user_id == Promotion.promoter_user_id).filter(Promotion.promotion_id == pro.promotion_id).first()
-        responsedic = {"promotion_id ":pro.promotion_id,
+        user = db.query(User).join(Promotion, User.user_id == Promotion.promoter_user_id).filter(Promotion.promotion_id == pro.promotion_id).first()
+        location = db.query(Location).join(Booking, Location.location_id == Booking.location_id).join(Promotion, Booking.booking_id == Promotion.booking_id).filter(Promotion.promotion_id == pro.promotion_id).first()
+        responsedic = {"promotion_id": pro.promotion_id,
                      "date": book.booking_date,
-                     "brand":bran.brand_name}
+                     "brand":bran.brand_name,
+                     "promoter": user.name,
+                     "location":location.location_name,
+                      }
         returnlist.append(responsedic)
 
     return returnlist
@@ -67,7 +72,7 @@ def getPromotionsPending():
     for pro in promotionsPending:
         book = db.query(Booking).join(Promotion, Booking.booking_id == Promotion.booking_id).filter(Promotion.promotion_id==pro.promotion_id).first()
         loc = db.query(Location).join(Booking, Location.location_id == Booking.location_id).join(Promotion, Booking.booking_id == Promotion.booking_id).filter(Promotion.promotion_id == pro.promotion_id).first()
-        responsedic = {"promotion_id ":pro.promotion_id,
+        responsedic = {"promotion_id":pro.promotion_id,
                      "date": book.booking_date,
                      "location":loc.location_name}
         returnlist.append(responsedic)
