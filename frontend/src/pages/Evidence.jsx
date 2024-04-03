@@ -3,8 +3,9 @@ import { useParams, useNavigate, Navigate } from 'react-router-dom'
 import { ReactSVG } from 'react-svg'
 import Layout from '../containers/Layout'
 import Button from '../components/Button'
-import { SAMPLE_PROMOTION_DATA } from '../utils/constants'
+import { API_URL, SAMPLE_PROMOTION_DATA } from '../utils/constants'
 import upload from '../assets/icons/upload.svg'
+import axios from 'axios'
 
 export default function Evidence () {
   const navigate = useNavigate()
@@ -22,6 +23,21 @@ export default function Evidence () {
     images: [],
     comment: ''
   })
+
+  const postEvidence = async (evidenceData) => {
+    try{
+      const headers = {
+        'Content-Type': 'application/json',
+        'user-id': 11
+      }
+      const response = await axios.post(`${API_URL}/create-evidence`, evidenceData, { headers })
+      console.log(response.data)
+      navigate('/bitacora')
+    } catch (error) {
+      console.error(error)
+    }
+
+  }
 
   const [fileNames, setFileNames] = useState([])
 
@@ -67,8 +83,12 @@ export default function Evidence () {
       alert('Debes subir al menos una imagen.')
       return
     }
-    console.log('Enviar evidencias', formData)
-    navigate('/bitacora')
+    const evidenceData = {
+      promotion_id: id,
+      evidence: formData.images[0],
+      promoter_comment: formData.comment
+    }
+    postEvidence(evidenceData)
   }
 
   return (

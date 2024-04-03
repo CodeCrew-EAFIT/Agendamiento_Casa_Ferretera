@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { format, parseISO } from 'date-fns'
 import { es } from 'date-fns/locale'
-import { SUPERVISOR, PROMOTER } from '../utils/constants'
+import { SUPERVISOR, PROMOTER, API_URL, AVAILABLE_LOCATIONS_DICT, PROMOTER_USER, USER_TO_NAME, AVAILABLE_LOCATIONS_PATH_DICT } from '../utils/constants'
 import Layout from '../containers/Layout'
 import Promotions from '../components/Promotions'
 import Box from '../components/Promotions/Box'
@@ -14,14 +14,14 @@ export default function Binnacle ({ userType }) {
 
   // Fetch service data from API
   const [services, setServices] = useState(null)
-  const base = 'http://127.0.0.1:8000'
+  const [promotionsData, setPromotionsData] = useState(null)
   const fetchRoute = userType === SUPERVISOR ? '/promotions-to-rate' : '/promotions-pending-evidence'
 
   const fetchService = async () => {
     try {
-      const result = await axios.get(`${base}${fetchRoute}`, {
+      const result = await axios.get(`${API_URL}${fetchRoute}`, {
         headers: {
-          'user-id': 9
+          'user-id': 1
         }
       })
       setServices(result.data)
@@ -34,33 +34,55 @@ export default function Binnacle ({ userType }) {
     fetchService()
   }, [])
 
+  useEffect(() => {
+    if (services === null) return
+    console.log(services)
+    let promotionExists = false
+    const promotions = services.map((service, index) => {
+      const formattedDate = format(parseISO(service.date), 'EEEE dd/MM/yyyy', { locale: es })
+      const onClickRoute = userType === SUPERVISOR ? `/calificar/${service.promotion_id}` : `/bitacora/${service.promotion_id}`
+      console.log(userType)
+      console.log(AVAILABLE_LOCATIONS_PATH_DICT[USER_TO_NAME[SUPERVISOR]])
+      if (userType === SUPERVISOR && AVAILABLE_LOCATIONS_PATH_DICT[USER_TO_NAME[SUPERVISOR]] === service.location) {
+        promotionExists = true
+        return (
+        <Box key={index} onClick={() => navigate(onClickRoute)}>
+          <p>{formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1)}</p>
+            <p className='font-bold'>{ service.brand.split('+').join(' + ').toUpperCase() }</p>
+            <p className='font-bold'>{ service.promoter }</p>
+        </Box>
+      )
+      }
+
+      if (userType === PROMOTER && service.promoter_id === PROMOTER_USER.user_id){
+        promotionExists = true
+        return (
+          <Box key={index} onClick={() => navigate(onClickRoute)}>
+            <p>{formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1)}</p>
+            <p className='font-bold'>Sede { AVAILABLE_LOCATIONS_DICT[service.location] } </p>
+          </Box>
+        )
+      }
+
+      return null
+    })
+    if (promotionExists) {
+      setPromotionsData(promotions.filter(promotion => promotion !== null))
+    }
+
+  }, [services])
+
   if (services === null) {
     return <Layout>Loading...</Layout>
-  } else if (services.length === 0) {
+  }
+
+  if (promotionsData === null || promotionsData.length === 0) {
     return <Layout>No hay servicios para mostrar</Layout>
   }
 
-  const promotions = services.map((service, index) => {
-    const formattedDate = format(parseISO(service.date), 'EEEE dd/MM/yyyy', { locale: es })
-    const onClickRoute = userType === SUPERVISOR ? `/calificar/${service.promotion_id}` : `/bitacora/${service.promotion_id}`
-    return (
-      <Box key={index} onClick={() => navigate(onClickRoute)}>
-        <p>{formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1)}</p>
-        { userType === PROMOTER
-          ? <p className='font-bold'>Sede { service.location } </p>
-          : (
-              <>
-                <p className='font-bold'>{ service.brand }</p>
-                <p className='font-bold'>{ service.promoter }</p>
-              </>
-            )}
-      </Box>
-    )
-  })
-
   return (
     <Layout>
-      <Promotions>{promotions}</Promotions>
+      <Promotions>{promotionsData}</Promotions>
     </Layout>
   )
 }

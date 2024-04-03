@@ -78,7 +78,7 @@ export default function Form ({ formData, setFormData }) {
         navigate('/horario')
       }
     } catch (error) {
-      alert(error.response)
+      alert(error.response.data.detail)
       setTogglePopUp(false)
     }
   }
