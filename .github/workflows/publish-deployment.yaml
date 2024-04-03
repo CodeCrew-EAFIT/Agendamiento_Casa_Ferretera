@@ -3,7 +3,7 @@ name: Deploy CasaFerretera to GCP with Docker - staging
 on:
   push:
     branches:
-      - main
+      - development
 
 jobs:
     build-and-publish:
@@ -63,8 +63,7 @@ jobs:
             username: ${{ secrets.GCE_SSH_USERNAME }}
             key: ${{ secrets.GCE_SSH_PRIVATE_KEY }}
             script: |
-              sudo docker compose -f /home/${{ secrets.GCE_SSH_USERNAME }}/docker-compose.yaml --profile staging down
-              sudo docker compose -f /home/${{ secrets.GCE_SSH_USERNAME }}/docker-compose.yaml --profile staging build --pull
-              sudo docker compose -f /home/${{ secrets.GCE_SSH_USERNAME }}/docker-compose.yaml --profile staging up -d
-
+              sudo docker compose -f /home/${{ secrets.GCE_SSH_USERNAME }}/docker-compose.yaml down
+              sudo docker compose -f /home/${{ secrets.GCE_SSH_USERNAME }}/docker-compose.yaml pull
+              sudo docker compose -f /home/${{ secrets.GCE_SSH_USERNAME }}/docker-compose.yaml up -d
               sudo docker image prune -f
