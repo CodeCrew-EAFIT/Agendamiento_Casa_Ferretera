@@ -73,8 +73,10 @@ def getPromotionsPending():
         book = db.query(Booking).join(Promotion, Booking.booking_id == Promotion.booking_id).filter(Promotion.promotion_id==pro.promotion_id).first()
         loc = db.query(Location).join(Booking, Location.location_id == Booking.location_id).join(Promotion, Booking.booking_id == Promotion.booking_id).filter(Promotion.promotion_id == pro.promotion_id).first()
         responsedic = {"promotion_id":pro.promotion_id,
+                     "promoter_id": pro.promoter_user_id,
                      "date": book.booking_date,
-                     "location":loc.location_name}
+                     "location":loc.location_name
+                     }
         returnlist.append(responsedic)
 
     return returnlist
