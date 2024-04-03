@@ -3,14 +3,17 @@ import Layout from '../containers/Layout'
 import { RATING_QUESTIONS } from '../utils/constants'
 import Button from '../components/Button'
 import { useParams } from 'react-router-dom'
+import axios from 'axios'
+
+const BASE = 'http://127.0.0.1:8000'
 
 function RatingForm () {
   const id = parseInt(useParams().id)
   const [rating, setRating] = useState({
     promotion_id: id,
-    calification_1: 0,
-    calification_2: 0,
-    calification_3: 0,
+    category_1: 0,
+    category_2: 0,
+    category_3: 0,
     supervisor_comment: ''
   })
 
@@ -28,9 +31,19 @@ function RatingForm () {
     })
   }
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault()
-    console.log(rating)
+    try {
+      const result = await axios.post(`${BASE}/create-rating`, rating, {
+        headers: {
+          'user-id': 9
+        }
+      })
+      // SWALERT
+      console.log(result.data)
+    } catch (error) {
+      console.error(error)
+    }
   }
   return (
      <form onSubmit={onSubmit}>
@@ -50,7 +63,7 @@ function RatingForm () {
                             name={`calification_${index + 1}`}
                             value={value}
                             onChange={onHandleChangeRadio}
-                            className="h-8 w-8 accent-tertiary "
+                            className="h-8 w-8 accent-tertiary"
                         />
                             <label htmlFor={`calification_${index + 1}_${value}`} className="text-md">{value}</label>
                         </div>
@@ -60,7 +73,7 @@ function RatingForm () {
             ))}
         <div className='flex flex-col w-full justify-center items-center mb-12'>
             <label className='mb-4' htmlFor="supervisor_comment"> <b>4. Comentarios adicionales sobre el promotor</b></label>
-            <textarea className='resize-none w-7/12 h-32 border-4 rounded-3xl border-secondary' name="supervisor_comment" onChange={onHandleChangeTextArea}></textarea>
+            <textarea className='resize-none w-7/12 h-32 border-4 rounded-3xl border-secondary bg-primary' name="supervisor_comment" onChange={onHandleChangeTextArea}></textarea>
         </div>
         <Button>Enviar</Button>
      </form>
