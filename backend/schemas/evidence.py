@@ -2,5 +2,5 @@ from pydantic import BaseModel
 
 class Evidence(BaseModel):
     promotion_id: int
-    evidence: str
+    evidence: list
     promoter_comment: str
