@@ -85,7 +85,7 @@ export default function Evidence () {
     }
     const evidenceData = {
       promotion_id: id,
-      evidence: formData.images[0],
+      evidence: formData.images,
       promoter_comment: formData.comment
     }
     postEvidence(evidenceData)
