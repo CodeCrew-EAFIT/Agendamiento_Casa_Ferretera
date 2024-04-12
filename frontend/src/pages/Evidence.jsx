@@ -1,74 +1,94 @@
-import React, { useState } from "react";
-import { useParams, useNavigate, Navigate } from "react-router-dom";
-import { ReactSVG } from "react-svg";
-import Layout from "../containers/Layout";
-import Button from "../components/Button";
-import { SAMPLE_PROMOTION_DATA } from "../utils/constants";
-import upload from "../assets/icons/upload.svg";
+import React, { useState } from 'react'
+import { useParams, useNavigate, Navigate } from 'react-router-dom'
+import { ReactSVG } from 'react-svg'
+import Layout from '../containers/Layout'
+import Button from '../components/Button'
+import { API_URL, SAMPLE_PROMOTION_DATA } from '../utils/constants'
+import upload from '../assets/icons/upload.svg'
+import axios from 'axios'
 
-export default function Evidence() {
-  const navigate = useNavigate();
-  const { id } = useParams();
+export default function Evidence () {
+  const navigate = useNavigate()
+  const { id } = useParams()
   const promotion = SAMPLE_PROMOTION_DATA.find(
     (promotion) => promotion.id === Number(id)
-  );
+  )
 
   if (!promotion) {
-    return <Navigate to="/bitacora" />;
+    return <Navigate to="/bitacora" />
   }
 
   const [formData, setFormData] = useState({
     promotion: id,
     images: [],
-    comment: "",
-  });
+    comment: ''
+  })
 
-  const [fileNames, setFileNames] = useState([]);
+  const postEvidence = async (evidenceData) => {
+    try{
+      const headers = {
+        'Content-Type': 'application/json',
+        'user-id': 11
+      }
+      const response = await axios.post(`${API_URL}/create-evidence`, evidenceData, { headers })
+      console.log(response.data)
+      navigate('/bitacora')
+    } catch (error) {
+      console.error(error)
+    }
+
+  }
+
+  const [fileNames, setFileNames] = useState([])
 
   const handleFileChange = (event) => {
-    const files = Array.from(event.target.files).slice(0, 3);
-    let base64Images = [];
-    setFileNames(files.map((file) => file.name));
+    const files = Array.from(event.target.files).slice(0, 3)
+    const base64Images = []
+    setFileNames(files.map((file) => file.name))
 
     files.forEach((file) => {
-      const fileReader = new FileReader();
+      const fileReader = new FileReader()
 
       fileReader.onload = (e) => {
-        base64Images.push(e.target.result);
+        base64Images.push(e.target.result)
         if (base64Images.length === files.length) {
           setFormData((prevFormData) => ({
             ...prevFormData,
-            images: base64Images,
-          }));
+            images: base64Images
+          }))
         }
-      };
+      }
 
-      fileReader.readAsDataURL(file);
-    });
-  };
+      fileReader.readAsDataURL(file)
+    })
+  }
 
   const removeFile = (indexToRemove) => {
     const updatedFileNames = fileNames.filter(
       (_, index) => index !== indexToRemove
-    );
-    setFileNames(updatedFileNames);
+    )
+    setFileNames(updatedFileNames)
 
     const updatedImages = formData.images.filter(
       (_, index) => index !== indexToRemove
-    );
+    )
     setFormData((prevFormData) => ({
       ...prevFormData,
-      images: updatedImages,
-    }));
-  };
+      images: updatedImages
+    }))
+  }
 
   const handleSubmit = () => {
     if (formData.images.length === 0) {
-      alert("Debes subir al menos una imagen.");
-      return;
+      alert('Debes subir al menos una imagen.')
+      return
     }
-    console.log("Enviar evidencias", formData)
-    navigate("/bitacora")
+    const evidenceData = {
+      promotion_id: id,
+      evidence: formData.images,
+      promoter_comment: formData.comment
+    }
+    postEvidence(evidenceData)
   }
 
   return (
@@ -88,7 +108,7 @@ export default function Evidence() {
               multiple
               accept="image/*"
               onChange={handleFileChange}
-              style={{ display: "none" }}
+              style={{ display: 'none' }}
               max="3"
             />
           </label>
@@ -125,5 +145,5 @@ export default function Evidence() {
         </Button>
       </div>
     </Layout>
-  );
+  )
 }

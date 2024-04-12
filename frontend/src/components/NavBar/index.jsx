@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useUserSession } from '../../utils/UserSessionContext'
 import { ReactSVG } from 'react-svg'
@@ -6,12 +7,12 @@ import logo from '../../assets/images/logo-light.png'
 import customerIcon from '../../assets/icons/customer.svg'
 import { ADMIN, CHIEF, SUPERVISOR, PROMOTER, ADMIN_USERS, BLOCK_USERS, USER_TO_NAME } from '../../utils/constants'
 
-export default function NavBar () {
+export default function NavBar ({ user }) {
   const location = useLocation()
   const navigate = useNavigate()
   const { userType, setUserSession } = useUserSession()
 
-  const customerName = USER_TO_NAME[userType]
+  // const customerName = USER_TO_NAME[userType]
 
   const isAdmin = userType === ADMIN
   const isChief = userType === CHIEF
@@ -35,7 +36,7 @@ export default function NavBar () {
             className='svg-size-override cursor-pointer'
             onClick={handleLogout}
           />
-          <p>{customerName}</p>
+          <p>{user.name}</p>
         </div>
         <ul className='flex gap-8'>
           <li className={`cursor-pointer ${location.pathname.includes('/horario') ? 'font-bold' : ''}`} onClick={() => navigate('/horario')}>Horario</li>
@@ -43,11 +44,15 @@ export default function NavBar () {
           {isBlockUser && <li className={'cursor-pointer'}>Bloquear</li>}
           {isAdmin && <li className={'cursor-pointer'}>Dashboard</li>}
           {isChief && <li className={'cursor-pointer'}>Promotores</li>}
-          {isSupervisor && <li className={'cursor-pointer'}>Calificar</li>}
+          {isSupervisor && <li className={`cursor-pointer ${location.pathname.includes('/calificar') ? 'font-bold' : ''}`} onClick={() => navigate('/calificar')}>Calificar</li>}
           {isAdminUser && <li className={'cursor-pointer'}>Reportes</li>}
           {isPromoter && <li className={`cursor-pointer ${location.pathname.includes('/bitacora') ? 'font-bold' : ''}`} onClick={() => navigate('/bitacora')}>Bitácora</li>}
         </ul>
       </div>
     </div>
   )
+}
+
+NavBar.propTypes = {
+  user: PropTypes.object
 }
