@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -167,7 +167,7 @@ input[type='date']::-webkit-calendar-picker-indicator {
 }
 
 .calendar-nav {
-  @apply flex items-center justify-between h-[50px] w-[818px] text-md text-secondary font-bold ml-[75px]
+  @apply flex items-center justify-between h-[50px] w-[824px] text-md text-secondary font-bold ml-[70px]
 }
 
 .calendar-talbe-container {

@@ -3,20 +3,13 @@ import { useParams, useNavigate, Navigate } from 'react-router-dom'
 import { ReactSVG } from 'react-svg'
 import Layout from '../containers/Layout'
 import Button from '../components/Button'
-import { API_URL, SAMPLE_PROMOTION_DATA } from '../utils/constants'
+import { API_URL } from '../utils/constants'
 import upload from '../assets/icons/upload.svg'
 import axios from 'axios'
 
 export default function Evidence () {
   const navigate = useNavigate()
   const { id } = useParams()
-  const promotion = SAMPLE_PROMOTION_DATA.find(
-    (promotion) => promotion.id === Number(id)
-  )
-
-  if (!promotion) {
-    return <Navigate to="/bitacora" />
-  }
 
   const [formData, setFormData] = useState({
     promotion: id,
@@ -35,6 +28,7 @@ export default function Evidence () {
       navigate('/bitacora')
     } catch (error) {
       console.error(error)
+      navigate('/bitacora')
     }
 
   }

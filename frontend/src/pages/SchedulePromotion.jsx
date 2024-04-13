@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import Layout from '../containers/Layout'
 import Form from '../components/Schedule/Form'
 import Calendar from '../components/Schedule/Calendar'
-import { AVAILABLE_LOCATIONS_DICT, AVAILABLE_LOCATIONS_PATH_DICT } from '../utils/constants'
+import { useCalendarContext } from '../utils/CalendarContext'
 
 export default function SchedulePromotion () {
-  const { location } = useParams()
+  const { location, setLocation } = useCalendarContext()
   const navigate = useNavigate()
   const [formData, setFormData] = useState({
-    location: AVAILABLE_LOCATIONS_DICT[location],
+    location: location,
     date: '',
     startTime: '',
     endTime: '',
@@ -17,17 +17,11 @@ export default function SchedulePromotion () {
   })
 
   useEffect(() => {
-    if (!AVAILABLE_LOCATIONS_DICT[location]) {
+    console.log('formData.location', formData.location)
+    if (!formData.location) {
       navigate('/horario')
     }
-  }, [location])
-
-  useEffect(() => {
-    if (location !== formData.location) {
-      navigate(
-        `/horario/agendar/${AVAILABLE_LOCATIONS_PATH_DICT[formData.location]}`
-      )
-    }
+    setLocation(formData.location)
   }, [formData.location])
 
   return (

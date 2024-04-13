@@ -1,21 +1,24 @@
-import React from 'react'
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { UserSessionProvider } from "./utils/UserSessionContext";
+import ChooseUser from "./pages/ChooseUser";
+import Home from "./pages/Home";
+import UserPanel from "./pages/Admin/UserPanel";
+import SchedulePromotion from "./pages/SchedulePromotion";
+import Binnacle from "./pages/Binnacle";
+import PromoterRating from "./pages/PromoterRating";
+import ProtectedRoute from "./components/ProtectedRoute";
 import {
-  BrowserRouter as Router,
-  Routes,
-  Route
-} from 'react-router-dom'
-import { UserSessionProvider } from './utils/UserSessionContext'
-import ChooseUser from './pages/ChooseUser'
-import Home from './pages/Home'
-import UserPanel from './pages/Admin/UserPanel'
-import SchedulePromotion from './pages/SchedulePromotion'
-import Binnacle from './pages/Binnacle'
-import PromoterRating from './pages/PromoterRating'
-import ProtectedRoute from './components/ProtectedRoute'
-import { USER_TYPES, ADMIN_USERS, ADMIN, PROMOTER, SUPERVISOR } from './utils/constants'
-import Evidence from './pages/Evidence'
+  USER_TYPES,
+  ADMIN_USERS,
+  ADMIN,
+  PROMOTER,
+  SUPERVISOR,
+} from "./utils/constants";
+import Evidence from "./pages/Evidence";
+import { CalendarContextProvider } from "./utils/CalendarContext";
 
-function App () {
+function App() {
   return (
     <UserSessionProvider>
       <Router>
@@ -25,17 +28,25 @@ function App () {
             path="/horario"
             element={
               <ProtectedRoute
-                element={<Home />}
+                element={
+                  <CalendarContextProvider>
+                    <Home />
+                  </CalendarContextProvider>
+                }
                 allowedUsers={USER_TYPES}
                 redirectTo="/"
               />
             }
           />
           <Route
-            path="/horario/agendar/:location"
+            path="/horario/agendar"
             element={
               <ProtectedRoute
-                element={<SchedulePromotion />}
+                element={
+                  <CalendarContextProvider>
+                    <SchedulePromotion />
+                  </CalendarContextProvider>
+                }
                 allowedUsers={ADMIN_USERS}
                 redirectTo="/horario"
               />
@@ -52,17 +63,17 @@ function App () {
             }
           />
           <Route
-            path='/calificar'
+            path="/calificar"
             element={
               <ProtectedRoute
-                element={<Binnacle userType={ SUPERVISOR } />}
+                element={<Binnacle userType={SUPERVISOR} />}
                 allowedUsers={[SUPERVISOR]}
                 redirectTo="/horario"
               />
             }
           />
           <Route
-            path='/calificar/:id'
+            path="/calificar/:id"
             element={
               <ProtectedRoute
                 element={<PromoterRating />}
@@ -75,7 +86,7 @@ function App () {
             path="/bitacora"
             element={
               <ProtectedRoute
-                element={<Binnacle userType={ PROMOTER }/>}
+                element={<Binnacle userType={PROMOTER} />}
                 allowedUsers={[PROMOTER]}
                 redirectTo="/horario"
               />
@@ -94,7 +105,7 @@ function App () {
         </Routes>
       </Router>
     </UserSessionProvider>
-  )
+  );
 }
 
-export default App
+export default App;
