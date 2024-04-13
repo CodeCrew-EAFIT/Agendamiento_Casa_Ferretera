@@ -51,10 +51,10 @@ export default function Binnacle ({ userType }) {
             <p className='font-bold'>{ service.brand.split('+').join(' + ').toUpperCase() }</p>
             <p className='font-bold'>{ service.promoter }</p>
         </Box>
-      )
+        )
       }
 
-      if (userType === PROMOTER && service.promoter_id === PROMOTER_USER.user_id){
+      if (userType === PROMOTER && service.promoter_id === PROMOTER_USER.user_id) {
         promotionExists = true
         return (
           <Box key={index} onClick={() => navigate(onClickRoute)}>
@@ -69,7 +69,6 @@ export default function Binnacle ({ userType }) {
     if (promotionExists) {
       setPromotionsData(promotions.filter(promotion => promotion !== null))
     }
-
   }, [services])
 
   if (services === null) {

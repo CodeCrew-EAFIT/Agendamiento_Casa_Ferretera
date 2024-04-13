@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useParams, useNavigate, Navigate } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import { ReactSVG } from 'react-svg'
 import Layout from '../containers/Layout'
 import Button from '../components/Button'
@@ -18,7 +18,7 @@ export default function Evidence () {
   })
 
   const postEvidence = async (evidenceData) => {
-    try{
+    try {
       const headers = {
         'Content-Type': 'application/json',
         'user-id': 11
@@ -30,7 +30,6 @@ export default function Evidence () {
       console.error(error)
       navigate('/bitacora')
     }
-
   }
 
   const [fileNames, setFileNames] = useState([])

@@ -13,20 +13,20 @@ export default function Layout ({ children }) {
         'Content-Type': 'application/json',
         'access-control-allow-origin': '*',
         'access-control-allow-credentials': 'true',
-        'Authorization': 'Bearer ' + localStorage.getItem('access_token') || ''
+        Authorization: 'Bearer ' + localStorage.getItem('access_token') || ''
       }
     })
       .then(response => response.json())
       .then(data => {
         // Manejar los datos aquí
         console.log(data)
-        setUser(data) 
+        setUser(data)
       })
       .catch(error => {
         // Manejar errores aquí
-        console.error('Error fetching user info:', error);
-        throw error; // Propagar el error para que se maneje en el contexto que llama a fetchUserInfo
-      });  
+        console.error('Error fetching user info:', error)
+        throw error // Propagar el error para que se maneje en el contexto que llama a fetchUserInfo
+      })
   }
 
   useEffect(() => {

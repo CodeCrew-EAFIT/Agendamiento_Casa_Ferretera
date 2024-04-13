@@ -29,7 +29,6 @@ export default function Calendar ({ promotionData, location, promoterPromotions 
     setWeekDays(newWeekDays)
   }, [currentDate])
 
-
   const handlePreviousWeek = () => {
     setCurrentDate(prevDate => addWeeks(prevDate, -1))
   }
@@ -56,42 +55,41 @@ export default function Calendar ({ promotionData, location, promoterPromotions 
   ))
 
   const promotionBoxes = promotionData.map((promotion, index) => {
-    const promotionLocation = ID_TO_AVAILABLE_LOCATIONS[promotion.location_id];
-    const parsedDate = parseISO(promotion.booking_date);
-    const startTime = AVAILABLE_HOURS_MILITARY_ARRAY.indexOf(promotion.start_time) + 1;
-    const endTime = AVAILABLE_HOURS_MILITARY_ARRAY.indexOf(promotion.end_time) + 1;
-    let dayOfWeek = getDay(parsedDate);
-    dayOfWeek = dayOfWeek === 0 ? 7 : dayOfWeek;
+    const promotionLocation = ID_TO_AVAILABLE_LOCATIONS[promotion.location_id]
+    const parsedDate = parseISO(promotion.booking_date)
+    const startTime = AVAILABLE_HOURS_MILITARY_ARRAY.indexOf(promotion.start_time) + 1
+    const endTime = AVAILABLE_HOURS_MILITARY_ARRAY.indexOf(promotion.end_time) + 1
+    let dayOfWeek = getDay(parsedDate)
+    dayOfWeek = dayOfWeek === 0 ? 7 : dayOfWeek
 
-    const start = startOfWeek(currentDate, { weekStartsOn: 1 });
-    const end = endOfWeek(currentDate, { weekStartsOn: 1 });
-  
+    const start = startOfWeek(currentDate, { weekStartsOn: 1 })
+    const end = endOfWeek(currentDate, { weekStartsOn: 1 })
+
     if (promotionLocation === location && parsedDate >= start && parsedDate <= end) {
       console.log(promotion)
       return (
-        <div className="calendar-box"
-              style={{ left: `${75 + 115.7 * (dayOfWeek - 1)}px`, width: `${dayOfWeek === 7 ? 125 : 110.25}px`, height: `${(endTime - startTime) * 26}px`, top: `${(startTime - 1) * 26}px`}}
+        <div key={index} className="calendar-box"
+              style={{ left: `${75 + 115.7 * (dayOfWeek - 1)}px`, width: `${dayOfWeek === 7 ? 125 : 110.25}px`, height: `${(endTime - startTime) * 26}px`, top: `${(startTime - 1) * 26}px` }}
             >
               {promotion.brand_name.toUpperCase().split('+').join(' + ')}
             </div>
-      );
+      )
     }
 
     if (userType === PROMOTER && parsedDate >= start && parsedDate <= end) {
-      const promoterPromotion = promoterPromotions.find(promo => promo.booking_id === promotion.booking_id);
+      const promoterPromotion = promoterPromotions.find(promo => promo.booking_id === promotion.booking_id)
       const promotionLocation = ID_TO_AVAILABLE_LOCATIONS[promotion.location_id]
-      return ( promoterPromotion &&
-        <div className="calendar-box text-[18px]"
-              style={{ left: `${75 + 115.7 * (dayOfWeek - 1)}px`, width: `${dayOfWeek === 7 ? 125 : 110.25}px`, height: `${(endTime - startTime) * 26}px`, top: `${(startTime - 1) * 26}px`}}
+      return (promoterPromotion &&
+        <div key={index} className="calendar-box text-[18px]"
+              style={{ left: `${75 + 115.7 * (dayOfWeek - 1)}px`, width: `${dayOfWeek === 7 ? 125 : 110.25}px`, height: `${(endTime - startTime) * 26}px`, top: `${(startTime - 1) * 26}px` }}
             >
               Sede {promotionLocation}
             </div>
-      );
+      )
     }
 
-    return null;
-  });
-  
+    return null
+  })
 
   return (
     <div className="default-container">

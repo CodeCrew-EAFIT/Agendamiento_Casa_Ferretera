@@ -9,7 +9,7 @@ export default function SchedulePromotion () {
   const { location, setLocation } = useCalendarContext()
   const navigate = useNavigate()
   const [formData, setFormData] = useState({
-    location: location,
+    location,
     date: '',
     startTime: '',
     endTime: '',

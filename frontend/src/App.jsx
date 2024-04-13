@@ -1,24 +1,24 @@
-import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { UserSessionProvider } from "./utils/UserSessionContext";
-import ChooseUser from "./pages/ChooseUser";
-import Home from "./pages/Home";
-import UserPanel from "./pages/Admin/UserPanel";
-import SchedulePromotion from "./pages/SchedulePromotion";
-import Binnacle from "./pages/Binnacle";
-import PromoterRating from "./pages/PromoterRating";
-import ProtectedRoute from "./components/ProtectedRoute";
+import React from 'react'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { UserSessionProvider } from './utils/UserSessionContext'
+import ChooseUser from './pages/ChooseUser'
+import Home from './pages/Home'
+import UserPanel from './pages/Admin/UserPanel'
+import SchedulePromotion from './pages/SchedulePromotion'
+import Binnacle from './pages/Binnacle'
+import PromoterRating from './pages/PromoterRating'
+import ProtectedRoute from './components/ProtectedRoute'
 import {
   USER_TYPES,
   ADMIN_USERS,
   ADMIN,
   PROMOTER,
-  SUPERVISOR,
-} from "./utils/constants";
-import Evidence from "./pages/Evidence";
-import { CalendarContextProvider } from "./utils/CalendarContext";
+  SUPERVISOR
+} from './utils/constants'
+import Evidence from './pages/Evidence'
+import { CalendarContextProvider } from './utils/CalendarContext'
 
-function App() {
+function App () {
   return (
     <UserSessionProvider>
       <Router>
@@ -105,7 +105,7 @@ function App() {
         </Routes>
       </Router>
     </UserSessionProvider>
-  );
+  )
 }
 
-export default App;
+export default App

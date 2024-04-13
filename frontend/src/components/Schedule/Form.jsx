@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 import { useUserSession } from '../../utils/UserSessionContext'
-import { useCalendarContext } from '../../utils/CalendarContext';
+import { useCalendarContext } from '../../utils/CalendarContext'
 import {
   AVAILABLE_LOCATIONS_ARRAY,
   AVAILABLE_HOURS_SPECIFIC,
@@ -23,7 +23,7 @@ import PopUp from './PopUp'
 export default function Form ({ formData, setFormData }) {
   const navigate = useNavigate()
   const { userType } = useUserSession()
-  const { sendCalendarNotification } = useCalendarContext();
+  const { sendCalendarNotification } = useCalendarContext()
   const [togglePopUp, setTogglePopUp] = useState(false)
   const [fetchedPromoters, setFetchedPromoters] = useState([])
   const [promoters, setPromoters] = useState([])
@@ -76,14 +76,14 @@ export default function Form ({ formData, setFormData }) {
     try {
       const response = await axios.post(`${API_URL}/create-promotion`, data, { headers })
       if (response.status === 200) {
-        sendCalendarNotification({ message: 'Promotoría agendada correctamente', success: true });
+        sendCalendarNotification({ message: 'Promotoría agendada correctamente', success: true })
         navigate('/horario')
       }
     } catch (error) {
-      if (error.response.data.detail){
-        sendCalendarNotification({ message: error.response.data.detail, success: false });
+      if (error.response.data.detail) {
+        sendCalendarNotification({ message: error.response.data.detail, success: false })
       } else {
-        sendCalendarNotification({ message: 'Ocurrió un error, por favor inténtelo de nuevo', success: false });
+        sendCalendarNotification({ message: 'Ocurrió un error, por favor inténtelo de nuevo', success: false })
       }
       navigate('/horario')
     }

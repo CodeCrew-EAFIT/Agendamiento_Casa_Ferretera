@@ -1,22 +1,22 @@
-import React from "react";
-import { ReactSVG } from "react-svg";
-import { format } from "date-fns";
-import { es } from "date-fns/locale";
-import forward from "../../assets/icons/forward-arrow.svg";
-import back from "../../assets/icons/back-arrow.svg";
+import React from 'react'
+import PropTypes from 'prop-types'
+import { ReactSVG } from 'react-svg'
+import { format } from 'date-fns'
+import { es } from 'date-fns/locale'
+import forward from '../../assets/icons/forward-arrow.svg'
+import back from '../../assets/icons/back-arrow.svg'
 
-export default function TableHeader({
+export default function TableHeader ({
   handleNextWeek,
   handlePreviousWeek,
-  weekDays,
+  weekDays
 }) {
-  const capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1);
+  const capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1)
 
   const isToday = (day) => {
-    if (capitalize(format(new Date(), "EEEE dd", { locale: es })) === day)
-      return <span className="mt-0">*</span>;
-    return false;
-  };
+    if (capitalize(format(new Date(), 'EEEE dd', { locale: es })) === day) { return <span className="mt-0">*</span> }
+    return false
+  }
 
   return (
     <table>
@@ -42,7 +42,7 @@ export default function TableHeader({
           ))}
           <th className="flex items-center justify-end gap-4 w-[134px] pr-[0.5px]">
             <div>
-              {`Dom. ${weekDays[6] && weekDays[6].split(" ")[1]}`}
+              {`Dom. ${weekDays[6] && weekDays[6].split(' ')[1]}`}
               {isToday(weekDays[6])}
             </div>
             <button
@@ -55,5 +55,11 @@ export default function TableHeader({
         </tr>
       </thead>
     </table>
-  );
+  )
+}
+
+TableHeader.propTypes = {
+  handleNextWeek: PropTypes.func,
+  handlePreviousWeek: PropTypes.func,
+  weekDays: PropTypes.array
 }
