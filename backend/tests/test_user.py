@@ -41,7 +41,7 @@ def test_fetch_user_success(test_app):
     response = test_app.get(f"/user-by-id/{valid_user_id}")
     # verify password is not returned
     assert response.json().get("password") is None
-    assert response.json().get("hashed_password") is None.ṕ
+    assert response.json().get("hashed_password") is None
 
     assert response.status_code == 200
     assert isinstance(response.json(), dict)
