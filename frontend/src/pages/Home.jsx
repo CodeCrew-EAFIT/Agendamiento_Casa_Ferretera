@@ -7,16 +7,32 @@ import { API_URL, ADMIN_USERS, SUPERVISOR, ID_TO_AVAILABLE_LOCATIONS, PROMOTER }
 import axios from 'axios'
 
 export default function Home () {
+  const [user, setUser] = useState({})
   const [location, setLocation] = useState('')
   const [promotionData, setPromotionData] = useState([])
   const [promoterPromotions, setPromoterPromotions] = useState([])
   const { userType } = useUserSession()
 
-  // Unificar en un solo fetch para evitar hacer dos llamadas
+  const fetchUser = async () => {
+    try {
+      const result = await axios.get(`${API_URL}/users/me`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+      })
+      setUser(result.data)
+    } catch (error) {
+      console.error(error)
+    }
+  }
 
   const fetchAllBookings = async () => {
     try {
-      const result = await axios.get(`${API_URL}/all-bookings`)
+      const result = await axios.get(`${API_URL}/all-bookings`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+      })
       setPromotionData(result.data)
     } catch (error) {
       console.error(error)
@@ -34,6 +50,7 @@ export default function Home () {
   }
 
   useEffect(() => {
+    fetchUser()
     fetchAllBookings()
   }, [])
 
@@ -47,7 +64,7 @@ export default function Home () {
   }, [userType])
 
   return (
-    <Layout>
+    <Layout user={user}>
       {ADMIN_USERS.includes(userType) && <ScheduleBar location={location} setLocation={setLocation} />}
       <Calendar promotionData={promotionData} location={location} promoterPromotions={promoterPromotions} />
     </Layout>
