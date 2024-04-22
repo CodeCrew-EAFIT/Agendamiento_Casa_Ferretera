@@ -77,7 +77,7 @@ def test_create_promotion_success(test_app):
     response = test_app.post("/create-promotion", json={
         "booking": {
             "location_id": 1,
-            "booking_date": "2021-12-12",
+            "booking_date": "2022-12-12",
             "start_time": "04:24:17.061Z",
             "end_time": "04:24:17.061Z"
         },
@@ -93,7 +93,7 @@ def test_create_promotion_forbidden(test_app):
     response = test_app.post("/create-promotion", json={
         "booking": {
             "location_id": 1,
-            "booking_date": "2021-12-12",
+            "booking_date": "2022-12-12",
             "start_time": "04:24:17.061Z",
             "end_time": "04:24:17.061Z"
         },
@@ -110,7 +110,7 @@ def test_create_promotion_conflict(test_app):
     response = test_app.post("/create-promotion", json={
         "booking": {
             "location_id": 1,
-            "booking_date": "2021-12-12",
+            "booking_date": "2022-12-12",
             "start_time": "04:24:17.061Z",
             "end_time": "04:24:17.061Z"
         },

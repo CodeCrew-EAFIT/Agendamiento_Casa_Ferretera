@@ -18,6 +18,7 @@ app.include_router(userRouter)
 app.include_router(authRouter)
 app.include_router(ratingRouter)
 app.include_router(evidenceRouter)
+app.include_router(reportsRouter)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
