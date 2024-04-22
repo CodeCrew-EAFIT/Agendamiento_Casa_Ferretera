@@ -172,7 +172,7 @@ def getPromotionsByPromoterId(promoterUserId: int):
         return promotions
 
     else:
-        raise HTTPException(status_code=404, detail="Not Found")
+        raise HTTPException(status_code=404, detail="No encontrado")
     
 
 
@@ -189,5 +189,5 @@ def getPromotionsByLocationName(locationName: str):
 
         return promotions
     else:
-        raise HTTPException(status_code=404, detail="Not Found")
+        raise HTTPException(status_code=404, detail="No encontrado")
     
