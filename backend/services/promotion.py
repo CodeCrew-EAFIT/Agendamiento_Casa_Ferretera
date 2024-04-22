@@ -138,7 +138,7 @@ def getPromotion(promotionId):
     if promotion is not None:
         return promotion
     else:
-        raise HTTPException(status_code=404, detail="Not Found")
+        raise HTTPException(status_code=404, detail="No encontrado")
 
 
 
