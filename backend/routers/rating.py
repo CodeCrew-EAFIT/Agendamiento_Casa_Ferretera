@@ -15,7 +15,7 @@ async def fetchPromotionsToRate(authenticated_user: None = Depends(getIdFromHead
         promotionsToRate = getPromotionsToRate()
         return promotionsToRate
     else:
-        raise HTTPException(status_code=403, detail="Forbidden Access")
+        raise HTTPException(status_code=403, detail="Acceso prohibido")
 
 
 @ratingRouter.post("/create-rating")
@@ -27,10 +27,10 @@ async def postRating(request: Rating, authenticated_user_id: str = Depends(getId
         createRating(request, authenticated_user_id, promoterId)
     
     elif not validPromotion:
-        raise HTTPException(status_code=400, detail="Promotion not valid for rating")
+        raise HTTPException(status_code=400, detail="Promotoría no válida para calificar")
     
     else:
-        raise HTTPException(status_code=403, detail="Forbidden Access")
+        raise HTTPException(status_code=403, detail="Acceso prohibido")
      
     updateRatedPromotion(request.promotion_id)
-    return {'message': 'The promotion has been successfully rated.'}
+    return {'message': 'Promotoría satisfactoriamente calificada.'}

@@ -41,11 +41,11 @@ async def createPromotion(request: CreatePromotionRequest, authenticatedUserId: 
             result = createBooking(booking, authenticatedUserId) 
             bookingId = result.booking_id
             result2 = createPromotionFunc(bookingId, request.promoter_user_id)
-            return {'message': 'The promotion has been successfully scheduled.'}
+            return {'message': 'Promotoría satisfactoriamente programada.'}
         else:
-            raise HTTPException(status_code=409, detail="Conflict with existing promotion")
+            raise HTTPException(status_code=409, detail="Conflicto con promotoría existente")
     else:
-        raise HTTPException(status_code=403, detail="Forbidden Access")
+        raise HTTPException(status_code=403, detail="Acceso prohibido")
 
 
 # Route to fetch promotions given a promoter_user_id
@@ -63,9 +63,3 @@ async def fetchPromotionsByPromoterId(location_name: str): #, authenticated_user
     promotions = getPromotionsByLocationName(location_name)
     return promotions
 
-# Test route
-
-@promotionRouter.get("/")
-async def testFunction():
-    print("This is a test")
-    return {"data": "This is a test x2"}

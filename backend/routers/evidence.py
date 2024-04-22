@@ -16,9 +16,9 @@ async def postEvidence(request: Evidence, authenticated_user_id: str = Depends(g
         createEvidence(request, authenticated_user_id)
         updateRatedPromotionEv(request.promotion_id)   
     else:
-        raise HTTPException(status_code=403, detail="Forbidden Access")
+        raise HTTPException(status_code=403, detail="Acceso prohibido")
      
-    return {'message': 'Evidence created.'}
+    return {'message': 'Evidencia creada correctamente.'}
 
 
 @evidenceRouter.get("/promotions-pending-evidence")
@@ -28,5 +28,5 @@ async def fetchPromotionsToRate(authenticated_user: None = Depends(getIdFromHead
         promotionsToRate = getPromotionsPending()
         return promotionsToRate
     else:
-        raise HTTPException(status_code=403, detail="Forbidden Access")
+        raise HTTPException(status_code=403, detail="Acceso prohibido")
 
