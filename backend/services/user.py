@@ -11,7 +11,7 @@ from sqlalchemy.orm import defer
 def getAllUsers():
     db = get_db()
     allUsers = db.query(UserTable).options(defer(UserTable.hashed_password)).all()
-    if len(allUsers) is not 0:
+    if len(allUsers) != 0:
         return allUsers
     else:
         raise HTTPException(status_code=404, detail="Not Found")
