@@ -14,7 +14,7 @@ def getAllUsers():
     if len(allUsers) != 0:
         return allUsers
     else:
-        raise HTTPException(status_code=404, detail="Not Found")
+        raise HTTPException(status_code=404, detail="No encontrado")
 
 
 # Function to fetch all users given the role
@@ -25,7 +25,7 @@ def getAllUsersByRole(role: str):
     if len(allUsers) != 0:
         return allUsers
     else:
-        raise HTTPException(status_code=404, detail="Not Found")
+        raise HTTPException(status_code=404, detail="No encontrado")
 
 
 # Function to fetch all promoters given the brand
@@ -39,9 +39,9 @@ def getAllPromotersByBrand(brandName: str):
         if len(allPromotersByBrand) != 0:
             return allPromotersByBrand
         else:
-            raise HTTPException(status_code=404, detail="Not Found")
+            raise HTTPException(status_code=404, detail="No encontrado")
     else:
-        raise HTTPException(status_code=404, detail="Not Found")
+        raise HTTPException(status_code=404, detail="No encontrado")
 
 
 
@@ -55,5 +55,5 @@ def getUserById(userId: int):
     if user is not None:
         return user
     else:
-        raise HTTPException(status_code=404, detail="Not Found")
+        raise HTTPException(status_code=404, detail="No encontrado")
     
