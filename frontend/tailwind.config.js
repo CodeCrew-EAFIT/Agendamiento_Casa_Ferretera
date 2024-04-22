@@ -11,7 +11,8 @@ module.exports = {
         DEFAULT: '#F8C300',
         dark: '#dbb200',
         light: '#fbd446'
-      } // Color terciario
+      }, // Color terciario
+      black: '#000000'
     },
     fontSize: {
       sm: '12px',

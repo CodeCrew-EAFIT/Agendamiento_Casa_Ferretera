@@ -12,6 +12,8 @@ export default function Home () {
   const [promoterPromotions, setPromoterPromotions] = useState([])
   const { userType } = useUserSession()
 
+  // Unificar en un solo fetch para evitar hacer dos llamadas
+
   const fetchAllBookings = async () => {
     try {
       const result = await axios.get(`${API_URL}/all-bookings`)

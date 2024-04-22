@@ -101,19 +101,21 @@ input[type='date']::-webkit-calendar-picker-indicator {
   @apply text-xl cursor-pointer hover:bg-secondary hover:text-primary p-2
 }
 
-
 /* LOGIN */
-
 .login-container{
   @apply flex justify-end items-center min-h-screen background-container;
 }
 
 .login-form {
-  @apply mr-[17px] p-10 flex flex-col gap-6 bg-primary rounded-3xl shadow-custom;
+  @apply mr-[36px] py-24 px-10 flex flex-col gap-6 bg-primary rounded-3xl shadow-custom;
 }
 
 .login-title {
   @apply text-xxl font-extrabold text-center
+}
+
+.login-input { 
+  @apply bg-primary border-b-2 placeholder:text-secondary p-2 outline-none;
 }
 
 .login-buttons-container {
