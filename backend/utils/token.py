@@ -7,17 +7,17 @@ SECRET_KEY = "passwordsecret123"
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
-def create_access_token(data: dict, expires_delta: timedelta = None):
-    to_encode = data.copy()
+def createAccessToken(data: dict, expires_delta: timedelta = None):
+    toEncode = data.copy()
     if expires_delta:
         expire = datetime.now(timezone.utc) + expires_delta
     else:
         expire = datetime.now(timezone.utc) + timedelta(minutes=15)
-    to_encode.update({"exp": expire})
-    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
-    return encoded_jwt
+    toEncode.update({"exp": expire})
+    encodedJwt = jwt.encode(toEncode, SECRET_KEY, algorithm=ALGORITHM)
+    return encodedJwt
 
-def decode_token(token: str):
+def decodeToken(token: str):
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         return payload
@@ -42,7 +42,7 @@ class JWTBearer(HTTPBearer):
     def verify_jwt(self, jwtoken):
         isTokenValid = False
         try:
-            payload = decode_token(jwtoken)
+            payload = decodeToken(jwtoken)
         except:
             payload = None
         if payload:

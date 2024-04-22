@@ -7,7 +7,6 @@ from schemas.rating import Rating
 
 ratingRouter = APIRouter()
 
-
 @ratingRouter.get("/promotions-to-rate")
 async def fetchPromotionsToRate(authenticated_user: None = Depends(getIdFromHeader)):
     userRole = getUserRole(authenticated_user)
@@ -16,7 +15,6 @@ async def fetchPromotionsToRate(authenticated_user: None = Depends(getIdFromHead
         return promotionsToRate
     else:
         raise HTTPException(status_code=403, detail="Forbidden Access")
-
 
 @ratingRouter.post("/create-rating")
 async def postRating(request: Rating, authenticated_user_id: str = Depends(getIdFromHeader)):
