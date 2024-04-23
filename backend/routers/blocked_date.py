@@ -11,15 +11,15 @@ blockedDateRouter = APIRouter()
 # Route to fetch all blocked dates
 
 @blockedDateRouter.get("/all-blocked-dates")
-async def fetchAllPromotions(): #, authenticated_user: None = Depends(authenticateUser)):
-    allPromotions = getAllBlockedDates()
-    return allPromotions
+async def fetchAllBlockedDates(): #, authenticated_user: None = Depends(authenticateUser)):
+    allBlockedDates = getAllBlockedDates()
+    return allBlockedDates
 
 
 # Route to fetch a blocked date given its id
 
 @blockedDateRouter.get("/blocked-date/{blocked_date_id}")
-async def fetchPromotion(blocked_date_id: int): #, authenticated_user: None = Depends(authenticateUser)):
+async def fetchBlockedDate(blocked_date_id: int): #, authenticated_user: None = Depends(authenticateUser)):
     blockedDate = getBlockedDate(blocked_date_id)
     return blockedDate
 
@@ -47,6 +47,6 @@ async def createBlockedDate(booking: Booking, authenticatedUserId: int = Depends
 # Route to fetch blocked dates given a location name
 
 @blockedDateRouter.get("/blocked-dates-by-location-name/{location_name}")
-async def fetchPromotionsByPromoterId(location_name: str): #, authenticated_user: None = Depends(authenticateUser)):
+async def fetchBlockedDatesByLocationName(location_name: str): #, authenticated_user: None = Depends(authenticateUser)):
     blockedDates = getBlockedDatesByLocationName(location_name)
     return blockedDates
