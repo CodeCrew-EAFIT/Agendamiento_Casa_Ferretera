@@ -16,7 +16,7 @@ class UserBase(BaseModel):
     brand_id: Optional[int]
 
 class UserCreate(UserBase):
-    hashed_password: str
+    password: str
 
 class User(UserBase):
     user_id: int
