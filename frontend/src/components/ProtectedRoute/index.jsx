@@ -4,9 +4,15 @@ import { Navigate } from 'react-router-dom'
 import { useUserSession } from '../../utils/UserSessionContext'
 
 const ProtectedRoute = ({ element, allowedUsers, redirectTo }) => {
-  const { userType } = useUserSession()
+  const { userDetails } = useUserSession()
 
-  if (!allowedUsers.includes(userType)) {
+  if (!userDetails) {
+    return <Navigate to={'/'} replace />
+  }
+
+  const currentRole = userDetails.role
+
+  if (!allowedUsers.includes(currentRole)) {
     return <Navigate to={redirectTo} replace />
   }
 

@@ -13,9 +13,10 @@ import capitalizeFirstWordLetter from '../../utils/capitalizeFirstWordLetter'
 export default function Calendar ({ promotionData, location, promoterPromotions }) {
   const [currentDate, setCurrentDate] = useState(new Date())
   const [weekDays, setWeekDays] = useState([])
-  const { userType } = useUserSession()
+  const { userDetails } = useUserSession()
   const rowsNumber = AVAILABLE_HOURS.length * 2 - 1
   const colsNumber = 8
+  const currentRole = userDetails.role
 
   useEffect(() => {
     const start = startOfWeek(currentDate, { weekStartsOn: 1 })
@@ -63,18 +64,8 @@ export default function Calendar ({ promotionData, location, promoterPromotions 
 
     const start = startOfWeek(currentDate, { weekStartsOn: 1 })
     const end = endOfWeek(currentDate, { weekStartsOn: 1 })
-    if (promotionLocation === location && parsedDate >= start && parsedDate <= end) {
-      console.log(promotion)
-      return (
-        <div className="calendar-box"
-              style={{  left: `${75 + 115.7 * (dayOfWeek - 1)}px`, width: `${dayOfWeek === 7 ? 125 : 110.25}px`, height: `${(endTime - startTime) * 26}px`, top: `${(startTime - 1) * 26}px`}}
-            >
-              {promotion.brand_name.toUpperCase().split('+').join(' + ')}
-        </div>
-      )
-    }
 
-    if (userType === PROMOTER && parsedDate >= start && parsedDate <= end) {
+    if (currentRole === PROMOTER && parsedDate >= start && parsedDate <= end) {
       const promoterPromotion = promoterPromotions.find(promo => promo.booking_id === promotion.booking_id)
       const promotionLocation = ID_TO_AVAILABLE_LOCATIONS[promotion.location_id]
       return (promoterPromotion &&
@@ -83,6 +74,14 @@ export default function Calendar ({ promotionData, location, promoterPromotions 
             >
               Sede {promotionLocation}
             </div>
+      )
+    } else if (promotionLocation === location && parsedDate >= start && parsedDate <= end) {
+      return (
+        <div key={index} className="calendar-box"
+              style={{ left: `${75 + 115.7 * (dayOfWeek - 1)}px`, width: `${dayOfWeek === 7 ? 125 : 110.25}px`, height: `${(endTime - startTime) * 26}px`, top: `${(startTime - 1) * 26}px` }}
+            >
+              {promotion.brand_name.toUpperCase().split('+').join(' + ')}
+        </div>
       )
     }
 

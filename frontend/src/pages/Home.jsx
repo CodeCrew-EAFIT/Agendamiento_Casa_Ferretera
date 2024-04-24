@@ -4,41 +4,27 @@ import Calendar from '../components/Calendar'
 import ScheduleBar from '../components/Calendar/ScheduleBar'
 import { useUserSession } from '../utils/UserSessionContext'
 import {
-  API_URL,
   ADMIN_USERS,
   SUPERVISOR,
   ID_TO_AVAILABLE_LOCATIONS,
-  PROMOTER,
-  MULTIPLE_PROMOTIONS_LOCATIONS
+  PROMOTER
 } from '../utils/constants'
 import axios from 'axios'
 import { useCalendarContext } from '../utils/CalendarContext'
 
+const BASE_URL = import.meta.env.VITE_BASE_URL
+
 export default function Home () {
-  const [user, setUser] = useState({})
-  const { userType } = useUserSession()
+  const { userDetails } = useUserSession()
   const { location, setLocation } = useCalendarContext()
   const [promotionData, setPromotionData] = useState([])
   const [promoterPromotions, setPromoterPromotions] = useState([])
 
-  const BASE_URL = import.meta.env.VITE_BASE_URL
-
-  const fetchUser = async () => {
-    try {
-      const result = await axios.get(`${BASE_URL}/users/me`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`
-        }
-      })
-      setUser(result.data)
-    } catch (error) {
-      console.error(error)
-    }
-  }
+  const currentRole = userDetails.role
 
   const fetchAllBookings = async () => {
     try {
-      const result = await axios.get(`${API_URL}/all-bookings`, {
+      const result = await axios.get(`${BASE_URL}/all-bookings`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`
         }
@@ -53,7 +39,7 @@ export default function Home () {
     try {
       const promoterId = 11
       const result = await axios.get(
-        `${API_URL}/promotions-by-promoter-id/${promoterId}`
+        `${BASE_URL}/promotions-by-promoter-id/${promoterId}`
       )
       setPromoterPromotions(result.data)
     } catch (error) {
@@ -62,22 +48,21 @@ export default function Home () {
   }
 
   useEffect(() => {
-    fetchUser()
     fetchAllBookings()
   }, [])
 
   useEffect(() => {
-    if (userType === SUPERVISOR) {
+    if (currentRole === SUPERVISOR) {
       setLocation(ID_TO_AVAILABLE_LOCATIONS[1]) // Aquí es la cuestión
     }
-    if (userType === PROMOTER) {
+    if (currentRole === PROMOTER) {
       fetchAllPromotionsForPromoter()
     }
-  }, [userType])
+  }, [currentRole])
 
   return (
-    <Layout user={user}>
-      {ADMIN_USERS.includes(userType) && <ScheduleBar location={location} setLocation={setLocation} />}
+    <Layout>
+      {ADMIN_USERS.includes(currentRole) && <ScheduleBar location={location} setLocation={setLocation} />}
       <Calendar promotionData={promotionData} location={location} promoterPromotions={promoterPromotions} />
     </Layout>
   )

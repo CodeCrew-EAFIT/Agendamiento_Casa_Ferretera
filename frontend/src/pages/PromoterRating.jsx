@@ -5,7 +5,7 @@ import Button from '../components/Button'
 import { useParams } from 'react-router-dom'
 import axios from 'axios'
 
-const BASE = 'http://127.0.0.1:8000'
+const BASE_URL = import.meta.env.VITE_BASE_URL
 
 function RatingForm () {
   const id = parseInt(useParams().id)
@@ -34,13 +34,18 @@ function RatingForm () {
   const onSubmit = async (e) => {
     e.preventDefault()
     try {
-      const result = await axios.post(`${BASE}/create-rating`, rating, {
+      // TODO: ELIMINAR CUANDO SE CORRIJA EL BACKEND
+      await axios.post(`${BASE_URL}/create-rating`, rating, {
         headers: {
           'user-id': 9
         }
       })
-      // SWALERT
-      console.log(result.data)
+      // TODO: DESCOMENTAR CUANDO SE CORRIJA EL BACKEND
+      // await axios.post(`${BASE_URL}/create-rating`, rating, {
+      //   headers: {
+      //     Authorization: `Bearer ${localStorage.getItem('token')}`
+      //   }
+      // })
     } catch (error) {
       console.error(error)
     }

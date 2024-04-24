@@ -7,7 +7,9 @@ import forwardArrow from '../../assets/icons/forward-arrow.svg'
 import forwardBlackArrow from '../../assets/icons/forward-black-arrow.svg'
 import backArrow from '../../assets/icons/back-arrow.svg'
 import backBlackArrow from '../../assets/icons/back-black-arrow.svg'
-import { FILLER_USER, API_URL, ID_TO_BRAND } from '../../utils/constants'
+import { FILLER_USER, ID_TO_BRAND } from '../../utils/constants'
+
+const BASE_URL = import.meta.env.VITE_BASE_URL
 
 export default function Users ({ searchValue }) {
   const [page, setPage] = useState(0)
@@ -20,7 +22,11 @@ export default function Users ({ searchValue }) {
 
   const fetchAllUsers = async () => {
     try {
-      const response = await axios.get(`${API_URL}/all-users`)
+      const response = await axios.get(`${BASE_URL}/all-users`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+      })
       const fetchedUsers = response.data
       const totalUsers = fetchedUsers.length
       const usersToAdd = totalUsers % 7 === 0 ? 0 : 7 - (totalUsers % 7)
@@ -34,13 +40,18 @@ export default function Users ({ searchValue }) {
 
   const sortData = (data, searchTerm) => {
     if (!searchTerm) return data
+
     return data.sort((a, b) => {
-      const aMatches = Object.values(a).some((value) =>
-        value.toLowerCase().includes(searchTerm.toLowerCase())
-      )
-      const bMatches = Object.values(b).some((value) =>
-        value.toLowerCase().includes(searchTerm.toLowerCase())
-      )
+      const aMatches = Object.values(a).some((value) => {
+        if (typeof value !== 'string') return false // Ignorar valores no cadena
+        return value.toLowerCase().includes(searchTerm.toLowerCase())
+      })
+
+      const bMatches = Object.values(b).some((value) => {
+        if (typeof value !== 'string') return false // Ignorar valores no cadena
+        return value.toLowerCase().includes(searchTerm.toLowerCase())
+      })
+
       return aMatches === bMatches ? 0 : aMatches ? -1 : 1
     })
   }

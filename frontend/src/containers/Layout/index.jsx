@@ -3,10 +3,10 @@ import PropTypes from 'prop-types'
 import NavBar from '../../components/NavBar/index.jsx'
 import ContentContainer from '../Content/index.jsx'
 
-export default function Layout ({ children, user }) {
+export default function Layout ({ children }) {
   return (
     <div className='w-[1024px] px-[49px] mx-auto'>
-      <NavBar user={user}/>
+      <NavBar/>
       <ContentContainer>
         {children}
       </ContentContainer>

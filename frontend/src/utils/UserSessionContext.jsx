@@ -6,23 +6,23 @@ const UserSessionContext = createContext()
 export const useUserSession = () => useContext(UserSessionContext)
 
 export const UserSessionProvider = ({ children }) => {
-  const [userType, setUserType] = useState(() => {
-    const savedUserType = sessionStorage.getItem('userType')
-    return savedUserType ? JSON.parse(savedUserType) : null
+  const [userDetails, setUserDetails] = useState(() => {
+    const savedUserDetails = sessionStorage.getItem('userDetails')
+    return savedUserDetails ? JSON.parse(savedUserDetails) : null
   })
 
   useEffect(() => {
-    if (userType !== null) {
-      sessionStorage.setItem('userType', JSON.stringify(userType))
+    if (userDetails !== null) {
+      sessionStorage.setItem('userDetails', JSON.stringify(userDetails))
     }
-  }, [userType])
+  }, [userDetails])
 
-  const setUserSession = (type) => {
-    setUserType(type)
+  const setUserSession = (details) => {
+    setUserDetails(details)
   }
 
   return (
-    <UserSessionContext.Provider value={{ userType, setUserSession }}>
+    <UserSessionContext.Provider value={{ userDetails, setUserSession }}>
       {children}
     </UserSessionContext.Provider>
   )

@@ -1,13 +1,11 @@
-import React, { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import React, { useState } from 'react'
 import Layout from '../containers/Layout'
 import Form from '../components/Schedule/Form'
 import Calendar from '../components/Schedule/Calendar'
 import { useCalendarContext } from '../utils/CalendarContext'
 
 export default function SchedulePromotion () {
-  const { location, setLocation } = useCalendarContext()
-  const navigate = useNavigate()
+  const { location } = useCalendarContext()
   const [formData, setFormData] = useState({
     location,
     date: '',
@@ -15,14 +13,6 @@ export default function SchedulePromotion () {
     endTime: '',
     promoter: ''
   })
-
-  useEffect(() => {
-    console.log('formData.location', formData.location)
-    if (!formData.location) {
-      navigate('/horario')
-    }
-    setLocation(formData.location)
-  }, [formData.location])
 
   return (
     <Layout>

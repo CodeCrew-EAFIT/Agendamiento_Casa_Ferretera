@@ -3,9 +3,10 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { ReactSVG } from 'react-svg'
 import Layout from '../containers/Layout'
 import Button from '../components/Button'
-import { API_URL } from '../utils/constants'
 import upload from '../assets/icons/upload.svg'
 import axios from 'axios'
+
+const BASE_URL = import.meta.env.VITE_BASE_URL
 
 export default function Evidence () {
   const navigate = useNavigate()
@@ -19,12 +20,18 @@ export default function Evidence () {
 
   const postEvidence = async (evidenceData) => {
     try {
+      // TODO: ELIMINAR CUANDO SE CORRIJA EL BACKEND
       const headers = {
         'Content-Type': 'application/json',
         'user-id': 11
       }
-      const response = await axios.post(`${API_URL}/create-evidence`, evidenceData, { headers })
-      console.log(response.data)
+      await axios.post(`${BASE_URL}/create-evidence`, evidenceData, { headers })
+      // TODO: DESCOMENTAR CUANDO SE CORRIJA EL BACKEND
+      // await axios.post(`${BASE_URL}/create-evidence`, evidenceData, {
+      //   headers: {
+      //     Authorization: `Bearer ${localStorage.getItem('token')}`
+      //   }
+      // })
       navigate('/bitacora')
     } catch (error) {
       console.error(error)

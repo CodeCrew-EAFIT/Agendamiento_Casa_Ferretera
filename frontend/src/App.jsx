@@ -66,7 +66,7 @@ function App () {
             path="/calificar"
             element={
               <ProtectedRoute
-                element={<Binnacle userType={SUPERVISOR} />}
+                element={<Binnacle />}
                 allowedUsers={[SUPERVISOR]}
                 redirectTo="/horario"
               />
@@ -86,7 +86,7 @@ function App () {
             path="/bitacora"
             element={
               <ProtectedRoute
-                element={<Binnacle userType={PROMOTER} />}
+                element={<Binnacle />}
                 allowedUsers={[PROMOTER]}
                 redirectTo="/horario"
               />

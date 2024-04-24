@@ -1,29 +1,40 @@
 import React, { useState, useEffect } from 'react'
+import { useUserSession } from '../utils/UserSessionContext'
 import { format, parseISO } from 'date-fns'
 import { es } from 'date-fns/locale'
-import { SUPERVISOR, PROMOTER, API_URL, AVAILABLE_LOCATIONS_DICT, PROMOTER_USER, USER_TO_NAME, AVAILABLE_LOCATIONS_PATH_DICT } from '../utils/constants'
+import { SUPERVISOR, PROMOTER, AVAILABLE_LOCATIONS_DICT, PROMOTER_USER, USER_TO_NAME, AVAILABLE_LOCATIONS_PATH_DICT } from '../utils/constants'
 import Layout from '../containers/Layout'
 import Promotions from '../components/Promotions'
 import Box from '../components/Promotions/Box'
 import { useNavigate } from 'react-router-dom'
-import PropTypes from 'prop-types'
 import axios from 'axios'
 
-export default function Binnacle ({ userType }) {
+export default function Binnacle () {
   const navigate = useNavigate()
+  const { userDetails } = useUserSession()
+  const currentRole = userDetails.role
 
   // Fetch service data from API
   const [services, setServices] = useState(null)
   const [promotionsData, setPromotionsData] = useState(null)
-  const fetchRoute = userType === SUPERVISOR ? '/promotions-to-rate' : '/promotions-pending-evidence'
+  const fetchRoute = currentRole === SUPERVISOR ? '/promotions-to-rate' : '/promotions-pending-evidence'
+
+  const BASE_URL = import.meta.env.VITE_BASE_URL
 
   const fetchService = async () => {
     try {
-      const result = await axios.get(`${API_URL}${fetchRoute}`, {
+      // TODO: ELIMINAR CUADNO SE CORRIJA EL BACKEND
+      const result = await axios.get(`${BASE_URL}${fetchRoute}`, {
         headers: {
           'user-id': 1
         }
       })
+      // TODO: DESCOMENTAR CUANDO SE CORRIJA EL BACKEND
+      // const result = await axios.get(`${BASE_URL}${fetchRoute}`, {
+      //   headers: {
+      //     Authorization: `Bearer ${localStorage.getItem('token')}`
+      //   }
+      // })
       setServices(result.data)
     } catch (error) {
       console.error(error)
@@ -36,14 +47,14 @@ export default function Binnacle ({ userType }) {
 
   useEffect(() => {
     if (services === null) return
-    console.log(services)
+
     let promotionExists = false
     const promotions = services.map((service, index) => {
       const formattedDate = format(parseISO(service.date), 'EEEE dd/MM/yyyy', { locale: es })
-      const onClickRoute = userType === SUPERVISOR ? `/calificar/${service.promotion_id}` : `/bitacora/${service.promotion_id}`
-      console.log(userType)
+      const onClickRoute = currentRole === SUPERVISOR ? `/calificar/${service.promotion_id}` : `/bitacora/${service.promotion_id}`
+      console.log(currentRole)
       console.log(AVAILABLE_LOCATIONS_PATH_DICT[USER_TO_NAME[SUPERVISOR]])
-      if (userType === SUPERVISOR && AVAILABLE_LOCATIONS_PATH_DICT[USER_TO_NAME[SUPERVISOR]] === service.location) {
+      if (currentRole === SUPERVISOR && AVAILABLE_LOCATIONS_PATH_DICT[USER_TO_NAME[SUPERVISOR]] === service.location) {
         promotionExists = true
         return (
         <Box key={index} onClick={() => navigate(onClickRoute)}>
@@ -54,7 +65,7 @@ export default function Binnacle ({ userType }) {
         )
       }
 
-      if (userType === PROMOTER && service.promoter_id === PROMOTER_USER.user_id) {
+      if (currentRole === PROMOTER && service.promoter_id === PROMOTER_USER.user_id) {
         promotionExists = true
         return (
           <Box key={index} onClick={() => navigate(onClickRoute)}>
@@ -84,8 +95,4 @@ export default function Binnacle ({ userType }) {
       <Promotions>{promotionsData}</Promotions>
     </Layout>
   )
-}
-
-Binnacle.propTypes = {
-  userType: PropTypes.string.isRequired
 }

@@ -11,8 +11,7 @@ import {
   ADMIN,
   ID_TO_BRAND,
   AVAILABLE_HOURS_MILITARY,
-  PROMOTER_BRAND,
-  API_URL
+  PROMOTER_BRAND
 } from '../../utils/constants'
 import Input from './Input'
 import expandedArrow from '../../assets/icons/expand-arrow.svg'
@@ -20,13 +19,17 @@ import Button from '../Button'
 import DateInput from './DateInput'
 import PopUp from './PopUp'
 
+const BASE_URL = import.meta.env.VITE_BASE_URL
+
 export default function Form ({ formData, setFormData }) {
   const navigate = useNavigate()
-  const { userType } = useUserSession()
+  const { userDetails } = useUserSession()
   const { sendCalendarNotification } = useCalendarContext()
   const [togglePopUp, setTogglePopUp] = useState(false)
   const [fetchedPromoters, setFetchedPromoters] = useState([])
   const [promoters, setPromoters] = useState([])
+
+  const currentRole = userDetails.role
 
   // Time logic
 
@@ -50,7 +53,11 @@ export default function Form ({ formData, setFormData }) {
 
   const fetchAllPromoters = async () => {
     try {
-      const response = await axios.get(`${API_URL}/all-users-by-role/promotor`)
+      const response = await axios.get(`${BASE_URL}/all-users-by-role/promotor`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+      })
 
       setFetchedPromoters(response.data)
     } catch (error) {
@@ -60,7 +67,11 @@ export default function Form ({ formData, setFormData }) {
 
   const fetchBrandPromoters = async () => {
     try {
-      const response = await axios.get(`${API_URL}/all-promoters-by-brand/${PROMOTER_BRAND}`)
+      const response = await axios.get(`${BASE_URL}/all-promoters-by-brand/${PROMOTER_BRAND}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+      })
 
       setFetchedPromoters(response.data)
     } catch (error) {
@@ -69,12 +80,20 @@ export default function Form ({ formData, setFormData }) {
   }
 
   const postPromotion = async (data) => {
+    // TODO: ELIMINAR CUANDO SE ARREGLE BACKEND
     const headers = {
       'Content-Type': 'application/json',
-      'user-id': userType === ADMIN ? 10 : 13
+      'user-id': userDetails.user_id
     }
     try {
-      const response = await axios.post(`${API_URL}/create-promotion`, data, { headers })
+      // TODO: ELIMINAR CUANDO SE ARREGLE BACKEND
+      const response = await axios.post(`${BASE_URL}/create-promotion`, data, { headers })
+      // TODO: DESCOMENTAR CUANDO SE ARREGLE BACKEND
+      // const response = await axios.post(`${BASE_URL}/create-promotion`, data, {
+      //   headers: {
+      //     Authorization: `Bearer ${localStorage.getItem('token')}`
+      //   }
+      // })
       if (response.status === 200) {
         sendCalendarNotification({ message: 'Promotoría agendada correctamente', success: true })
         navigate('/horario')
@@ -92,7 +111,7 @@ export default function Form ({ formData, setFormData }) {
   // Handlers
 
   useEffect(() => {
-    if (userType === ADMIN) {
+    if (currentRole === ADMIN) {
       fetchAllPromoters()
     } else {
       fetchBrandPromoters()
@@ -101,7 +120,7 @@ export default function Form ({ formData, setFormData }) {
 
   useEffect(() => {
     let curatedPromoters = fetchedPromoters.map((promoter) => (promoter.name))
-    if (userType === ADMIN) {
+    if (currentRole === ADMIN) {
       curatedPromoters = fetchedPromoters.map((promoter) => {
         const promoterContent = promoter.name + ' - ' + ID_TO_BRAND[promoter.brand_id]
         return promoterContent
@@ -119,6 +138,8 @@ export default function Form ({ formData, setFormData }) {
       formData.promoter
     ) {
       setTogglePopUp(true)
+    } else {
+      alert('Por favor, llene todos los campos')
     }
   }
 
@@ -127,6 +148,17 @@ export default function Form ({ formData, setFormData }) {
   }
 
   const handlePost = async () => {
+    // Obtener la fecha actual y agregar un día
+    const tomorrow = new Date()
+    tomorrow.setDate(tomorrow.getDate() + 1) // Sumar un día a la fecha actual
+    const tomorrowDate = tomorrow.toISOString().split('T')[0] // Obtener solo la parte de la fecha
+
+    if (formData.date < tomorrowDate) {
+      alert('No puedes agendar una promotoría en una fecha pasada o sin un día de anticipación')
+      handleClosePopUp()
+      return
+    }
+
     const data = {
       booking: {
         location_id: AVAILABLE_LOCATIONS_TO_ID[formData.location],
