@@ -6,8 +6,10 @@ import Home from './pages/Home'
 import UserPanel from './pages/Admin/UserPanel'
 import SchedulePromotion from './pages/SchedulePromotion'
 import Binnacle from './pages/Binnacle'
+import BlockPromotion from './pages/BlockPromotion'
 import PromoterRating from './pages/PromoterRating'
 import ProtectedRoute from './components/ProtectedRoute'
+import Evidence from './pages/Evidence'
 import {
   USER_TYPES,
   ADMIN_USERS,
@@ -15,7 +17,6 @@ import {
   PROMOTER,
   SUPERVISOR
 } from './utils/constants'
-import Evidence from './pages/Evidence'
 import { CalendarContextProvider } from './utils/CalendarContext'
 
 function App () {
@@ -66,7 +67,7 @@ function App () {
             path="/calificar"
             element={
               <ProtectedRoute
-                element={<Binnacle userType={SUPERVISOR} />}
+                element={<Binnacle />}
                 allowedUsers={[SUPERVISOR]}
                 redirectTo="/horario"
               />
@@ -86,7 +87,7 @@ function App () {
             path="/bitacora"
             element={
               <ProtectedRoute
-                element={<Binnacle userType={PROMOTER} />}
+                element={<Binnacle />}
                 allowedUsers={[PROMOTER]}
                 redirectTo="/horario"
               />
@@ -98,6 +99,20 @@ function App () {
               <ProtectedRoute
                 element={<Evidence />}
                 allowedUsers={[PROMOTER]}
+                redirectTo="/horario"
+              />
+            }
+          />
+          <Route
+            path="/bloquear"
+            element={
+              <ProtectedRoute
+                element={
+                  <CalendarContextProvider>
+                    <BlockPromotion />
+                  </CalendarContextProvider>
+                }
+                allowedUsers={[SUPERVISOR, ADMIN]}
                 redirectTo="/horario"
               />
             }

@@ -213,11 +213,12 @@ export const ID_TO_BRAND = {
 }
 
 export const INPUT_PLACEHOLDERS = {
-  location: 'Escoger sede',
+  location: 'Seleccione la sede',
   date: 'Fecha',
   startTime: 'Hora inicio',
   endTime: 'Hora final',
-  promoter: 'Promotor'
+  promoter: 'Promotor',
+  reason: 'Seleccione la opción más adecuada'
 }
 
 export const SAMPLE_PROMOTERS = ['Maria Paula A.', 'Juan Felipe B.']

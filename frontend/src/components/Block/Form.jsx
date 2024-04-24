@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
@@ -9,15 +9,13 @@ import {
   AVAILABLE_HOURS_SPECIFIC,
   AVAILABLE_LOCATIONS_TO_ID,
   ADMIN,
-  ID_TO_BRAND,
-  AVAILABLE_HOURS_MILITARY,
-  PROMOTER_BRAND
+  SUPERVISOR
 } from '../../utils/constants'
 import expandedArrow from '../../assets/icons/expand-arrow.svg'
 import Button from '../Button'
-import DateInput from '../Input/DateInput'
-import PopUp from './PopUp'
 import SelectInput from '../Input/SelectInput'
+import DateInput from '../Input/DateInput'
+import TextInputBlock from '../Input/TextInputBlock'
 
 const BASE_URL = import.meta.env.VITE_BASE_URL
 
@@ -25,11 +23,10 @@ export default function Form ({ formData, setFormData }) {
   const navigate = useNavigate()
   const { userDetails } = useUserSession()
   const { sendCalendarNotification } = useCalendarContext()
-  const [togglePopUp, setTogglePopUp] = useState(false)
-  const [fetchedPromoters, setFetchedPromoters] = useState([])
-  const [promoters, setPromoters] = useState([])
 
   const currentRole = userDetails.role
+
+  const isAdmin = currentRole === ADMIN
 
   // Time logic
 
@@ -49,37 +46,7 @@ export default function Form ({ formData, setFormData }) {
     endTimeArray = AVAILABLE_HOURS_SPECIFIC.slice(index + 2)
   }
 
-  // Fetching logic
-
-  const fetchAllPromoters = async () => {
-    try {
-      const response = await axios.get(`${BASE_URL}/all-users-by-role/promotor`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`
-        }
-      })
-
-      setFetchedPromoters(response.data)
-    } catch (error) {
-      console.error(error)
-    }
-  }
-
-  const fetchBrandPromoters = async () => {
-    try {
-      const response = await axios.get(`${BASE_URL}/all-promoters-by-brand/${PROMOTER_BRAND}`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`
-        }
-      })
-
-      setFetchedPromoters(response.data)
-    } catch (error) {
-      console.error(error)
-    }
-  }
-
-  const postPromotion = async (data) => {
+  const postBlock = async (data) => {
     // TODO: ELIMINAR CUANDO SE ARREGLE BACKEND
     const headers = {
       'Content-Type': 'application/json',
@@ -108,43 +75,19 @@ export default function Form ({ formData, setFormData }) {
     }
   }
 
-  // Handlers
-
-  useEffect(() => {
-    if (currentRole === ADMIN) {
-      fetchAllPromoters()
-    } else {
-      fetchBrandPromoters()
-    }
-  }, [])
-
-  useEffect(() => {
-    let curatedPromoters = fetchedPromoters.map((promoter) => (promoter.name))
-    if (currentRole === ADMIN) {
-      curatedPromoters = fetchedPromoters.map((promoter) => {
-        const promoterContent = promoter.name + ' - ' + ID_TO_BRAND[promoter.brand_id]
-        return promoterContent
-      })
-    }
-    setPromoters(curatedPromoters)
-  }, [fetchedPromoters])
-
   const handleSubmit = () => {
     if (
       formData.location &&
       formData.date &&
       formData.startTime &&
       formData.endTime &&
-      formData.promoter
+      formData.reason
     ) {
-      setTogglePopUp(true)
+      console.log('formData', formData)
+      // handlePost()
     } else {
       alert('Por favor, llene todos los campos')
     }
-  }
-
-  const handleClosePopUp = () => {
-    setTogglePopUp(false)
   }
 
   const handlePost = async () => {
@@ -155,51 +98,37 @@ export default function Form ({ formData, setFormData }) {
 
     if (formData.date < tomorrowDate) {
       alert('No puedes agendar una promotoría en una fecha pasada o sin un día de anticipación')
-      handleClosePopUp()
       return
     }
 
     const data = {
-      booking: {
-        location_id: AVAILABLE_LOCATIONS_TO_ID[formData.location],
-        booking_date: formData.date,
-        start_time: AVAILABLE_HOURS_MILITARY[formData.startTime] + ':00',
-        end_time: AVAILABLE_HOURS_MILITARY[formData.endTime] + ':00'
-      },
-      promoter_user_id: fetchedPromoters[promoters.indexOf(formData.promoter)].user_id
     }
 
-    await postPromotion(data)
+    await postBlock(data)
   }
 
   return (
     <>
-      {togglePopUp && <PopUp formData={formData} handleClosePopUp={handleClosePopUp} handlePost={handlePost}/>}
-      {togglePopUp && (
-        <div
-          className="blur-screen bg-transparent"
-          onClick={handleClosePopUp}
-        ></div>
-      )}
-      <div className="flex py-[5px] px-[30px] pt-[38px]">
+      <div className={`flex px-[30px] py-2 ${isAdmin ? '' : 'pt-[37px]'}`}>
         <div className="w-full">
-          <div className="schedule-form text-left">
-            <div className="w-full">
-              <p className="font-bold text-lg pb-[10px]">Sede seleccionada:</p>
+          <div className={`flex flex-col items-center ${isAdmin ? 'gap-[25px]' : 'gap-[30px]'} text-left`}>
+          {currentRole === ADMIN && <div className="w-full">
+              <p className="font-bold text-lg pb-[10px]">Sede:</p>
               <SelectInput
                 name={'location'}
+                arrowIcon={expandedArrow}
                 value={formData}
                 setValue={setFormData}
                 optionsArray={AVAILABLE_LOCATIONS_ARRAY}
               />
-            </div>
+            </div>}
             <div className="w-full">
-              <p className="font-bold text-lg pb-[10px]">Fecha seleccionada:</p>
+              <p className="font-bold text-lg pb-[10px]">Fecha del bloqueo:</p>
               <DateInput value={formData} setValue={setFormData} />
             </div>
             <div className="w-full">
               <p className="font-bold text-lg pb-[10px]">
-                Horario de la promotoría:
+                Horario del bloqueo:
               </p>
               <div className="flex justify-between gap-[12px] w-full">
                 <SelectInput
@@ -219,18 +148,27 @@ export default function Form ({ formData, setFormData }) {
               </div>
             </div>
             <div className="w-full">
-              <p className="font-bold text-lg pb-[10px]">Promotor asignado:</p>
+              <p className="font-bold text-lg pb-[10px]">Razón del bloqueo:</p>
               <SelectInput
-                name={'promoter'}
+                name={'reason'}
                 arrowIcon={expandedArrow}
                 value={formData}
                 setValue={setFormData}
-                optionsArray={promoters}
+                optionsArray={['Auditoría', 'Vacaciones supervisor', 'Cierre de la sede']}
+              />
+            </div>
+            <div className="w-full">
+              <p className="font-bold text-lg pb-[10px]">Comentarios adicionales:</p>
+              <TextInputBlock
+                name={'comments'}
+                value={formData}
+                setValue={setFormData}
+                height={currentRole === SUPERVISOR}
               />
             </div>
           </div>
-          <div className="mt-[67px]">
-            <Button onClick={handleSubmit}>Agendar</Button>
+          <div className={`${currentRole === ADMIN ? 'mt-[10px]' : 'mt-[40px]'}`}>
+            <Button onClick={handleSubmit}>Bloquear</Button>
           </div>
         </div>
       </div>
