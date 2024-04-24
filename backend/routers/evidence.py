@@ -3,12 +3,10 @@ from services.getUserRole import getUserRole
 from services.booking import *
 from services.promotion import *
 from fastapi import APIRouter, Depends, Request
-from middlewares.getIdFromHeader import getIdFromHeader
 from schemas.evidence import Evidence
-from utils import token, security
+from utils import token
 
 evidenceRouter = APIRouter()
-
 
 @evidenceRouter.post("/create-evidence", dependencies=[Depends(token.JWTBearer())])
 async def postEvidence(evidence: Evidence, request: Request):
