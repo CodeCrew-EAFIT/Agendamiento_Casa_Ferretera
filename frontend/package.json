@@ -9,9 +9,11 @@
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "lint:fix": "eslint . --ext .js,.jsx --fix",
     "preview": "vite preview",
-    "test": "vitest --ui"
+    "testui": "vitest --ui",
+    "test": "vitest"
   },
   "dependencies": {
+    "@testing-library/react": "^15.0.2",
     "axios": "^1.6.8",
     "date-fns": "^3.6.0",
     "jsdom": "^24.0.0",
