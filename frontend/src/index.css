@@ -59,7 +59,11 @@ input[type='date']::-webkit-calendar-picker-indicator {
 }
 
 .input-container {
-  @apply relative flex items-center justify-between h-[52px] border-[3.5px] border-secondary rounded-full text-left cursor-pointer
+  @apply relative flex items-center justify-between h-[49px] border-[3.5px] border-secondary rounded-full text-left cursor-pointer
+}
+
+.input-container-simple {
+  @apply relative flex items-center justify-between border-[3.5px] border-secondary rounded-[15px] text-left cursor-pointer
 }
 
 /* INPUT */
@@ -207,7 +211,12 @@ input[type='date']::-webkit-calendar-picker-indicator {
 
 /* CALENDAR BOX */
 .calendar-box {
-  @apply absolute flex items-center justify-center bg-tertiary rounded-[10px] shadow-[5px_5px_5px_0_rgba(0,0,0,0.25)] font-bold px-2
+  @apply absolute flex items-center justify-center bg-tertiary rounded-[10px] shadow-[5px_5px_5px_0_rgba(0,0,0,0.25)] font-bold
+}
+
+/* BlOCK BOX */
+.blocking-box {
+  @apply absolute flex items-center justify-center bg-[#231F20] opacity-85 shadow-[5px_5px_5px_0_rgba(0,0,0,0.25)] font-bold
 }
 
 /* SHEDULE */
@@ -317,4 +326,10 @@ input[type='date']::-webkit-calendar-picker-indicator {
 
 .upload-image-label {
   @apply flex items-center gap-2 px-[10px] py-[2px] text-secondary border-[3px] border-secondary rounded-[15px] mt-[20px] cursor-pointer
+}
+
+/* BLOCK */
+
+.block-box {
+  @apply w-[232px] absolute right-0 flex items-center justify-center bg-[#231F20] opacity-85 shadow-[5px_5px_5px_0_rgba(0,0,0,0.25)] transition-all duration-500
 }

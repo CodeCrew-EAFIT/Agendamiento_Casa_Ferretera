@@ -27,7 +27,7 @@ export default function ChooseUser () {
         email: result.data.email,
         name: result.data.name,
         phone_number: result.data.phone_number,
-        role: capitalizeFirstWordLetter('Promotor'),
+        role: capitalizeFirstWordLetter('Supervisor'),
         user_id: userId
       })
     } catch (error) {

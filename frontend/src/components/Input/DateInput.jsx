@@ -35,10 +35,10 @@ export default function DateInput ({ value, setValue }) {
 
   return (
     <div className="schedule-input-container" onClick={handleContainerClick}>
-      <div className="input-container w-full pl-5 cursor-pointer">
+      <div className="input-container h-[52px] w-full pl-5 cursor-pointer">
         <input
           ref={dateInputRef}
-          className="text-xl bg-primary filter-none cursor-pointer"
+          className={`text-xl bg-primary filter-none cursor-pointer ${chosenDate ? '' : 'text-secondary'}`}
           type="date"
           value={chosenDate ? chosenDate.toISOString().split('T')[0] : ''}
           onChange={handleDateChange}

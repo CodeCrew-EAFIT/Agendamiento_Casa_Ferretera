@@ -17,8 +17,18 @@ const BASE_URL = import.meta.env.VITE_BASE_URL
 export default function Home () {
   const { userDetails } = useUserSession()
   const { location, setLocation } = useCalendarContext()
+  const [blockData, setBlockData] = useState([{
+    blocking_date: '2024-04-25',
+    blocking_id: 1,
+    location_id: 1,
+    start_time: '08:00:00',
+    end_time: '12:00:00',
+    user_id: 15
+  }])
   const [promotionData, setPromotionData] = useState([])
   const [promoterPromotions, setPromoterPromotions] = useState([])
+
+  console.log(promotionData)
 
   const currentRole = userDetails.role
 
@@ -63,7 +73,7 @@ export default function Home () {
   return (
     <Layout>
       {ADMIN_USERS.includes(currentRole) && <ScheduleBar location={location} setLocation={setLocation} />}
-      <Calendar promotionData={promotionData} location={location} promoterPromotions={promoterPromotions} />
+      <Calendar blockData={blockData} promotionData={promotionData} location={location} promoterPromotions={promoterPromotions} />
     </Layout>
   )
 }

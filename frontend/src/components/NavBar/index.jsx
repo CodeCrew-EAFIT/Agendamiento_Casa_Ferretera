@@ -41,12 +41,12 @@ export default function NavBar () {
         <ul className='flex gap-8'>
           <li className={`cursor-pointer ${location.pathname.includes('/horario') ? 'font-bold' : ''}`} onClick={() => navigate('/horario')}>Horario</li>
           {isAdmin && <li className={`cursor-pointer ${location.pathname.includes('/usuarios') ? 'font-bold' : ''}`} onClick={() => navigate('/usuarios')}>Usuarios</li>}
-          {isBlockUser && <li className={'cursor-pointer'}>Bloquear</li>}
-          {isAdmin && <li className={'cursor-pointer'}>Dashboard</li>}
           {isChief && <li className={'cursor-pointer'}>Promotores</li>}
           {isSupervisor && <li className={`cursor-pointer ${location.pathname.includes('/calificar') ? 'font-bold' : ''}`} onClick={() => navigate('/calificar')}>Calificar</li>}
-          {isAdminUser && <li className={'cursor-pointer'}>Reportes</li>}
           {isPromoter && <li className={`cursor-pointer ${location.pathname.includes('/bitacora') ? 'font-bold' : ''}`} onClick={() => navigate('/bitacora')}>Bitácora</li>}
+          {isBlockUser && <li className={`cursor-pointer ${location.pathname.includes('/bloquear') ? 'font-bold' : ''}`} onClick={() => navigate('/bloquear')}>Bloquear</li>}
+          {isAdmin && <li className={'cursor-pointer'}>Dashboard</li>}
+          {isAdminUser && <li className={'cursor-pointer'}>Reportes</li>}
         </ul>
       </div>
     </div>
