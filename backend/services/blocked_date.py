@@ -13,8 +13,7 @@ def createBlockedDateFunc(bookingId: int):
     db = get_db()
 
     dbBlockedDate = Blocked_date(
-        booking_id = bookingId, 
-        promotion_state = 'booked'
+        booking_id = bookingId
     )
     
     db.add(dbBlockedDate)
@@ -44,10 +43,10 @@ def getAllBlockedDates():
 
 def getBlockedDate(blockedDateId: int):
     db = get_db()
-    promotion = db.query(Blocked_date).filter(Blocked_date.blocked_id == blockedDateId).first()
+    blockedDate = db.query(Blocked_date).filter(Blocked_date.blocked_id == blockedDateId).first()
 
-    if promotion is not None:
-        return promotion
+    if blockedDate is not None:
+        return blockedDate
     else:
         raise HTTPException(status_code=404, detail="No encontrado")
     

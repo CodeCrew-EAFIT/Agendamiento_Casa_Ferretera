@@ -12,12 +12,3 @@ def getUserRole(userId: int):
   else:
     role_enum, = userRole  # Unpack the tuple
     return role_enum.value  # Access the value of the Enum
-  
-
-
-
-'''def verifyUserPermision(userId: int, userRole:str):
-  db = get_db()
-  userRoleById = db.query(User.role).filter(User.user_id == userId).first()
-  if not userRoleById or userRoleById is not userRole:
-    raise HTTPException(status_code=403, detail="Forbidden Access")'''
