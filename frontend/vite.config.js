@@ -25,5 +25,9 @@ export default defineConfig({
           port: 8080,
           strictPort: false
         }
-      })
+      }),
+  test: {
+    environment: 'jsdom',
+    globals: true
+  }
 })
