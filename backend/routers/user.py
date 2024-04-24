@@ -1,19 +1,20 @@
 from services.promotion import *
 from services.booking import *
 from services.user import *
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends, Request
+from utils import token, security
 
 userRouter = APIRouter()
 
 # Route to fetch all users
-@userRouter.get("/all-users")
+@userRouter.get("/all-users", dependencies=[Depends(token.JWTBearer())])
 async def fetchAllUsersByRole(): #, authenticated_user: None = Depends(authenticateUser)):
     allUsers = getAllUsers()
     return allUsers
 
 
 # Route to fetch all user given the role
-@userRouter.get("/all-users-by-role/{role}")
+@userRouter.get("/all-users-by-role/{role}", dependencies=[Depends(token.JWTBearer())])
 async def fetchAllUsersByRole(role: str): #, authenticated_user: None = Depends(authenticateUser)):
     allUsersByRole = getAllUsersByRole(role)
     return allUsersByRole
@@ -21,7 +22,7 @@ async def fetchAllUsersByRole(role: str): #, authenticated_user: None = Depends(
 
 
 # Route to fetch all user given the brand
-@userRouter.get("/all-promoters-by-brand/{brand_name}")
+@userRouter.get("/all-promoters-by-brand/{brand_name}", dependencies=[Depends(token.JWTBearer())])
 async def fetchAllPromotersByBrand(brand_name: str): #, authenticated_user: None = Depends(authenticateUser)):
     allPromotersByBrand = getAllPromotersByBrand(brand_name)
     return allPromotersByBrand

@@ -5,7 +5,7 @@ from config.db import Base
 class Blocked_date(Base):
     __tablename__ = "Blocked_date"
 
-    blocked_id = Column(Integer, primary_key=True, index=True)
+    blocked_id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     booking_id = Column(Integer, ForeignKey('Booking.booking_id'), nullable=False)
 
     #Relationships
