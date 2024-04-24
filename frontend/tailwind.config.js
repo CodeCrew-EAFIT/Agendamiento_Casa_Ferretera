@@ -11,7 +11,8 @@ module.exports = {
         DEFAULT: '#F8C300',
         dark: '#dbb200',
         light: '#fbd446'
-      } // Color terciario
+      }, // Color terciario
+      black: '#000000'
     },
     fontSize: {
       sm: '12px',
@@ -23,6 +24,7 @@ module.exports = {
     fontWeight: {
       extrabold: '800',
       bold: '700',
+      semibold: '600',
       medium: '400'
     },
     extend: {

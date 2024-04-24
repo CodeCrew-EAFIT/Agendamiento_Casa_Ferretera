@@ -1,17 +1,18 @@
 import React, { useState } from 'react'
+import Calendar from '../components/Block/Calendar'
+import Form from '../components/Block/Form'
 import Layout from '../containers/Layout'
-import Form from '../components/Schedule/Form'
-import Calendar from '../components/Schedule/Calendar'
 import { useCalendarContext } from '../utils/CalendarContext'
 
-export default function SchedulePromotion () {
+export default function BlockPromotion () {
   const { location } = useCalendarContext()
   const [formData, setFormData] = useState({
     location,
     date: '',
     startTime: '',
     endTime: '',
-    promoter: ''
+    reason: '',
+    comments: ''
   })
 
   return (

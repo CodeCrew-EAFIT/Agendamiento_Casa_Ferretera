@@ -15,8 +15,8 @@ export default function Box ({ start, end }) {
         height: `${23.5 * height}px`,
         top: `${23.5 * start + 1}px`
       }}
-      className='schedule-box ease'>
-      <p className='text-xl font-bold'>Promotoría</p>
+      className='block-box ease'>
+      <p className='text-xl font-bold text-primary'>NO DISPONIBLE</p>
     </div>
   )
 }

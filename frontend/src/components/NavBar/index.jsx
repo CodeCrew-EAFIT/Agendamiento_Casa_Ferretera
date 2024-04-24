@@ -1,28 +1,28 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useUserSession } from '../../utils/UserSessionContext'
 import { ReactSVG } from 'react-svg'
 import logo from '../../assets/images/logo-light.png'
 import customerIcon from '../../assets/icons/customer.svg'
-import { ADMIN, CHIEF, SUPERVISOR, PROMOTER, ADMIN_USERS, BLOCK_USERS, USER_TO_NAME } from '../../utils/constants'
+import { ADMIN, CHIEF, SUPERVISOR, PROMOTER, ADMIN_USERS, BLOCK_USERS } from '../../utils/constants'
 
-export default function NavBar ({ user }) {
+export default function NavBar () {
   const location = useLocation()
   const navigate = useNavigate()
-  const { userType, setUserSession } = useUserSession()
+  const { userDetails, setUserSession } = useUserSession()
 
-  // const customerName = USER_TO_NAME[userType]
+  const currentRole = userDetails.role
 
-  const isAdmin = userType === ADMIN
-  const isChief = userType === CHIEF
-  const isSupervisor = userType === SUPERVISOR
-  const isPromoter = userType === PROMOTER
-  const isBlockUser = BLOCK_USERS.includes(userType)
-  const isAdminUser = ADMIN_USERS.includes(userType)
+  const isAdmin = currentRole === ADMIN
+  const isChief = currentRole === CHIEF
+  const isSupervisor = currentRole === SUPERVISOR
+  const isPromoter = currentRole === PROMOTER
+  const isBlockUser = BLOCK_USERS.includes(currentRole)
+  const isAdminUser = ADMIN_USERS.includes(currentRole)
 
   const handleLogout = () => {
     setUserSession(null)
+    localStorage.removeItem('token')
   }
 
   return (
@@ -36,23 +36,19 @@ export default function NavBar ({ user }) {
             className='svg-size-override cursor-pointer'
             onClick={handleLogout}
           />
-          <p>{user.name}</p>
+          <p>{userDetails.name && userDetails.name.split(' ')[0]}</p>
         </div>
         <ul className='flex gap-8'>
           <li className={`cursor-pointer ${location.pathname.includes('/horario') ? 'font-bold' : ''}`} onClick={() => navigate('/horario')}>Horario</li>
           {isAdmin && <li className={`cursor-pointer ${location.pathname.includes('/usuarios') ? 'font-bold' : ''}`} onClick={() => navigate('/usuarios')}>Usuarios</li>}
-          {isBlockUser && <li className={'cursor-pointer'}>Bloquear</li>}
-          {isAdmin && <li className={'cursor-pointer'}>Dashboard</li>}
           {isChief && <li className={'cursor-pointer'}>Promotores</li>}
           {isSupervisor && <li className={`cursor-pointer ${location.pathname.includes('/calificar') ? 'font-bold' : ''}`} onClick={() => navigate('/calificar')}>Calificar</li>}
-          {isAdminUser && <li className={'cursor-pointer'}>Reportes</li>}
           {isPromoter && <li className={`cursor-pointer ${location.pathname.includes('/bitacora') ? 'font-bold' : ''}`} onClick={() => navigate('/bitacora')}>Bitácora</li>}
+          {isBlockUser && <li className={`cursor-pointer ${location.pathname.includes('/bloquear') ? 'font-bold' : ''}`} onClick={() => navigate('/bloquear')}>Bloquear</li>}
+          {isAdmin && <li className={'cursor-pointer'}>Dashboard</li>}
+          {isAdminUser && <li className={'cursor-pointer'}>Reportes</li>}
         </ul>
       </div>
     </div>
   )
-}
-
-NavBar.propTypes = {
-  user: PropTypes.object
 }

@@ -197,6 +197,8 @@ export const ID_TO_AVAILABLE_LOCATIONS = {
   9: 'Apartadó'
 }
 
+export const MULTIPLE_PROMOTIONS_LOCATIONS = ['Palacé']
+
 export const BRAND_TO_ID = {
   casaferretera: 1,
   dewalt: 2,
@@ -211,11 +213,12 @@ export const ID_TO_BRAND = {
 }
 
 export const INPUT_PLACEHOLDERS = {
-  location: 'Escoger sede',
+  location: 'Seleccione la sede',
   date: 'Fecha',
   startTime: 'Hora inicio',
   endTime: 'Hora final',
-  promoter: 'Promotor'
+  promoter: 'Promotor',
+  reason: 'Seleccione la opción más adecuada'
 }
 
 export const SAMPLE_PROMOTERS = ['Maria Paula A.', 'Juan Felipe B.']
@@ -226,187 +229,6 @@ export const FILLER_USER = {
   role: 'XXXXX',
   brand_id: 0
 }
-
-export const SAMPLE_USER_DATA = [
-  {
-    name: 'Carolina Sierra',
-    email: 'carolina.sierra@gmail.com',
-    role: 'Jefe Directo',
-    store: 'Stanley'
-  },
-  {
-    name: 'Juan Fernando Gutierrez',
-    email: 'juanfergut@gmail.com',
-    role: 'Supervisor',
-    store: 'Sede Palacé'
-  },
-  {
-    name: 'Maria Paula Ayala',
-    email: 'mpayalal@eafit.edu.co',
-    role: 'Promotor',
-    store: 'Stanley'
-  },
-  {
-    name: 'Sara Lopez',
-    email: 'saral@casaferretera.com',
-    role: 'Supervisor',
-    store: 'Sede Envigado'
-  },
-  {
-    name: 'Felipe Cárdenas',
-    email: 'felipec@casaferretera.com',
-    role: 'Supervisor',
-    store: 'Sede Apartadó'
-  },
-  {
-    name: 'Andrés García',
-    email: 'andresg@casaferretera.com',
-    role: 'Administrador',
-    store: 'Administrador'
-  },
-  {
-    name: 'Ana Maria Martinez',
-    email: 'anam@casaferretera.com',
-    role: 'Administrador',
-    store: 'Administrador'
-  },
-  {
-    name: 'Diana Sofia Sierra',
-    email: 'd.sofia_21@bandd.com',
-    role: 'Jefe Directo',
-    store: 'Black+Decker'
-  },
-  {
-    name: 'Camila Ramirez',
-    email: 'camila_ramirez@bandd.com',
-    role: 'Promotor',
-    store: 'Black+Decker'
-  },
-  {
-    name: 'XXX',
-    email: 'xxx@gmail.com',
-    role: 'XXXXX',
-    store: 'XXXXXXXX'
-  },
-  {
-    name: 'XXX',
-    email: 'xxx@gmail.com',
-    role: 'XXXXX',
-    store: 'XXXXXXXX'
-  },
-  {
-    name: 'XXX',
-    email: 'xxx@gmail.com',
-    role: 'XXXXX',
-    store: 'XXXXXXXX'
-  },
-  {
-    name: 'XXX',
-    email: 'xxx@gmail.com',
-    role: 'XXXXX',
-    store: 'XXXXXXXX'
-  },
-  {
-    name: 'XXX',
-    email: 'xxx@gmail.com',
-    role: 'XXXXX',
-    store: 'XXXXXXXX'
-  },
-  {
-    name: 'XXX',
-    email: 'xxx@gmail.com',
-    role: 'XXXXX',
-    store: 'XXXXXXXX'
-  },
-  {
-    name: 'XXX',
-    email: 'xxx@gmail.com',
-    role: 'XXXXX',
-    store: 'XXXXXXXX'
-  },
-  {
-    name: 'XXX',
-    email: 'xxx@gmail.com',
-    role: 'XXXXX',
-    store: 'XXXXXXXX'
-  },
-  {
-    name: 'XXX',
-    email: 'xxx@gmail.com',
-    role: 'XXXXX',
-    store: 'XXXXXXXX'
-  },
-  {
-    name: 'XXX',
-    email: 'xxx@gmail.com',
-    role: 'XXXXX',
-    store: 'XXXXXXXX'
-  },
-  {
-    name: 'XXX',
-    email: 'xxx@gmail.com',
-    role: 'XXXXX',
-    store: 'XXXXXXXX'
-  },
-  {
-    name: 'XXX',
-    email: 'xxx@gmail.com',
-    role: 'XXXXX',
-    store: 'XXXXXXXX'
-  }
-]
-
-export const SAMPLE_PROMOTION_DATA = [
-  {
-    id: 1,
-    name: 'Stanley',
-    date: '2024-04-06',
-    promoter: 'Maria Paula A.',
-    location: 'Amador'
-  },
-  {
-    id: 2,
-    name: 'Black + Decker',
-    date: '2024-03-12',
-    promoter: 'Daniel Salazar',
-    location: 'América'
-  },
-  {
-    id: 3,
-    name: 'Stanley',
-    date: '2024-03-11',
-    promoter: 'Camila Valencia',
-    location: 'Apartadó'
-  },
-  {
-    id: 4,
-    name: 'Sata',
-    date: '2024-03-11',
-    promoter: 'Sandra Gomez',
-    location: 'Centro'
-  },
-  {
-    id: 5,
-    name: 'Furius',
-    date: '2024-03-15',
-    promoter: 'Martin Fernandez',
-    location: 'Envigado'
-  },
-  {
-    id: 6,
-    name: 'Dewalt',
-    date: '2024-03-14',
-    promoter: 'Juan Camilo Diaz',
-    location: 'Itagüí'
-  },
-  {
-    id: 7,
-    name: 'Stanley',
-    date: '2024-03-21',
-    promoter: 'Santiago Jaramillo',
-    location: 'La Ceja'
-  }
-]
 
 export const RATING_QUESTIONS = [
   '1. El promotor cumplió con su horario agendado',

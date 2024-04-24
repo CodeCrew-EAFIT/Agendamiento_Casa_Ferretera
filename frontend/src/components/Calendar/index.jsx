@@ -8,27 +8,26 @@ import Cell from './Cell'
 import TimeSlot from './TimeSlot'
 import { useUserSession } from '../../utils/UserSessionContext'
 import { AVAILABLE_HOURS, ID_TO_AVAILABLE_LOCATIONS, AVAILABLE_HOURS_MILITARY_ARRAY, PROMOTER } from '../../utils/constants'
+import capitalizeFirstWordLetter from '../../utils/capitalizeFirstWordLetter'
 
-export default function Calendar ({ promotionData, location, promoterPromotions }) {
+export default function Calendar ({ blockData, promotionData, location, promoterPromotions }) {
   const [currentDate, setCurrentDate] = useState(new Date())
   const [weekDays, setWeekDays] = useState([])
-  const { userType } = useUserSession()
+  const { userDetails } = useUserSession()
   const rowsNumber = AVAILABLE_HOURS.length * 2 - 1
   const colsNumber = 8
-
-  const capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1)
+  const currentRole = userDetails.role
 
   useEffect(() => {
     const start = startOfWeek(currentDate, { weekStartsOn: 1 })
     const end = endOfWeek(currentDate, { weekStartsOn: 1 })
 
     const newWeekDays = eachDayOfInterval({ start, end }).map(day =>
-      capitalize(format(day, 'EEEE dd', { locale: es }))
+      capitalizeFirstWordLetter(format(day, 'EEEE dd', { locale: es }))
     )
 
     setWeekDays(newWeekDays)
   }, [currentDate])
-
 
   const handlePreviousWeek = () => {
     setCurrentDate(prevDate => addWeeks(prevDate, -1))
@@ -56,42 +55,64 @@ export default function Calendar ({ promotionData, location, promoterPromotions 
   ))
 
   const promotionBoxes = promotionData.map((promotion, index) => {
-    const promotionLocation = ID_TO_AVAILABLE_LOCATIONS[promotion.location_id];
-    const parsedDate = parseISO(promotion.booking_date);
-    const startTime = AVAILABLE_HOURS_MILITARY_ARRAY.indexOf(promotion.start_time) + 1;
-    const endTime = AVAILABLE_HOURS_MILITARY_ARRAY.indexOf(promotion.end_time) + 1;
-    let dayOfWeek = getDay(parsedDate);
-    dayOfWeek = dayOfWeek === 0 ? 7 : dayOfWeek;
+    const promotionLocation = ID_TO_AVAILABLE_LOCATIONS[promotion.location_id]
+    const parsedDate = parseISO(promotion.booking_date)
+    const startTime = AVAILABLE_HOURS_MILITARY_ARRAY.indexOf(promotion.start_time) + 1
+    const endTime = AVAILABLE_HOURS_MILITARY_ARRAY.indexOf(promotion.end_time) + 1
+    let dayOfWeek = getDay(parsedDate)
+    dayOfWeek = dayOfWeek === 0 ? 7 : dayOfWeek
 
-    const start = startOfWeek(currentDate, { weekStartsOn: 1 });
-    const end = endOfWeek(currentDate, { weekStartsOn: 1 });
-  
-    if (promotionLocation === location && parsedDate >= start && parsedDate <= end) {
-      console.log(promotion)
-      return (
-        <div className="calendar-box"
-              style={{ left: `${75 + 115.7 * (dayOfWeek - 1)}px`, width: `${dayOfWeek === 7 ? 125 : 110.25}px`, height: `${(endTime - startTime) * 26}px`, top: `${(startTime - 1) * 26}px`}}
-            >
-              {promotion.brand_name.toUpperCase().split('+').join(' + ')}
-            </div>
-      );
-    }
+    const start = startOfWeek(currentDate, { weekStartsOn: 1 })
+    const end = endOfWeek(currentDate, { weekStartsOn: 1 })
 
-    if (userType === PROMOTER && parsedDate >= start && parsedDate <= end) {
-      const promoterPromotion = promoterPromotions.find(promo => promo.booking_id === promotion.booking_id);
+    if (currentRole === PROMOTER && parsedDate >= start && parsedDate <= end) {
+      const promoterPromotion = promoterPromotions.find(promo => promo.booking_id === promotion.booking_id)
       const promotionLocation = ID_TO_AVAILABLE_LOCATIONS[promotion.location_id]
-      return ( promoterPromotion &&
-        <div className="calendar-box text-[18px]"
-              style={{ left: `${75 + 115.7 * (dayOfWeek - 1)}px`, width: `${dayOfWeek === 7 ? 125 : 110.25}px`, height: `${(endTime - startTime) * 26}px`, top: `${(startTime - 1) * 26}px`}}
+      return (promoterPromotion &&
+        <div key={index} className="calendar-box text-[18px]"
+              style={{ left: `${75 + 115.7 * (dayOfWeek - 1)}px`, width: `${dayOfWeek === 7 ? 125 : 110.25}px`, height: `${(endTime - startTime) * 26}px`, top: `${(startTime - 1) * 26}px` }}
             >
               Sede {promotionLocation}
             </div>
-      );
+      )
+    } else if (promotionLocation === location && parsedDate >= start && parsedDate <= end) {
+      return (
+        <div key={index} className="calendar-box"
+              style={{ left: `${75 + 115.7 * (dayOfWeek - 1)}px`, width: `${dayOfWeek === 7 ? 125 : 110.25}px`, height: `${(endTime - startTime) * 26}px`, top: `${(startTime - 1) * 26}px` }}
+            >
+              {promotion.brand_name.toUpperCase().split('+').join(' + ')}
+        </div>
+      )
     }
 
-    return null;
-  });
-  
+    return null
+  })
+
+  const blockBoxes = blockData.map((block, index) => {
+    const blockLocation = ID_TO_AVAILABLE_LOCATIONS[block.location_id]
+    const parsedDate = parseISO(block.blocking_date)
+    const startTime = AVAILABLE_HOURS_MILITARY_ARRAY.indexOf(block.start_time) + 1
+    const endTime = AVAILABLE_HOURS_MILITARY_ARRAY.indexOf(block.end_time) + 1
+    let dayOfWeek = getDay(parsedDate)
+    dayOfWeek = dayOfWeek === 0 ? 7 : dayOfWeek
+
+    const start = startOfWeek(currentDate, { weekStartsOn: 1 })
+    const end = endOfWeek(currentDate, { weekStartsOn: 1 })
+
+    if (currentRole === PROMOTER) {
+      return null
+    } else if (blockLocation === location && parsedDate >= start && parsedDate <= end) {
+      return (
+        <div key={index} className="blocking-box text-primary text-[16px]"
+              style={{ left: `${75 + 115.7 * (dayOfWeek - 1)}px`, width: `${dayOfWeek === 7 ? 125 : 110.25}px`, height: `${(endTime - startTime) * 26}px`, top: `${(startTime - 1) * 26}px` }}
+            >
+              NO DISPONIBLE
+        </div>
+      )
+    }
+
+    return null
+  })
 
   return (
     <div className="default-container">
@@ -100,6 +121,7 @@ export default function Calendar ({ promotionData, location, promoterPromotions 
         <div className="relative text-sm">{timeSlots}</div>
         <table>
           <tbody className="relative">
+            {blockBoxes}
             {promotionBoxes}
             {tableContent}
           </tbody>
@@ -110,6 +132,7 @@ export default function Calendar ({ promotionData, location, promoterPromotions 
 }
 
 Calendar.propTypes = {
+  blockData: PropTypes.array,
   promotionData: PropTypes.array,
   location: PropTypes.string,
   promoterPromotions: PropTypes.array
