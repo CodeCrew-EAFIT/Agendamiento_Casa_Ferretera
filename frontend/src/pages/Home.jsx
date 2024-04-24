@@ -13,9 +13,11 @@ export default function Home () {
   const [promoterPromotions, setPromoterPromotions] = useState([])
   const { userType } = useUserSession()
 
+  const BASE_URL = import.meta.env.VITE_BASE_URL
+
   const fetchUser = async () => {
     try {
-      const result = await axios.get(`${API_URL}/users/me`, {
+      const result = await axios.get(`${BASE_URL}/users/me`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`
         }
@@ -56,7 +58,7 @@ export default function Home () {
 
   useEffect(() => {
     if (userType === SUPERVISOR) {
-      setLocation(ID_TO_AVAILABLE_LOCATIONS[1])
+      setLocation(ID_TO_AVAILABLE_LOCATIONS[1]) // Aquí es la cuestión
     }
     if (userType === PROMOTER) {
       fetchAllPromotionsForPromoter()
