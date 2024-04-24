@@ -1,49 +1,65 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import { ReactSVG } from 'react-svg'
 import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
 import forward from '../../assets/icons/forward-arrow.svg'
 import back from '../../assets/icons/back-arrow.svg'
 
-export default function TableHeader ({ handleNextWeek, handlePreviousWeek, weekDays }) {
-  
+export default function TableHeader ({
+  handleNextWeek,
+  handlePreviousWeek,
+  weekDays
+}) {
   const capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1)
 
   const isToday = (day) => {
-    if (capitalize(format(new Date(), 'EEEE dd', { locale: es })) === day) return <span className="mt-0">*</span>
+    if (capitalize(format(new Date(), 'EEEE dd', { locale: es })) === day) { return <span className="mt-0">*</span> }
     return false
   }
 
   return (
     <table>
-        <thead>
+      <thead>
         <tr className="calendar-nav">
-            <th className="flex items-center w-[124px]">
-            <button onClick={handlePreviousWeek}>
-                <ReactSVG src={back} />
+          <th className="flex items-center w-[124px]">
+            <button
+              onClick={handlePreviousWeek}
+              className="bg-tertiary rounded-full p-[2px] mr-2"
+            >
+              <ReactSVG src={back} />
             </button>
             <div>
-                {weekDays[0]}
-                {isToday(weekDays[0])}
+              {weekDays[0]}
+              {isToday(weekDays[0])}
             </div>
+          </th>
+          {weekDays.slice(1, -1).map((day, index) => (
+            <th key={index} className="w-[124px]">
+              {day}
+              {isToday(day)}
             </th>
-            {weekDays.slice(1, -1).map((day, index) => (
-            <th key={index} className='w-[124px]'>
-                {day}
-                {isToday(day)}
-            </th>
-            ))}
-            <th className="flex items-center justify-between w-[134px] pr-[0.5px]">
+          ))}
+          <th className="flex items-center justify-end gap-4 w-[134px] pr-[0.5px]">
             <div>
-                {weekDays[6]}
-                {isToday(weekDays[6])}
+              {`Dom. ${weekDays[6] && weekDays[6].split(' ')[1]}`}
+              {isToday(weekDays[6])}
             </div>
-            <button onClick={handleNextWeek}>
-                <ReactSVG src={forward} />
+            <button
+              onClick={handleNextWeek}
+              className="bg-tertiary rounded-full p-[2px]"
+            >
+              <ReactSVG src={forward} />
             </button>
-            </th>
+          </th>
         </tr>
-        </thead>
+      </thead>
     </table>
   )
+}
+
+TableHeader.propTypes = {
+  handleNextWeek: PropTypes.func,
+  handlePreviousWeek: PropTypes.func,
+  weekDays: PropTypes.array
 }

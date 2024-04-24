@@ -75,11 +75,11 @@ export default function Calendar ({ promotionData, location, promoterPromotions 
     }
 
     if (userType === PROMOTER && parsedDate >= start && parsedDate <= end) {
-      const promoterPromotion = promoterPromotions.find(promo => promo.booking_id === promotion.booking_id);
+      const promoterPromotion = promoterPromotions.find(promo => promo.booking_id === promotion.booking_id)
       const promotionLocation = ID_TO_AVAILABLE_LOCATIONS[promotion.location_id]
-      return ( promoterPromotion &&
-        <div className="calendar-box text-[18px]"
-              style={{ left: `${75 + 115.7 * (dayOfWeek - 1)}px`, width: `${dayOfWeek === 7 ? 125 : 110.25}px`, height: `${(endTime - startTime) * 26}px`, top: `${(startTime - 1) * 26}px`}}
+      return (promoterPromotion &&
+        <div key={index} className="calendar-box text-[18px]"
+              style={{ left: `${75 + 115.7 * (dayOfWeek - 1)}px`, width: `${dayOfWeek === 7 ? 125 : 110.25}px`, height: `${(endTime - startTime) * 26}px`, top: `${(startTime - 1) * 26}px` }}
             >
               Sede {promotionLocation}
             </div>
