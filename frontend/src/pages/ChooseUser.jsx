@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useUserSession } from '../utils/UserSessionContext'
 import ContentContainer from '../containers/Content'
-import extractPayloadFromJWT from '../utils/extractPayloadFromJWT'
 import axios from 'axios'
 import capitalizeFirstWordLetter from '../utils/capitalizeFirstWordLetter'
 
@@ -14,7 +13,7 @@ export default function ChooseUser () {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
-  const fetchUser = async (userId) => {
+  const fetchUser = async () => {
     try {
       const result = await axios.get(`${BASE_URL}/users/me`, {
         headers: {
@@ -27,8 +26,7 @@ export default function ChooseUser () {
         email: result.data.email,
         name: result.data.name,
         phone_number: result.data.phone_number,
-        role: capitalizeFirstWordLetter('Supervisor'),
-        user_id: userId
+        role: capitalizeFirstWordLetter('Promotor')
       })
     } catch (error) {
       console.error(error)
@@ -45,12 +43,8 @@ export default function ChooseUser () {
       // Guardar el token en el local storage
       localStorage.setItem('token', response.data.access_token)
 
-      // Obtener el payload del JWT para extraer la información básica
-      const jwt = response.data.access_token
-      const payload = extractPayloadFromJWT(jwt)
-
       // Después de obtener el token, solicitar la información detallada del usuario
-      await fetchUser(payload.id)
+      await fetchUser()
 
       // Redirigir a la página de horario
       navigate('/horario')

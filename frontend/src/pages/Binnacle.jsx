@@ -23,18 +23,11 @@ export default function Binnacle () {
 
   const fetchService = async () => {
     try {
-      // TODO: ELIMINAR CUADNO SE CORRIJA EL BACKEND
       const result = await axios.get(`${BASE_URL}${fetchRoute}`, {
         headers: {
-          'user-id': 1
+          Authorization: `Bearer ${localStorage.getItem('token')}`
         }
       })
-      // TODO: DESCOMENTAR CUANDO SE CORRIJA EL BACKEND
-      // const result = await axios.get(`${BASE_URL}${fetchRoute}`, {
-      //   headers: {
-      //     Authorization: `Bearer ${localStorage.getItem('token')}`
-      //   }
-      // })
       setServices(result.data)
     } catch (error) {
       console.error(error)

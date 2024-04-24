@@ -20,18 +20,11 @@ export default function Evidence () {
 
   const postEvidence = async (evidenceData) => {
     try {
-      // TODO: ELIMINAR CUANDO SE CORRIJA EL BACKEND
-      const headers = {
-        'Content-Type': 'application/json',
-        'user-id': 11
-      }
-      await axios.post(`${BASE_URL}/create-evidence`, evidenceData, { headers })
-      // TODO: DESCOMENTAR CUANDO SE CORRIJA EL BACKEND
-      // await axios.post(`${BASE_URL}/create-evidence`, evidenceData, {
-      //   headers: {
-      //     Authorization: `Bearer ${localStorage.getItem('token')}`
-      //   }
-      // })
+      await axios.post(`${BASE_URL}/create-evidence`, evidenceData, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+      })
       navigate('/bitacora')
     } catch (error) {
       console.error(error)

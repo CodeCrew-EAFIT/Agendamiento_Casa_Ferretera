@@ -34,18 +34,11 @@ function RatingForm () {
   const onSubmit = async (e) => {
     e.preventDefault()
     try {
-      // TODO: ELIMINAR CUANDO SE CORRIJA EL BACKEND
       await axios.post(`${BASE_URL}/create-rating`, rating, {
         headers: {
-          'user-id': 9
+          Authorization: `Bearer ${localStorage.getItem('token')}`
         }
       })
-      // TODO: DESCOMENTAR CUANDO SE CORRIJA EL BACKEND
-      // await axios.post(`${BASE_URL}/create-rating`, rating, {
-      //   headers: {
-      //     Authorization: `Bearer ${localStorage.getItem('token')}`
-      //   }
-      // })
     } catch (error) {
       console.error(error)
     }
