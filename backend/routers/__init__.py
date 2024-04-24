@@ -5,3 +5,4 @@ from .promotion import promotionRouter
 from .rating import ratingRouter
 from .user import userRouter
 from .reports import reportsRouter
+from .blocked_date import blockedDateRouter
