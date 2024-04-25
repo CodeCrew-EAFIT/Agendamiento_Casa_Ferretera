@@ -114,6 +114,8 @@ def getPromoterId(promotion_id):
 
 def createPromotionFunc(bookingId: int, promoterUserId: int):
 
+    
+
     db = get_db()
 
     dbPromotion = Promotion(
