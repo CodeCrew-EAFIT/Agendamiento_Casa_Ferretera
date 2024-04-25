@@ -45,9 +45,7 @@ export default function Binnacle () {
     const promotions = services.map((service, index) => {
       const formattedDate = format(parseISO(service.date), 'EEEE dd/MM/yyyy', { locale: es })
       const onClickRoute = currentRole === SUPERVISOR ? `/calificar/${service.promotion_id}` : `/bitacora/${service.promotion_id}`
-      console.log(currentRole)
-      console.log(AVAILABLE_LOCATIONS_PATH_DICT[USER_TO_NAME[SUPERVISOR]])
-      if (currentRole === SUPERVISOR && AVAILABLE_LOCATIONS_PATH_DICT[USER_TO_NAME[SUPERVISOR]] === service.location) {
+      if (currentRole === SUPERVISOR && service.location) {
         promotionExists = true
         return (
         <Box key={index} onClick={() => navigate(onClickRoute)}>
@@ -58,12 +56,12 @@ export default function Binnacle () {
         )
       }
 
-      if (currentRole === PROMOTER && service.promoter_id === PROMOTER_USER.user_id) {
+      if (currentRole === PROMOTER && service.promoter_id) {
         promotionExists = true
         return (
           <Box key={index} onClick={() => navigate(onClickRoute)}>
             <p>{formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1)}</p>
-            <p className='font-bold'>Sede { AVAILABLE_LOCATIONS_DICT[service.location] } </p>
+            <p className='font-bold'>Sede { service.location } </p>
           </Box>
         )
       }
