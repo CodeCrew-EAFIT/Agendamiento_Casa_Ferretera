@@ -15,7 +15,8 @@ import {
   ADMIN_USERS,
   ADMIN,
   PROMOTER,
-  SUPERVISOR
+  SUPERVISOR,
+  CHIEF
 } from './utils/constants'
 import { CalendarContextProvider } from './utils/CalendarContext'
 import Reports from './pages/Reports'
@@ -125,7 +126,7 @@ function App () {
                 element={
                   <Reports />
                 }
-                allowedUsers={[SUPERVISOR, ADMIN]}
+                allowedUsers={ADMIN_USERS}
                 redirectTo="/horario"
               />
             }

@@ -1,57 +1,57 @@
-import React, { useState, useRef, useEffect } from 'react';
-import PropTypes from 'prop-types';
-import { ReactSVG } from 'react-svg';
+import React, { useState, useRef, useEffect } from 'react'
+import PropTypes from 'prop-types'
+import { ReactSVG } from 'react-svg'
 
-export default function SelectMultiple({ content, optionsArray, expandArrow, ...props }) {
-  const { selectedValues, setSelectedValues, width } = props;
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const dropdownRef = useRef(null);
+export default function SelectMultiple ({ content, optionsArray, expandArrow, ...props }) {
+  const { selectedValues, setSelectedValues, width } = props
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false)
+  const dropdownRef = useRef(null)
 
   useEffect(() => {
-    function handleClickOutside(event) {
+    function handleClickOutside (event) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setIsDropdownOpen(false);
+        setIsDropdownOpen(false)
       }
     }
 
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [dropdownRef]);
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [dropdownRef])
 
-  const toggleDropdown = () => setIsDropdownOpen(!isDropdownOpen);
+  const toggleDropdown = () => setIsDropdownOpen(!isDropdownOpen)
 
   const handleOptionClick = (option) => {
     if (option === 'Seleccionar todas') {
       if (selectedValues.length === optionsArray.length) {
-        setSelectedValues([]); // Deselecciona todas
+        setSelectedValues([]) // Deselecciona todas
       } else {
-        setSelectedValues([...optionsArray]); // Selecciona todas
+        setSelectedValues([...optionsArray]) // Selecciona todas
       }
     } else {
-      const updatedSelectedValues = [...selectedValues];
+      const updatedSelectedValues = [...selectedValues]
       if (updatedSelectedValues.includes(option)) {
-        const index = updatedSelectedValues.indexOf(option);
-        updatedSelectedValues.splice(index, 1);
+        const index = updatedSelectedValues.indexOf(option)
+        updatedSelectedValues.splice(index, 1)
       } else {
-        updatedSelectedValues.push(option);
+        updatedSelectedValues.push(option)
       }
-      setSelectedValues(updatedSelectedValues);
+      setSelectedValues(updatedSelectedValues)
     }
-  };
+  }
 
   const isOptionSelected = (option) => {
     if (option === 'Seleccionar todas') {
-      return selectedValues.length === optionsArray.length;
+      return selectedValues.length === optionsArray.length
     }
-    return selectedValues.includes(option);
-  };
+    return selectedValues.includes(option)
+  }
 
   const displayText = () => {
     if (selectedValues.length > 2) {
-      return `${selectedValues.slice(0, 2).join(', ')}...`;
+      return `${selectedValues.slice(0, 2).join(', ')}...`
     }
-    return selectedValues.join(', ') || content;
-  };
+    return selectedValues.join(', ') || content
+  }
 
   return (
     <div className={`input-container h-[52px] ${width ? 'w-full' : 'w-[544px]'}`} onClick={toggleDropdown}>
@@ -74,14 +74,14 @@ export default function SelectMultiple({ content, optionsArray, expandArrow, ...
                   onChange={() => handleOptionClick(option)}
                   className="styled-checkbox" // Clase para aplicar el estilo
                 />
-                {" "}{option}
+                {' '}{option}
               </div>
             ))}
           </div>
         )}
       </div>
     </div>
-  );
+  )
 }
 
 SelectMultiple.propTypes = {
@@ -90,5 +90,5 @@ SelectMultiple.propTypes = {
   expandArrow: PropTypes.string,
   selectedValues: PropTypes.array.isRequired,
   setSelectedValues: PropTypes.func.isRequired,
-  width: PropTypes.bool,
-};
+  width: PropTypes.bool
+}
