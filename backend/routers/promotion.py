@@ -24,7 +24,7 @@ async def fetchPromotion(promotion_id: int):
 
 # Route to create a promotion and consequently a booking
 @promotionRouter.post("/create-promotion", dependencies=[Depends(token.JWTBearer())])
-async def createPromotion(promotion: CreatePromotionRequest, request):
+async def createPromotion(promotion: CreatePromotionRequest, request: Request):
     authorizationToken = request.headers.get('Authorization').split(' ')[1]
     payload = token.decodeToken(authorizationToken)
     userId = payload["id"]
@@ -45,9 +45,12 @@ async def createPromotion(promotion: CreatePromotionRequest, request):
 
 
 # Route to fetch promotions given a promoter_user_id
-@promotionRouter.get("/promotions-by-promoter-id/{promoter_user_id}", dependencies=[Depends(token.JWTBearer())])
-async def fetchPromotionsByPromoterId(promoter_user_id: int): 
-    promotions = getPromotionsByPromoterId(promoter_user_id)
+@promotionRouter.get("/promotions-by-promoter-id", dependencies=[Depends(token.JWTBearer())])
+async def fetchPromotionsByPromoterId(request: Request, promoter_user_id: int): 
+    authorizationToken = request.headers.get('Authorization').split(' ')[1]
+    payload = token.decodeToken(authorizationToken)
+    userId = payload["id"]
+    promotions = getPromotionsByPromoterId(userId)
     return promotions
 
 # Route to fetch promotions given a location name

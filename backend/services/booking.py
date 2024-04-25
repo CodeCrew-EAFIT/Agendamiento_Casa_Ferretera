@@ -20,14 +20,13 @@ def getColombiaTimezoneDatetime():
 # Function to create a booking given a Booking object
 
 def createBooking(booking: Booking, user_id, promoter_id: int):
-
-    booking = db.query(BookingTable) \
+    db = get_db()
+    bookingDb = db.query(BookingTable) \
                 .join(PromotionTable, BookingTable.booking_id == PromotionTable.booking_id) \
                 .filter(BookingTable.booking_date == booking.booking_date, PromotionTable.promoter_user_id == promoter_id) \
                 .first()
     
-    if booking is None:
-
+    if bookingDb is None:
         dbBooking = BookingTable(
             location_id = booking.location_id,
             booking_date = booking.booking_date,
@@ -37,7 +36,6 @@ def createBooking(booking: Booking, user_id, promoter_id: int):
             user_id_created_by = user_id
         )
 
-        db = get_db()
         db.add(dbBooking)
         db.commit()
         db.refresh(dbBooking)
