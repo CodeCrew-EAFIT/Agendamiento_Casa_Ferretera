@@ -63,7 +63,7 @@ export default function Reports () {
     }
     try {
       if (!isAdmin){
-        const response = await axios.get(`${BASE_URL}/create-report`, data, {
+        const response = await axios.post(`${BASE_URL}/create-report`, data, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`
           }
@@ -108,8 +108,6 @@ export default function Reports () {
 
   useEffect(() => {
     const promotersList = fetchedPromoters.map((promoter) => {
-      console.log(formData.brands)
-      console.log(ID_TO_BRAND[promoter.brand_id])
       if (isAdmin){
         if (formData.brands.includes(ID_TO_BRAND[promoter.brand_id])) {
           return promoter.name
