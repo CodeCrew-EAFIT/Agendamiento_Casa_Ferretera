@@ -34,7 +34,7 @@ async def createPromotion(promotion: CreatePromotionRequest, request):
         available = checkAvailability(booking.booking_date, booking.start_time, booking.end_time, booking.location_id)
 
         if available:
-            result = createBooking(booking, userId) 
+            result = createBooking(booking, userId, promotion.promoter_user_id) 
             bookingId = result.booking_id
             result2 = createPromotionFunc(bookingId, promotion.promoter_user_id)
             return {'message': 'Promotoría satisfactoriamente programada.'}
