@@ -80,27 +80,24 @@ export default function Form ({ formData, setFormData }) {
   }
 
   const postPromotion = async (data) => {
-    // TODO: ELIMINAR CUANDO SE ARREGLE BACKEND
-    const headers = {
-      'Content-Type': 'application/json',
-      'user-id': userDetails.user_id
-    }
     try {
-      // TODO: ELIMINAR CUANDO SE ARREGLE BACKEND
-      const response = await axios.post(`${BASE_URL}/create-promotion`, data, { headers })
-      // TODO: DESCOMENTAR CUANDO SE ARREGLE BACKEND
-      // const response = await axios.post(`${BASE_URL}/create-promotion`, data, {
-      //   headers: {
-      //     Authorization: `Bearer ${localStorage.getItem('token')}`
-      //   }
-      // })
+      const response = await axios.post(`${BASE_URL}/create-promotion`, data, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+      })
       if (response.status === 200) {
         sendCalendarNotification({ message: 'Promotoría agendada correctamente', success: true })
         navigate('/horario')
       }
     } catch (error) {
       if (error.response.data.detail) {
-        sendCalendarNotification({ message: error.response.data.detail, success: false })
+        console.log('error.response.data.detail', error.response.data.detail)
+        if (Array.isArray(error.response.data.detail)) {
+          sendCalendarNotification({ message: error.response.data.detail[0].msg, success: false })
+        } else {
+          sendCalendarNotification({ message: error.response.data.detail, success: false })
+        }
       } else {
         sendCalendarNotification({ message: 'Ocurrió un error, por favor inténtelo de nuevo', success: false })
       }
@@ -169,6 +166,8 @@ export default function Form ({ formData, setFormData }) {
       promoter_user_id: fetchedPromoters[promoters.indexOf(formData.promoter)].user_id
     }
 
+    console.log(data)
+
     await postPromotion(data)
   }
 
@@ -195,7 +194,7 @@ export default function Form ({ formData, setFormData }) {
             </div>
             <div className="w-full">
               <p className="font-bold text-lg pb-[10px]">Fecha seleccionada:</p>
-              <DateInput value={formData} setValue={setFormData} />
+              <DateInput value={formData} setValue={setFormData} name={'date'} />
             </div>
             <div className="w-full">
               <p className="font-bold text-lg pb-[10px]">

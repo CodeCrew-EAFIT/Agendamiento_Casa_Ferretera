@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
-import { addDays, isSunday } from 'date-fns' // Importa isSunday de date-fns
+import { addDays, isSunday } from 'date-fns'
 
 export default function DateInput ({ value, setValue }) {
   const [chosenDate, setChosenDate] = useState(value.date ? new Date(value.date) : null)
@@ -15,9 +15,9 @@ export default function DateInput ({ value, setValue }) {
 
   const handleDateChange = (event) => {
     const selectedDate = new Date(event.target.value + 'T00:00:00')
-    if (isSunday(selectedDate)) { // Comprobar si la fecha seleccionada es domingo
-      event.preventDefault() // Previene el cambio de estado si es domingo
-      return // No hacer nada si es domingo
+    if (isSunday(selectedDate)) {
+      event.preventDefault()
+      return
     }
     if (event.target.value) {
       setValue({ ...value, date: event.target.value })

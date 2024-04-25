@@ -333,3 +333,29 @@ input[type='date']::-webkit-calendar-picker-indicator {
 .block-box {
   @apply w-[232px] absolute right-0 flex items-center justify-center bg-[#231F20] opacity-85 shadow-[5px_5px_5px_0_rgba(0,0,0,0.25)] transition-all duration-500
 }
+
+/* REPORTS */
+
+.styled-checkbox {
+  appearance: none; /* Elimina el estilo predeterminado del navegador */
+  background-color: #F1F1F1;
+  border: 1px solid #88868B;
+  border-radius: 50%; /* Hace el checkbox circular */
+  width: 20px;
+  height: 20px;
+  position: relative;
+  cursor: pointer;
+}
+
+.styled-checkbox:checked::before {
+  content: '';
+  display: block;
+  width: 14px; /* Ajusta según el tamaño del círculo interno */
+  height: 14px;
+  border-radius: 50%;
+  background: #F8C300; /* Color del círculo interno */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* Centra el círculo */
+}

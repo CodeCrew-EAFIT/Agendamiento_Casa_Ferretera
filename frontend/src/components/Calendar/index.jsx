@@ -66,6 +66,7 @@ export default function Calendar ({ blockData, promotionData, location, promoter
     const end = endOfWeek(currentDate, { weekStartsOn: 1 })
 
     if (currentRole === PROMOTER && parsedDate >= start && parsedDate <= end) {
+      if (blockData.includes(promotion.booking_id)) return null
       const promoterPromotion = promoterPromotions.find(promo => promo.booking_id === promotion.booking_id)
       const promotionLocation = ID_TO_AVAILABLE_LOCATIONS[promotion.location_id]
       return (promoterPromotion &&
@@ -76,37 +77,20 @@ export default function Calendar ({ blockData, promotionData, location, promoter
             </div>
       )
     } else if (promotionLocation === location && parsedDate >= start && parsedDate <= end) {
+      if (blockData.includes(promotion.booking_id)) {
+        return (
+          <div key={index} className="blocking-box text-primary text-[16px]"
+                style={{ left: `${75 + 115.7 * (dayOfWeek - 1)}px`, width: `${dayOfWeek === 7 ? 125 : 110.25}px`, height: `${(endTime - startTime) * 26}px`, top: `${(startTime - 1) * 26}px` }}
+              >
+                NO DISPONIBLE
+          </div>
+        )
+      }
       return (
         <div key={index} className="calendar-box"
               style={{ left: `${75 + 115.7 * (dayOfWeek - 1)}px`, width: `${dayOfWeek === 7 ? 125 : 110.25}px`, height: `${(endTime - startTime) * 26}px`, top: `${(startTime - 1) * 26}px` }}
             >
               {promotion.brand_name.toUpperCase().split('+').join(' + ')}
-        </div>
-      )
-    }
-
-    return null
-  })
-
-  const blockBoxes = blockData.map((block, index) => {
-    const blockLocation = ID_TO_AVAILABLE_LOCATIONS[block.location_id]
-    const parsedDate = parseISO(block.blocking_date)
-    const startTime = AVAILABLE_HOURS_MILITARY_ARRAY.indexOf(block.start_time) + 1
-    const endTime = AVAILABLE_HOURS_MILITARY_ARRAY.indexOf(block.end_time) + 1
-    let dayOfWeek = getDay(parsedDate)
-    dayOfWeek = dayOfWeek === 0 ? 7 : dayOfWeek
-
-    const start = startOfWeek(currentDate, { weekStartsOn: 1 })
-    const end = endOfWeek(currentDate, { weekStartsOn: 1 })
-
-    if (currentRole === PROMOTER) {
-      return null
-    } else if (blockLocation === location && parsedDate >= start && parsedDate <= end) {
-      return (
-        <div key={index} className="blocking-box text-primary text-[16px]"
-              style={{ left: `${75 + 115.7 * (dayOfWeek - 1)}px`, width: `${dayOfWeek === 7 ? 125 : 110.25}px`, height: `${(endTime - startTime) * 26}px`, top: `${(startTime - 1) * 26}px` }}
-            >
-              NO DISPONIBLE
         </div>
       )
     }
@@ -121,7 +105,6 @@ export default function Calendar ({ blockData, promotionData, location, promoter
         <div className="relative text-sm">{timeSlots}</div>
         <table>
           <tbody className="relative">
-            {blockBoxes}
             {promotionBoxes}
             {tableContent}
           </tbody>
