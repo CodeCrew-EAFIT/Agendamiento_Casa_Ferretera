@@ -4,7 +4,7 @@ from datetime import timedelta
 from sqlalchemy.orm import Session
 from config.db import get_db
 from utils import token, security
-from services import auth
+from services import auth, user
 
 authRouter = APIRouter()
 
@@ -24,9 +24,9 @@ async def registerUser(user: UserCreate, db: Session = Depends(get_db)):
         raise HTTPException(status_code=400, detail="Username already registered")
     return auth.createUser(db=db, user=user)
 
-@authRouter.get("/users/me", dependencies=[Depends(token.JWTBearer())], response_model=UserBase)
-async def readUsersMe(request: Request, db: Session = Depends(get_db)):
+@authRouter.get("/users/me", dependencies=[Depends(token.JWTBearer())])
+async def readUsersMe(request: Request):
     authorizationToken = request.headers.get('Authorization').split(' ')[1]
     payload = token.decodeToken(authorizationToken)
-    user = auth.getUserById(db, payload["id"])
-    return user
+    userResponse = user.getUserById(payload["id"])
+    return userResponse

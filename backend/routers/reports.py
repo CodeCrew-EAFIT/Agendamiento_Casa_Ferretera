@@ -26,7 +26,7 @@ async def createReport(reports: Reports, request: Request):
     authorizationToken = request.headers.get('Authorization').split(' ')[1]
     payload = token.decodeToken(authorizationToken)
     userRole = getUserRole(payload["id"])
-    if userRole == "supervisor" or userRole == "administrador":
+    if userRole == "jefe directo" or userRole == "administrador":
         ginfo = reportGenerator(reports)
         return {"Report data:":ginfo}
     else:

@@ -24,7 +24,7 @@ async def fetchPromotion(promotion_id: int):
 
 # Route to create a promotion and consequently a booking
 @promotionRouter.post("/create-promotion", dependencies=[Depends(token.JWTBearer())])
-async def createPromotion(promotion: CreatePromotionRequest, request):
+async def createPromotion(promotion: CreatePromotionRequest, request: Request):
     authorizationToken = request.headers.get('Authorization').split(' ')[1]
     payload = token.decodeToken(authorizationToken)
     userId = payload["id"]
@@ -34,7 +34,7 @@ async def createPromotion(promotion: CreatePromotionRequest, request):
         available = checkAvailability(booking.booking_date, booking.start_time, booking.end_time, booking.location_id)
 
         if available:
-            result = createBooking(booking, userId) 
+            result = createBooking(booking, userId, promotion.promoter_user_id) 
             bookingId = result.booking_id
             result2 = createPromotionFunc(bookingId, promotion.promoter_user_id)
             return {'message': 'Promotoría satisfactoriamente programada.'}
@@ -45,9 +45,12 @@ async def createPromotion(promotion: CreatePromotionRequest, request):
 
 
 # Route to fetch promotions given a promoter_user_id
-@promotionRouter.get("/promotions-by-promoter-id/{promoter_user_id}", dependencies=[Depends(token.JWTBearer())])
-async def fetchPromotionsByPromoterId(promoter_user_id: int): 
-    promotions = getPromotionsByPromoterId(promoter_user_id)
+@promotionRouter.get("/promotions-by-promoter-id", dependencies=[Depends(token.JWTBearer())])
+async def fetchPromotionsByPromoterId(request: Request): 
+    authorizationToken = request.headers.get('Authorization').split(' ')[1]
+    payload = token.decodeToken(authorizationToken)
+    userId = payload["id"]
+    promotions = getPromotionsByPromoterId(userId)
     return promotions
 
 # Route to fetch promotions given a location name

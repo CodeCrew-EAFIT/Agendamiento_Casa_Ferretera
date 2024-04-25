@@ -28,8 +28,8 @@ async def fetchPromotionsToRate(request: Request):
     authorizationToken = request.headers.get('Authorization').split(' ')[1]
     payload = token.decodeToken(authorizationToken)
     userRole = getUserRole(payload["id"])
-    if userRole == "supervisor":
-        promotionsToRate = getPromotionsPending()
+    if userRole == "promotor":
+        promotionsToRate = getPromotionsPending(payload["id"])
         return promotionsToRate
     else:
         raise HTTPException(status_code=403, detail="Acceso prohibido")

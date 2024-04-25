@@ -65,10 +65,10 @@ def getPromotionsToRate():
 
 # Function to get all promotions pending evidence
 
-def getPromotionsPending():
+def getPromotionsPending(promoter_user_id):
     returnlist = []
     db = get_db()
-    promotionsPending = db.query(Promotion).filter(Promotion.has_evidence == 0, Promotion.promotion_state.in_(["completed", "rated"])).all() #
+    promotionsPending = db.query(Promotion).filter(Promotion.promoter_user_id == promoter_user_id, Promotion.has_evidence == 0, Promotion.promotion_state.in_(["completed", "rated"])).all() #
     for pro in promotionsPending:
         book = db.query(Booking).join(Promotion, Booking.booking_id == Promotion.booking_id).filter(Promotion.promotion_id==pro.promotion_id).first()
         loc = db.query(Location).join(Booking, Location.location_id == Booking.location_id).join(Promotion, Booking.booking_id == Promotion.booking_id).filter(Promotion.promotion_id == pro.promotion_id).first()
@@ -78,7 +78,6 @@ def getPromotionsPending():
                      "location":loc.location_name
                      }
         returnlist.append(responsedic)
-
     return returnlist
 
 
@@ -113,6 +112,8 @@ def getPromoterId(promotion_id):
 # Function to create a promotion
 
 def createPromotionFunc(bookingId: int, promoterUserId: int):
+
+    
 
     db = get_db()
 

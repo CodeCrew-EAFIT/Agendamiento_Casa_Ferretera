@@ -19,23 +19,34 @@ def getColombiaTimezoneDatetime():
 
 # Function to create a booking given a Booking object
 
-def createBooking(booking: Booking, user_id):
-
-    dbBooking = BookingTable(
-        location_id = booking.location_id,
-        booking_date = booking.booking_date,
-        start_time = booking.start_time,
-        end_time = booking.end_time,
-        created_at = getColombiaTimezoneDatetime(),
-        user_id_created_by = user_id
-    )
-
+def createBooking(booking: Booking, user_id, promoter_id: int = None):
     db = get_db()
-    db.add(dbBooking)
-    db.commit()
-    db.refresh(dbBooking)
 
-    return dbBooking
+    bookingDb = None
+    
+    if promoter_id:
+        bookingDb = db.query(BookingTable) \
+                .join(PromotionTable, BookingTable.booking_id == PromotionTable.booking_id) \
+                .filter(BookingTable.booking_date == booking.booking_date, PromotionTable.promoter_user_id == promoter_id) \
+                .first()
+    
+    if bookingDb is None:
+        dbBooking = BookingTable(
+            location_id = booking.location_id,
+            booking_date = booking.booking_date,
+            start_time = booking.start_time,
+            end_time = booking.end_time,
+            created_at = getColombiaTimezoneDatetime(),
+            user_id_created_by = user_id
+        )
+
+        db.add(dbBooking)
+        db.commit()
+        db.refresh(dbBooking)
+
+        return dbBooking
+    else:
+        raise HTTPException(status_code=400, detail="Ya existe una reserva para este promotor en esta fecha")
 
 
 def getBrandName(booking, db):
