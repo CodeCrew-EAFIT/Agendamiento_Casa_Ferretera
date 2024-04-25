@@ -41,7 +41,7 @@ export default function NavBar () {
         <ul className='flex gap-8'>
           <li className={`cursor-pointer ${location.pathname.includes('/horario') ? 'font-bold' : ''}`} onClick={() => navigate('/horario')}>Horario</li>
           {isAdmin && <li className={`cursor-pointer ${location.pathname.includes('/usuarios') ? 'font-bold' : ''}`} onClick={() => navigate('/usuarios')}>Usuarios</li>}
-          {isChief && <li className={'cursor-pointer'}>Promotores</li>}
+          {isChief && <li className={`cursor-pointer ${location.pathname.includes('/promotores') ? 'font-bold' : ''}`} onClick={() => navigate('/promotores')}>Promotores</li>}
           {isSupervisor && <li className={`cursor-pointer ${location.pathname.includes('/calificar') ? 'font-bold' : ''}`} onClick={() => navigate('/calificar')}>Calificar</li>}
           {isPromoter && <li className={`cursor-pointer ${location.pathname.includes('/bitacora') ? 'font-bold' : ''}`} onClick={() => navigate('/bitacora')}>Bitácora</li>}
           {isBlockUser && <li className={`cursor-pointer ${location.pathname.includes('/bloquear') ? 'font-bold' : ''}`} onClick={() => navigate('/bloquear')}>Bloquear</li>}

@@ -15,10 +15,12 @@ import {
   ADMIN_USERS,
   ADMIN,
   PROMOTER,
-  SUPERVISOR
+  SUPERVISOR,
+  CHIEF
 } from './utils/constants'
 import { CalendarContextProvider } from './utils/CalendarContext'
 import Reports from './pages/Reports'
+import PromoterPanel from './pages/PromoterPanel'
 
 function App () {
   return (
@@ -126,6 +128,18 @@ function App () {
                   <Reports />
                 }
                 allowedUsers={ADMIN_USERS}
+                redirectTo="/horario"
+              />
+            }
+          />
+          <Route
+            path="/promotores"
+            element={
+              <ProtectedRoute
+                element={
+                  <PromoterPanel />
+                }
+                allowedUsers={[CHIEF]}
                 redirectTo="/horario"
               />
             }

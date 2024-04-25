@@ -243,6 +243,7 @@ export const FILLER_USER = {
   name: 'XXX',
   email: 'xxx@gmail.com',
   role: 'XXXXX',
+  phone_number: 'XXXXXXXXXX',
   brand_id: 0
 }
 
