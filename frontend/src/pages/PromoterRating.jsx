@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import Layout from '../containers/Layout'
 import { RATING_QUESTIONS } from '../utils/constants'
 import Button from '../components/Button'
@@ -9,6 +10,7 @@ const BASE_URL = import.meta.env.VITE_BASE_URL
 
 function RatingForm () {
   const id = parseInt(useParams().id)
+  const navigate = useNavigate()
   const [rating, setRating] = useState({
     promotion_id: id,
     category_1: 0,
@@ -39,6 +41,7 @@ function RatingForm () {
           Authorization: `Bearer ${localStorage.getItem('token')}`
         }
       })
+      navigate('/calificar')
     } catch (error) {
       console.error(error)
     }
