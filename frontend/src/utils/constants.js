@@ -205,10 +205,9 @@ export const AVAILABLE_BRANDS_ARRAY = [
 ]
 
 export const BRAND_TO_LOWERCASE = {
-  'Dewalt': 'dewalt',
+  Dewalt: 'dewalt',
   'Black+Decker': 'black+decker'
 }
-
 
 export const BRAND_TO_ID = {
   casaferretera: 1,
@@ -217,8 +216,8 @@ export const BRAND_TO_ID = {
 }
 
 export const ID_TO_BRAND_LOWERCASE = {
-  1: "casaferretera",
-  2: "dewalt",
+  1: 'casaferretera',
+  2: 'dewalt',
   3: 'black+decker'
 }
 

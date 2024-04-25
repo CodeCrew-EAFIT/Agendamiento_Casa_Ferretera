@@ -16,8 +16,8 @@ import {
 import expandedArrow from '../../assets/icons/expand-arrow.svg'
 import Button from '../Button'
 import DateInput from '../Input/DateInput'
-import PopUp from './PopUp'
 import SelectInput from '../Input/SelectInput'
+import PopUp from '../PopUp'
 
 const BASE_URL = import.meta.env.VITE_BASE_URL
 

@@ -1,9 +1,8 @@
 import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import Layout from '../containers/Layout'
 import { RATING_QUESTIONS } from '../utils/constants'
 import Button from '../components/Button'
-import { useParams } from 'react-router-dom'
 import axios from 'axios'
 
 const BASE_URL = import.meta.env.VITE_BASE_URL

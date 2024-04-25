@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { useNavigate } from 'react-router-dom'
-import { useCalendarContext } from '../../utils/CalendarContext'
 import expandArrow from '../../assets/icons/expand-arrow.svg'
 import Button from '../Button'
 import {

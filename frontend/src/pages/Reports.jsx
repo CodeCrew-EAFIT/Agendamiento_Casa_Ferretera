@@ -1,18 +1,17 @@
 import React, { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { useUserSession } from '../utils/UserSessionContext'
 import Layout from '../containers/Layout'
 import SelectMultiple from '../components/Input/SelectMultiple'
-import { AVAILABLE_LOCATIONS_ARRAY, ADMIN, ID_TO_BRAND_LOWERCASE, AVAILABLE_BRANDS_ARRAY, ID_TO_BRAND } from '../utils/constants'
+import { AVAILABLE_LOCATIONS_ARRAY, AVAILABLE_LOCATIONS_TO_ID, ADMIN, ID_TO_BRAND_LOWERCASE, AVAILABLE_BRANDS_ARRAY, ID_TO_BRAND, BRAND_TO_LOWERCASE, BRAND_TO_ID } from '../utils/constants'
 import expandedArrow from '../assets/icons/expand-arrow.svg'
 import DoubleDateInput from '../components/Input/DoubleDateInput'
 import Button from '../components/Button'
 import axios from 'axios'
+import { convertToExcel, downloadExcel } from '../utils/excel'
 
 const BASE_URL = import.meta.env.VITE_BASE_URL
 
 export default function Reports () {
-  const navigate = useNavigate()
   const { userDetails } = useUserSession()
   const [fetchedPromoters, setFetchedPromoters] = useState([])
   const [displayedPromoters, setDisplayedPromoters] = useState([])
@@ -55,21 +54,26 @@ export default function Reports () {
 
   const postReport = async () => {
     const data = {
-      locations: formData.locations,
-      brands: isAdmin ? formData.brands : [ID_TO_BRAND_LOWERCASE[userDetails.brand_id]],
-      promoters: formData.promoters,
+      locations: formData.locations.map((location) => AVAILABLE_LOCATIONS_TO_ID[location]),
+      brands: isAdmin ? formData.brands.map(brand => BRAND_TO_ID[BRAND_TO_LOWERCASE[brand]]) : [userDetails.brand_id],
+      promoters: formData.promoters.map((promoter) => fetchedPromoters.find((p) => p.name === promoter).user_id),
       start_date: formData.startDate,
       end_date: formData.endDate
     }
+
+    console.log(data)
+
     try {
-      if (!isAdmin){
-        const response = await axios.post(`${BASE_URL}/create-report`, data, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`
-          }
-        })
-        console.log(response.data)
-      } 
+      const response = await axios.post(`${BASE_URL}/create-report`, data, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+      })
+
+      const excelData = response.data['Report data:']
+      const workbook = convertToExcel(excelData)
+
+      downloadExcel('Reporte.xlsx', workbook)
     } catch (error) {
       console.error(error)
     }
@@ -108,7 +112,7 @@ export default function Reports () {
 
   useEffect(() => {
     const promotersList = fetchedPromoters.map((promoter) => {
-      if (isAdmin){
+      if (isAdmin) {
         if (formData.brands.includes(ID_TO_BRAND[promoter.brand_id])) {
           return promoter.name
         }
@@ -152,7 +156,6 @@ export default function Reports () {
               />
             </div>
           </div>)}
-
 
           {!isAdmin && <div className="flex items-center w-full gap-2">
             <p className="text-lg font-bold">Sede(s):</p>

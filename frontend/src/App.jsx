@@ -15,8 +15,7 @@ import {
   ADMIN_USERS,
   ADMIN,
   PROMOTER,
-  SUPERVISOR,
-  CHIEF
+  SUPERVISOR
 } from './utils/constants'
 import { CalendarContextProvider } from './utils/CalendarContext'
 import Reports from './pages/Reports'
