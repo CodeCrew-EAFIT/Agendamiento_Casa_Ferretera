@@ -18,6 +18,7 @@ import Button from '../Button'
 import DateInput from '../Input/DateInput'
 import SelectInput from '../Input/SelectInput'
 import PopUp from '../PopUp'
+import file from '../../assets/docs/seguridad-social.pdf'
 
 const BASE_URL = import.meta.env.VITE_BASE_URL
 
@@ -171,9 +172,23 @@ export default function Form ({ formData, setFormData }) {
     await postPromotion(data)
   }
 
+  const handleDownload = () => {
+    fetch(file)
+      .then(response => response.blob())
+      .then(blob => {
+        const url = window.URL.createObjectURL(new Blob([blob]))
+        const link = document.createElement('a')
+        link.href = url
+        link.setAttribute('download', 'seguridad-social.pdf')
+        document.body.appendChild(link)
+        link.click()
+        link.parentNode.removeChild(link)
+      })
+  }
+
   return (
     <>
-      {togglePopUp && <PopUp formData={formData} handleClosePopUp={handleClosePopUp} handlePost={handlePost}/>}
+      {togglePopUp && <PopUp isPromotion={true} formData={formData} handleClosePopUp={handleClosePopUp} handlePost={handlePost} handleDownload={handleDownload}/>}
       {togglePopUp && (
         <div
           className="blur-screen bg-transparent"

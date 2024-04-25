@@ -60,12 +60,12 @@ function RatingForm () {
                         <input
                             key={value}
                             type="radio"
-                            name={`calification_${index + 1}`}
+                            name={`category_${index + 1}`}
                             value={value}
                             onChange={onHandleChangeRadio}
                             className="h-8 w-8 accent-tertiary"
                         />
-                            <label htmlFor={`calification_${index + 1}_${value}`} className="text-md">{value}</label>
+                            <label htmlFor={`category_${index + 1}_${value}`} className="text-md">{value}</label>
                         </div>
                     ))}
                     </div>

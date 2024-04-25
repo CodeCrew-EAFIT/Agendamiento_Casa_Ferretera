@@ -8,11 +8,13 @@ import DoubleDateInput from '../components/Input/DoubleDateInput'
 import Button from '../components/Button'
 import axios from 'axios'
 import { convertToExcel, downloadExcel } from '../utils/excel'
+import PopUp from '../components/PopUp'
 
 const BASE_URL = import.meta.env.VITE_BASE_URL
 
 export default function Reports () {
   const { userDetails } = useUserSession()
+  const [togglePopUp, setTogglePopUp] = useState(false)
   const [fetchedPromoters, setFetchedPromoters] = useState([])
   const [displayedPromoters, setDisplayedPromoters] = useState([])
   const [formData, setFormData] = useState({
@@ -96,10 +98,18 @@ export default function Reports () {
 
   const handleSubmit = () => {
     if (formData.locations.length > 0 && formData.promoters.length > 0 && formData.startDate && formData.endDate) {
-      postReport()
+      setTogglePopUp(true)
     } else {
       alert('Por favor, llene todos los campos')
     }
+  }
+
+  const handleClosePopUp = () => {
+    setTogglePopUp(false)
+  }
+
+  const handleDownload = () => {
+    postReport()
   }
 
   useEffect(() => {
@@ -127,6 +137,13 @@ export default function Reports () {
 
   return (
     <Layout>
+      {togglePopUp && <PopUp isPromotion={false} formData={formData} handleClosePopUp={handleClosePopUp} handlePost={handleDownload} handleDownload={handleDownload}/>}
+      {togglePopUp && (
+        <div
+          className="blur-screen bg-transparent"
+          onClick={handleClosePopUp}
+        ></div>
+      )}
       <div className="default-container py-[20px] px-[15px]">
 
         <div className="flex flex-col gap-[30px]">
