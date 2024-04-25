@@ -11,11 +11,8 @@ from models.rating import Rating
 from models.location import Location
 from models.user import User
 from models.location import Location
+from models.blocked_date import Blocked_date
 from config.db import get_db
-
-
-
-
 
 def preReportInfo():
     returnDict = {"locations":[], "brands":[], "promoters":[]}
@@ -43,7 +40,10 @@ def reportGenerator(request: ReportSchema):
     db = get_db()
     reportList = [["Sede", "Fecha", "Hora inicio", "Hora fin", "Estado", "Promotor", "Marca", "Calificacion promedio"]]
 
-    bookings = db.query(Booking).filter(Booking.booking_date >= request.start_date, Booking.booking_date <= request.end_date, Booking.location_id.in_(request.locations)).all()
+    bookings =  db.query(Booking).outerjoin(Blocked_date, Booking.booking_id == Blocked_date.booking_id).\
+                    filter(Blocked_date.booking_id == None).\
+                    filter(Booking.booking_date >= request.start_date, Booking.booking_date <= request.end_date, Booking.location_id.in_(request.locations)).all()
+
     for book in bookings:
         loc = db.query(Location).filter(Location.location_id == book.location_id).first()
         promot = db.query(Promotion).filter(Promotion.booking_id == book.booking_id).first()
@@ -54,18 +54,12 @@ def reportGenerator(request: ReportSchema):
             calif = rating.mid_rating
         else:
             calif = None
-
-        
+ 
         if user.brand_id not in request.brands or user.user_id not in request.promoters:
             continue
         
         else:
             newRow = [loc.location_name, book.booking_date, book.start_time, book.end_time, promot.promotion_state, user.name, brand.brand_name, calif]
             reportList.append(newRow)
-
-        
-        
-        #print(user.brand_id)
-        #print(user.user_id)
     
     return reportList
