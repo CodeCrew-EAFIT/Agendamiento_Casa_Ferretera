@@ -46,7 +46,7 @@ async def createPromotion(promotion: CreatePromotionRequest, request: Request):
 
 # Route to fetch promotions given a promoter_user_id
 @promotionRouter.get("/promotions-by-promoter-id", dependencies=[Depends(token.JWTBearer())])
-async def fetchPromotionsByPromoterId(request: Request, promoter_user_id: int): 
+async def fetchPromotionsByPromoterId(request: Request): 
     authorizationToken = request.headers.get('Authorization').split(' ')[1]
     payload = token.decodeToken(authorizationToken)
     userId = payload["id"]
