@@ -7,6 +7,7 @@ import { useCalendarContext } from '../../utils/CalendarContext'
 import {
   AVAILABLE_LOCATIONS_ARRAY,
   AVAILABLE_HOURS_SPECIFIC,
+  AVAILABLE_HOURS_MILITARY,
   AVAILABLE_LOCATIONS_TO_ID,
   ADMIN,
   SUPERVISOR
@@ -47,27 +48,23 @@ export default function Form ({ formData, setFormData }) {
   }
 
   const postBlock = async (data) => {
-    // TODO: ELIMINAR CUANDO SE ARREGLE BACKEND
-    const headers = {
-      'Content-Type': 'application/json',
-      'user-id': userDetails.user_id
-    }
     try {
-      // TODO: ELIMINAR CUANDO SE ARREGLE BACKEND
-      const response = await axios.post(`${BASE_URL}/create-promotion`, data, { headers })
-      // TODO: DESCOMENTAR CUANDO SE ARREGLE BACKEND
-      // const response = await axios.post(`${BASE_URL}/create-promotion`, data, {
-      //   headers: {
-      //     Authorization: `Bearer ${localStorage.getItem('token')}`
-      //   }
-      // })
+      const response = await axios.post(`${BASE_URL}/create-blocked-date`, data, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+      })
       if (response.status === 200) {
-        sendCalendarNotification({ message: 'Promotoría agendada correctamente', success: true })
+        sendCalendarNotification({ message: 'Bloqueo agendado correctamente', success: true })
         navigate('/horario')
       }
     } catch (error) {
       if (error.response.data.detail) {
-        sendCalendarNotification({ message: error.response.data.detail, success: false })
+        if (Array.isArray(error.response.data.detail)) {
+          sendCalendarNotification({ message: error.response.data.detail[0].msg, success: false })
+        } else {
+          sendCalendarNotification({ message: error.response.data.detail, success: false })
+        }
       } else {
         sendCalendarNotification({ message: 'Ocurrió un error, por favor inténtelo de nuevo', success: false })
       }
@@ -84,7 +81,7 @@ export default function Form ({ formData, setFormData }) {
       formData.reason
     ) {
       console.log('formData', formData)
-      // handlePost()
+      handlePost()
     } else {
       alert('Por favor, llene todos los campos')
     }
@@ -102,6 +99,12 @@ export default function Form ({ formData, setFormData }) {
     }
 
     const data = {
+      location_id: AVAILABLE_LOCATIONS_TO_ID[formData.location],
+      booking_date: formData.date,
+      start_time: AVAILABLE_HOURS_MILITARY[formData.startTime] + ':00',
+      end_time: AVAILABLE_HOURS_MILITARY[formData.endTime] + ':00'
+      // reason: formData.reason,
+      // comments: formData.comments
     }
 
     await postBlock(data)
@@ -124,7 +127,7 @@ export default function Form ({ formData, setFormData }) {
             </div>}
             <div className="w-full">
               <p className="font-bold text-lg pb-[10px]">Fecha del bloqueo:</p>
-              <DateInput value={formData} setValue={setFormData} />
+              <DateInput value={formData} setValue={setFormData} name={'date'}/>
             </div>
             <div className="w-full">
               <p className="font-bold text-lg pb-[10px]">

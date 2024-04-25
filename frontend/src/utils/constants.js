@@ -15,7 +15,7 @@ export const PROMOTER_USER = {
 export const ADMIN = 'Administrador'
 export const SUPERVISOR = 'Supervisor'
 export const PROMOTER = 'Promotor'
-export const CHIEF = 'Jefe Directo'
+export const CHIEF = 'Jefe directo'
 
 export const USER_TYPES = [ADMIN, SUPERVISOR, PROMOTER, CHIEF]
 

@@ -18,6 +18,7 @@ import {
   SUPERVISOR
 } from './utils/constants'
 import { CalendarContextProvider } from './utils/CalendarContext'
+import Reports from './pages/Reports'
 
 function App () {
   return (
@@ -111,6 +112,18 @@ function App () {
                   <CalendarContextProvider>
                     <BlockPromotion />
                   </CalendarContextProvider>
+                }
+                allowedUsers={[SUPERVISOR, ADMIN]}
+                redirectTo="/horario"
+              />
+            }
+          />
+          <Route
+            path="/reportes"
+            element={
+              <ProtectedRoute
+                element={
+                  <Reports />
                 }
                 allowedUsers={[SUPERVISOR, ADMIN]}
                 redirectTo="/horario"

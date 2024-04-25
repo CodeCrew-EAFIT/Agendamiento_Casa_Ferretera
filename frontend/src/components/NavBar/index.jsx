@@ -46,7 +46,7 @@ export default function NavBar () {
           {isPromoter && <li className={`cursor-pointer ${location.pathname.includes('/bitacora') ? 'font-bold' : ''}`} onClick={() => navigate('/bitacora')}>Bitácora</li>}
           {isBlockUser && <li className={`cursor-pointer ${location.pathname.includes('/bloquear') ? 'font-bold' : ''}`} onClick={() => navigate('/bloquear')}>Bloquear</li>}
           {isAdmin && <li className={'cursor-pointer'}>Dashboard</li>}
-          {isAdminUser && <li className={'cursor-pointer'}>Reportes</li>}
+          {isAdminUser && <li className={`cursor-pointer ${location.pathname.includes('/reportes') ? 'font-bold' : ''}`} onClick={() => navigate('/reportes')}>Reportes</li>}
         </ul>
       </div>
     </div>

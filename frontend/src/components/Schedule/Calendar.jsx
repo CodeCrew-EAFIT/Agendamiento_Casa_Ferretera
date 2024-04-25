@@ -4,7 +4,7 @@ import {
   AVAILABLE_HOURS_SIMPLIFIED,
   AVAILABLE_HOURS_SPECIFIC
 } from '../../utils/constants'
-import { format, addDays } from 'date-fns' // Importar addDays
+import { format, addDays } from 'date-fns'
 import { es } from 'date-fns/locale'
 import Box from './Box'
 
