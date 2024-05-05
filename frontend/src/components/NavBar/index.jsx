@@ -9,7 +9,7 @@ import { ADMIN, CHIEF, SUPERVISOR, PROMOTER, ADMIN_USERS, BLOCK_USERS } from '..
 export default function NavBar () {
   const location = useLocation()
   const navigate = useNavigate()
-  const { userDetails, setUserSession } = useUserSession()
+  const { userDetails, handleLogout } = useUserSession()
 
   const currentRole = userDetails.role
 
@@ -19,11 +19,6 @@ export default function NavBar () {
   const isPromoter = currentRole === PROMOTER
   const isBlockUser = BLOCK_USERS.includes(currentRole)
   const isAdminUser = ADMIN_USERS.includes(currentRole)
-
-  const handleLogout = () => {
-    setUserSession(null)
-    localStorage.removeItem('token')
-  }
 
   return (
     <div className='nav-container'>

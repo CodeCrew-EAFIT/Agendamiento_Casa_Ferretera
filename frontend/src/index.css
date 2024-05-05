@@ -173,7 +173,7 @@ input[type='date']::-webkit-calendar-picker-indicator {
 }
 
 .calendar-nav {
-  @apply flex items-center justify-between h-[50px] w-[824px] text-md text-secondary font-bold ml-[70px]
+  @apply flex items-center mb-[5px] justify-between w-[824px] text-md text-secondary font-bold ml-[70px]
 }
 
 .calendar-talbe-container {

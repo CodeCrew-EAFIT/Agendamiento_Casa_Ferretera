@@ -9,11 +9,16 @@ import Button from '../components/Button'
 import axios from 'axios'
 import { convertToExcel, downloadExcel } from '../utils/excel'
 import PopUp from '../components/PopUp'
+import { useNotificationContext } from '../utils/NotificationContext'
+import Notification from '../components/Calendar/Notification'
+import checkIcon from '../assets/icons/check.svg'
+import warningIcon from '../assets/icons/warning.svg'
 
 const BASE_URL = import.meta.env.VITE_BASE_URL
 
 export default function Reports () {
-  const { userDetails } = useUserSession()
+  const { userDetails, handleLogout } = useUserSession()
+  const { sendNotification, notification, resetNotification } = useNotificationContext()
   const [togglePopUp, setTogglePopUp] = useState(false)
   const [fetchedPromoters, setFetchedPromoters] = useState([])
   const [displayedPromoters, setDisplayedPromoters] = useState([])
@@ -38,6 +43,9 @@ export default function Reports () {
       setFetchedPromoters(response.data)
     } catch (error) {
       console.error(error)
+      if (error.response.status === 403){
+        handleLogout()
+      }
     }
   }
 
@@ -51,6 +59,9 @@ export default function Reports () {
       setFetchedPromoters(response.data)
     } catch (error) {
       console.error(error)
+      if (error.response.status === 403){
+        handleLogout()
+      }
     }
   }
 
@@ -76,8 +87,14 @@ export default function Reports () {
       const workbook = convertToExcel(excelData)
 
       downloadExcel('Reporte.xlsx', workbook)
+      handleClosePopUp()
+      sendNotification({ message: 'Reporte descargado correctamente', success: true })
     } catch (error) {
-      console.error(error)
+      if (error.response.status === 403){
+        handleLogout()
+      } else {
+        sendNotification({ message: 'Ocurrió un error, por favor inténtelo de nuevo', success: false })
+      }
     }
   }
 
@@ -137,18 +154,44 @@ export default function Reports () {
 
   return (
     <Layout>
-      {togglePopUp && <PopUp isPromotion={false} formData={formData} handleClosePopUp={handleClosePopUp} handlePost={handleDownload} handleDownload={handleDownload}/>}
-      {togglePopUp && (
-        <div
-          className="blur-screen bg-transparent"
-          onClick={handleClosePopUp}
-        ></div>
-      )}
-      <div className="default-container py-[20px] px-[15px]">
-
-        <div className="flex flex-col gap-[30px]">
-        {isAdmin && (<div className="flex justify-between">
-            <div className="flex items-center w-[417px] h-[49px] gap-2">
+      <div className='relative'>
+        {notification && <Notification icon={notification.success ? checkIcon : warningIcon} message={notification.message} handleClose={resetNotification}/>}
+        {togglePopUp && <PopUp isPromotion={false} formData={formData} handleClosePopUp={handleClosePopUp} handlePost={handleDownload} handleDownload={handleDownload}/>}
+        {togglePopUp && (
+          <div
+            className="blur-screen bg-transparent"
+            onClick={handleClosePopUp}
+          ></div>
+        )}
+        <div className="default-container py-[20px] px-[15px]">
+          <div className="flex flex-col gap-[30px]">
+          {isAdmin && (<div className="flex justify-between">
+              <div className="flex items-center w-[417px] h-[49px] gap-2">
+                <p className="text-lg font-bold">Sede(s):</p>
+                <SelectMultiple
+                  content="Escoger sede(s)"
+                  optionsArray={AVAILABLE_LOCATIONS_ARRAY}
+                  expandArrow={expandedArrow}
+                  selectedValues={formData.locations}
+                  setSelectedValues={(newSelectedValues) =>
+                    handleSetSelectedValues('locations', newSelectedValues)
+                  }
+                />
+              </div>
+              <div className="flex items-center w-[417px] h-[49px] gap-2">
+                <p className="text-lg font-bold">Marca(s):</p>
+                <SelectMultiple
+                  content="Escoger marca(s)"
+                  optionsArray={AVAILABLE_BRANDS_ARRAY}
+                  expandArrow={expandedArrow}
+                  selectedValues={formData.brands}
+                  setSelectedValues={(newSelectedValues) =>
+                    handleSetSelectedValues('brands', newSelectedValues)
+                  }
+                />
+              </div>
+            </div>)}
+            {!isAdmin && <div className="flex items-center w-full gap-2">
               <p className="text-lg font-bold">Sede(s):</p>
               <SelectMultiple
                 content="Escoger sede(s)"
@@ -158,78 +201,51 @@ export default function Reports () {
                 setSelectedValues={(newSelectedValues) =>
                   handleSetSelectedValues('locations', newSelectedValues)
                 }
+                width={true}
               />
-            </div>
-            <div className="flex items-center w-[417px] h-[49px] gap-2">
-              <p className="text-lg font-bold">Marca(s):</p>
+            </div>}
+            <div className="flex items-center w-full gap-2">
+              <p className="text-lg font-bold">Promotor(es):</p>
               <SelectMultiple
-                content="Escoger marca(s)"
-                optionsArray={AVAILABLE_BRANDS_ARRAY}
+                content="Escoger promotor(es)"
+                optionsArray={displayedPromoters}
                 expandArrow={expandedArrow}
-                selectedValues={formData.brands}
+                selectedValues={formData.promoters}
                 setSelectedValues={(newSelectedValues) =>
-                  handleSetSelectedValues('brands', newSelectedValues)
+                  handleSetSelectedValues('promoters', newSelectedValues)
                 }
+                width={true}
               />
             </div>
-          </div>)}
-
-          {!isAdmin && <div className="flex items-center w-full gap-2">
-            <p className="text-lg font-bold">Sede(s):</p>
-            <SelectMultiple
-              content="Escoger sede(s)"
-              optionsArray={AVAILABLE_LOCATIONS_ARRAY}
-              expandArrow={expandedArrow}
-              selectedValues={formData.locations}
-              setSelectedValues={(newSelectedValues) =>
-                handleSetSelectedValues('locations', newSelectedValues)
-              }
-              width={true}
-            />
-          </div>}
-
-          <div className="flex items-center w-full gap-2">
-            <p className="text-lg font-bold">Promotor(es):</p>
-            <SelectMultiple
-              content="Escoger promotor(es)"
-              optionsArray={displayedPromoters}
-              expandArrow={expandedArrow}
-              selectedValues={formData.promoters}
-              setSelectedValues={(newSelectedValues) =>
-                handleSetSelectedValues('promoters', newSelectedValues)
-              }
-              width={true}
-            />
-          </div>
-
-          <div className="flex justify-between">
-            <div className="flex items-center w-[417px] h-[49px] gap-2">
-              <p className="text-lg font-bold">Fecha desde:</p>
-              <div className="w-[269px]">
-                <DoubleDateInput
-                  value={formData}
-                  setValue={setFormData}
-                  name={'startDate'}
-                />
+            <div className="flex justify-between">
+              <div className="flex items-center w-[417px] h-[49px] gap-2">
+                <p className="text-lg font-bold">Fecha desde:</p>
+                <div className="w-[269px]">
+                  <DoubleDateInput
+                    value={formData}
+                    setValue={setFormData}
+                    name={'startDate'}
+                  />
+                </div>
               </div>
-            </div>
-            <div className="flex items-center w-[417px] h-[49px] gap-2">
-              <p className="text-lg font-bold">Fecha hasta:</p>
-              <div className="w-[269px]">
-                <DoubleDateInput
-                  value={formData}
-                  setValue={setFormData}
-                  name={'endDate'}
-                />
+              <div className="flex items-center w-[417px] h-[49px] gap-2">
+                <p className="text-lg font-bold">Fecha hasta:</p>
+                <div className="w-[269px]">
+                  <DoubleDateInput
+                    value={formData}
+                    setValue={setFormData}
+                    name={'endDate'}
+                  />
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <div className="flex items-center justify-between px-[243px] mt-[40px]">
-            <Button onClick={handleCleanFilters} white={true}>
-                Limpiar filtros
-            </Button>
-            <Button onClick={handleSubmit}>Generar reporte</Button>
+          <div className="flex items-center justify-between px-[243px] mt-[40px]">
+              <Button onClick={handleCleanFilters} white={true}>
+                  Limpiar filtros
+              </Button>
+              <Button onClick={handleSubmit}>Generar reporte</Button>
+          </div>
         </div>
       </div>
     </Layout>

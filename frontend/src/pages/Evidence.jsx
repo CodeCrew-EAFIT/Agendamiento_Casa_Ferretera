@@ -5,12 +5,16 @@ import Layout from '../containers/Layout'
 import Button from '../components/Button'
 import upload from '../assets/icons/upload.svg'
 import axios from 'axios'
+import { useUserSession } from '../utils/UserSessionContext'
+import { useNotificationContext } from '../utils/NotificationContext'
 
 const BASE_URL = import.meta.env.VITE_BASE_URL
 
 export default function Evidence () {
   const navigate = useNavigate()
   const { id } = useParams()
+  const { handleLogout } = useUserSession()
+  const { sendNotification } = useNotificationContext()
 
   const [formData, setFormData] = useState({
     promotion: id,
@@ -25,10 +29,16 @@ export default function Evidence () {
           Authorization: `Bearer ${localStorage.getItem('token')}`
         }
       })
+      sendNotification({ message: 'Evidencias adjuntadas correctamente', success: true })
       navigate('/bitacora')
     } catch (error) {
       console.error(error)
-      navigate('/bitacora')
+      if (error.response.status === 403){
+        handleLogout()
+      } else {
+        sendNotification({ message: 'Ocurrió un error, por favor inténtelo de nuevo', success: false })
+        navigate('/bitacora')
+      }
     }
   }
 

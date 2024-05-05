@@ -6,11 +6,14 @@ export default function DoubleDateInput ({ value, setValue, name }) {
   const dateInputRef = useRef(null)
 
   useEffect(() => {
-    if (value && value[name]) {
-      const newDate = new Date(value[name])
-      setChosenDate(newDate)
+    if (value[name]) {
+      const newDate = new Date(value[name]);
+      setChosenDate(newDate);
+    } else {
+      setChosenDate(null);
     }
-  }, [value])
+  }, [value, name]);
+  
 
   const handleDateChange = (event) => {
     event.preventDefault()
