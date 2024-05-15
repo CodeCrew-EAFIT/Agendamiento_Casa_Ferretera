@@ -15,13 +15,13 @@ def test_create_user(test_app, db_session):
     assert response.json()['email'] == user_data['email']
     # Verificar que no se devuelva la "password" o la "hashed_password"
     assert "password" not in response.json()
-    #assert "hashed_password" not in response.json()
+    assert "hashed_password" not in response.json()
 
 def test_create_same_user(test_app, db_session):
     user_data = ADMIN_USER_DATA
     response = test_app.post("/register", json=user_data)
     assert response.status_code == 400
-    #assert response.json()['detail'] == "Este correo ya está registrado."
+    assert response.json()['detail'] == "Este correo ya está registrado."
 
 def test_correct_login_user(test_app, db_session):
     user_data = {
@@ -40,7 +40,7 @@ def test_login_user_wrong_password(test_app, db_session):
     }
     response = test_app.post("/login", json=user_data)
     assert response.status_code == 401
-    #assert response.json()['detail'] == "Correo o contraseña incorrectos."
+    assert response.json()['detail'] == "Correo o contraseña incorrectos."
 
 def test_login_user_wrong_email(test_app):
     user_data = {
@@ -49,7 +49,7 @@ def test_login_user_wrong_email(test_app):
     }
     response = test_app.post("/login", json=user_data)
     assert response.status_code == 401
-    #assert response.json()['detail'] == "Correo o contraseña incorrectos."
+    assert response.json()['detail'] == "Correo o contraseña incorrectos."
 
 def test_read_user(test_app, db_session):
     user_data = {
@@ -78,7 +78,7 @@ def test_read_user(test_app, db_session):
 def test_read_user_no_token(test_app, db_session):
     response = test_app.get("/users/me")
     assert response.status_code == 403
-    #assert response.json()['detail'] == "No se proporcionó un token de acceso."
+    assert response.json()['detail'] == "No se proporcionó un token de acceso."
 
 def test_read_user_invalid_token(test_app, db_session):
     headers = {
@@ -86,4 +86,4 @@ def test_read_user_invalid_token(test_app, db_session):
     }
     response = test_app.get("/users/me", headers=headers)
     assert response.status_code == 403
-    #assert response.json()['detail'] == "Token inválido o expirado."
+    assert response.json()['detail'] == "Token inválido o expirado."
