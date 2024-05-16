@@ -1,13 +1,11 @@
 import pytest
 from config.db import Base, engine, SessionLocal
+import shutil, os
+from tests.constants import DB_FILE, BACKUP_DB_FILE
 
 @pytest.fixture(scope="session", autouse=True)
 def setup_database():
-    # Crea todas las tablas al comienzo de la sesión de pruebas
-    Base.metadata.create_all(bind=engine)
-    yield
-    # Elimina todas las tablas al final de la sesión de pruebas
-    Base.metadata.drop_all(bind=engine)
+    backup_db()
 
 @pytest.fixture(scope="function")
 def db_session():
@@ -24,3 +22,9 @@ def db_session():
     session.close()
     transaction.rollback()  # Esto revierte todas las operaciones hechas durante la prueba
     connection.close()
+
+def backup_db():
+    if os.path.exists(DB_FILE):
+        shutil.copyfile(DB_FILE, BACKUP_DB_FILE)
+    else:
+        raise FileNotFoundError("No se encontró el archivo de base de datos")

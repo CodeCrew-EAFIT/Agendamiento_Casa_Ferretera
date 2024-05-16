@@ -1,3 +1,6 @@
+DB_FILE = "acf.db"
+BACKUP_DB_FILE = "backup.db"
+
 ADMIN_USER_DATA = {
                 "name": "string",
                 "role": "administrador",
