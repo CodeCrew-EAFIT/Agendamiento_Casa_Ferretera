@@ -1,7 +1,7 @@
 from fastapi.testclient import TestClient
 import pytest
 from main import app  
-from tests.constants import ADMIN_USER_DATA
+from tests.constants import ADMIN_USER_DATA, PROMOTER_USER_DATA
 
 @pytest.fixture(scope="module")
 def test_app():
@@ -10,6 +10,15 @@ def test_app():
 
 def test_create_user(test_app):
     user_data = ADMIN_USER_DATA
+    response = test_app.post("/register", json=user_data)
+    assert response.status_code == 200
+    assert response.json()['email'] == user_data['email']
+    # Verificar que no se devuelva la "password" o la "hashed_password"
+    assert "password" not in response.json()
+    assert "hashed_password" not in response.json()
+
+def test_create_user_promotor(test_app):
+    user_data = PROMOTER_USER_DATA
     response = test_app.post("/register", json=user_data)
     assert response.status_code == 200
     assert response.json()['email'] == user_data['email']
@@ -27,6 +36,16 @@ def test_correct_login_user(test_app):
     user_data = {
         "email": ADMIN_USER_DATA["email"],
         "password": ADMIN_USER_DATA["password"]
+    }
+    response = test_app.post("/login", json=user_data)
+    assert response.status_code == 200
+    assert response.json()['token_type'] == "Bearer"
+    assert response.json()['access_token']
+
+def test_correct_login_user_promotor(test_app):
+    user_data = {
+        "email": PROMOTER_USER_DATA["email"],
+        "password": PROMOTER_USER_DATA["password"]
     }
     response = test_app.post("/login", json=user_data)
     assert response.status_code == 200

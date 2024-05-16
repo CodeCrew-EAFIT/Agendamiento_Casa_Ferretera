@@ -7,8 +7,17 @@ ADMIN_USER_DATA = {
                 "email": "admin@gmail.com",
                 "password": "admin",
                 "phone_number": "1234567890",
-                "brand_id": 10000,
+                "brand_id": 1,
             }
+
+PROMOTER_USER_DATA = {
+    "name": "promotortest",
+    "role": "promotor",
+    "email": "test@promotor.com",
+    "password": "promotor",
+    "phone_number": "423423432",
+    "brand_id": 10000,
+}
 
 ADMIN_USER_DATA_BLOCKING = ADMIN_USER_DATA.copy()
 
