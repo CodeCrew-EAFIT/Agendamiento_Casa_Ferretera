@@ -26,7 +26,7 @@ def getAllUsersByRole(role: str):
     if len(allUsers) != 0:
         return allUsers
     else:
-        raise HTTPException(status_code=404, detail="No encontrado")
+        raise HTTPException(status_code=404, detail="Rol no encontrado.")
 
 
 # Function to fetch all promoters given the brand
@@ -40,9 +40,9 @@ def getAllPromotersByBrand(brandName: str):
         if len(allPromotersByBrand) != 0:
             return allPromotersByBrand
         else:
-            raise HTTPException(status_code=404, detail="No encontrado")
+            raise HTTPException(status_code=404, detail="No hay promotores para esta marca.")
     else:
-        raise HTTPException(status_code=404, detail="No encontrado")
+        raise HTTPException(status_code=404, detail="Marca no encontrada.")
 
 
 
