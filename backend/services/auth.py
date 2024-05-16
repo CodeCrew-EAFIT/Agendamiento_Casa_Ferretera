@@ -22,4 +22,5 @@ def createUser(db: Session, user: UserCreate):
     db.add(dbUser)
     db.commit()
     db.refresh(dbUser)
+    delattr(dbUser, 'hashed_password')
     return dbUser
