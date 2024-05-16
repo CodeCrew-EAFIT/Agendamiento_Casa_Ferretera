@@ -23,3 +23,15 @@ LOCATIONS_LIST = [
     "La Ceja",
     "Apartadó",
 ]
+
+ROLE_LIST = [
+    "administrador",
+    "supervisor",
+    "promotor",
+    "jefe_directo",
+]
+
+BRAND_LIST = {
+    2: "dewalt",
+    3: "black+decker",
+}
