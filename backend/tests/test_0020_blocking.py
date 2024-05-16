@@ -18,7 +18,7 @@ def admin_token(test_app):
     token = response.json()['access_token']
     return token
 
-def test_create_blocked_date(test_app, admin_token, db_session):
+def test_create_blocked_date(test_app, admin_token):
     booking_data = {
         "booking_date": "2524-05-15",
         "start_time": "09:00",
@@ -32,7 +32,7 @@ def test_create_blocked_date(test_app, admin_token, db_session):
     assert response.status_code == 200
     assert response.json()['message'] == 'Horario bloqueado satisfactoriamente.'
 
-def test_fetch_all_blocked_dates(test_app, admin_token, db_session):
+def test_fetch_all_blocked_dates(test_app, admin_token):
     headers = {
         "Authorization": f"Bearer {admin_token}"
     }
@@ -40,7 +40,7 @@ def test_fetch_all_blocked_dates(test_app, admin_token, db_session):
     assert response.status_code == 200
     assert isinstance(response.json(), list)
 
-def test_fetch_blocked_date(test_app, admin_token, db_session):
+def test_fetch_blocked_date(test_app, admin_token):
     headers = {
         "Authorization": f"Bearer {admin_token}"
     }
@@ -49,7 +49,7 @@ def test_fetch_blocked_date(test_app, admin_token, db_session):
     assert response.status_code == 200
     assert response.json()['blocked_id'] == blocked_date_id
 
-def test_fetch_blocked_dates_by_location_name(test_app, admin_token, db_session):
+def test_fetch_blocked_dates_by_location_name(test_app, admin_token):
     headers = {
         "Authorization": f"Bearer {admin_token}"
     }
@@ -58,7 +58,7 @@ def test_fetch_blocked_dates_by_location_name(test_app, admin_token, db_session)
         assert response.status_code == 200
         assert isinstance(response.json(), list)
 
-def test_create_blocked_date_conflict(test_app, admin_token, db_session):
+def test_create_blocked_date_conflict(test_app, admin_token):
     booking_data = {
         "booking_date": "2524-05-15",
         "start_time": "09:00",
