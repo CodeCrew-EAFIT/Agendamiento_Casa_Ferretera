@@ -78,7 +78,7 @@ def test_read_user(test_app, db_session):
 def test_read_user_no_token(test_app, db_session):
     response = test_app.get("/users/me")
     assert response.status_code == 403
-    assert response.json()['detail'] == "No se proporcionó un token de acceso."
+    assert response.json()['detail'] == "Not authenticated"
 
 def test_read_user_invalid_token(test_app, db_session):
     headers = {
