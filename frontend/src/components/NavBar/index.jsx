@@ -24,17 +24,18 @@ export default function NavBar () {
     <div className='nav-container'>
       <img className='w-[95px] cursor-pointer' src={logo} alt='logo' onClick={() => navigate('/horario')} />
       <div className='nav'>
-        <div className='user-container'>
+        <div className={`user-container ${isAdmin ? 'mr-20' : ''}`}>
           <ReactSVG
             src={customerIcon}
             wrapper='span'
             className='svg-size-override cursor-pointer'
             onClick={handleLogout}
           />
-          <p>{userDetails.name && userDetails.name.split(' ')[0]}</p>
+          {!isAdmin && <p>{userDetails.name && userDetails.name.split(' ')[0]}</p>}
         </div>
         <ul className='flex gap-8'>
           <li className={`cursor-pointer ${location.pathname.includes('/horario') ? 'font-bold' : ''}`} onClick={() => navigate('/horario')}>Horario</li>
+          {isAdmin && <li className={'cursor-pointer'}>Bitácoras</li>}
           {isAdmin && <li className={`cursor-pointer ${location.pathname.includes('/usuarios') ? 'font-bold' : ''}`} onClick={() => navigate('/usuarios')}>Usuarios</li>}
           {isChief && <li className={`cursor-pointer ${location.pathname.includes('/promotores') ? 'font-bold' : ''}`} onClick={() => navigate('/promotores')}>Promotores</li>}
           {isSupervisor && <li className={`cursor-pointer ${location.pathname.includes('/calificar') ? 'font-bold' : ''}`} onClick={() => navigate('/calificar')}>Calificar</li>}

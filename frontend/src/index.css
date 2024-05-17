@@ -73,7 +73,7 @@ input[type='date']::-webkit-calendar-picker-indicator {
 }
 
 .text-input::placeholder {
-  color: black;
+  color: #88868B;
   opacity: 1; /* opcional, para asegurarte de que el color es completamente opaco */
 }
 

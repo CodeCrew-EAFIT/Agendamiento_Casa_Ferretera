@@ -22,6 +22,7 @@ import { NotificationContextProvider } from "./utils/NotificationContext";
 import { LocationContextProvider } from "./utils/LocationContext";
 import Reports from "./pages/Reports";
 import PromoterPanel from "./pages/PromoterPanel";
+import AddPromoter from "./pages/AddPromoter";
 
 function App() {
   return (
@@ -137,6 +138,16 @@ function App() {
               element={
                 <ProtectedRoute
                   element={<PromoterPanel />}
+                  allowedUsers={[CHIEF]}
+                  redirectTo="/horario"
+                />
+              }
+            />
+            <Route
+              path="/promotores/crear"
+              element={
+                <ProtectedRoute
+                  element={<AddPromoter />}
                   allowedUsers={[CHIEF]}
                   redirectTo="/horario"
                 />

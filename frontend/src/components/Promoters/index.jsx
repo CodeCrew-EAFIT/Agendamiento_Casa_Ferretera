@@ -14,7 +14,6 @@ const BASE_URL = import.meta.env.VITE_BASE_URL
 
 export default function Promoters ({ searchValue }) {
   const { userDetails } = useUserSession()
-  console.log(userDetails)
   const [page, setPage] = useState(0)
   const [users, setUsers] = useState([])
   const [userArray, setUserArray] = useState([])
@@ -32,7 +31,6 @@ export default function Promoters ({ searchValue }) {
         }
       })
       const fetchedUsers = response.data
-      console.log(fetchedUsers)
       const totalUsers = fetchedUsers.length
       const usersToAdd = totalUsers % 7 === 0 ? 0 : 7 - (totalUsers % 7)
 
