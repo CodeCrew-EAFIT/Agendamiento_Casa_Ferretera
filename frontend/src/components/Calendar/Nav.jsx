@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { ReactSVG } from 'react-svg'
-import { format, parse } from 'date-fns'
+import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
 import forward from '../../assets/icons/forward-arrow.svg'
 import back from '../../assets/icons/back-arrow.svg'
@@ -10,10 +10,9 @@ import capitalizeFirstWordLetter from '../../utils/capitalizeFirstWordLetter'
 export default function TableHeader ({
   handleNextWeek,
   handlePreviousWeek,
-  weekDays, 
+  weekDays,
   currentDate
 }) {
-
   const [currentMonth, setCurrentMonth] = useState('')
 
   const isToday = (day) => {
@@ -24,8 +23,8 @@ export default function TableHeader ({
   }
 
   useEffect(() => {
-    if (!currentDate) return;
-    const monthName = format(currentDate, 'MMMM', { locale: es });
+    if (!currentDate) return
+    const monthName = format(currentDate, 'MMMM', { locale: es })
     setCurrentMonth(monthName)
   }, [currentDate])
 
@@ -75,5 +74,6 @@ export default function TableHeader ({
 TableHeader.propTypes = {
   handleNextWeek: PropTypes.func.isRequired,
   handlePreviousWeek: PropTypes.func.isRequired,
-  weekDays: PropTypes.array.isRequired
+  weekDays: PropTypes.array.isRequired,
+  currentDate: PropTypes.object.isRequired
 }

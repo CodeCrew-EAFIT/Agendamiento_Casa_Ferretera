@@ -56,7 +56,7 @@ export default function Form ({ formData, setFormData }) {
       })
       if (response.status === 200) {
         sendNotification({ message: 'Bloqueo agendado correctamente', success: true })
-        navigate('/horario')
+        navigate('/')
       }
     } catch (error) {
       if (error.response.data.detail) {
@@ -68,7 +68,7 @@ export default function Form ({ formData, setFormData }) {
       } else {
         sendNotification({ message: 'Ocurrió un error, por favor inténtelo de nuevo', success: false })
       }
-      navigate('/horario')
+      navigate('/')
     }
   }
 

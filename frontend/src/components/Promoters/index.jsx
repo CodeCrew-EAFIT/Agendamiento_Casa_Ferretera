@@ -22,7 +22,6 @@ export default function Promoters ({ searchValue }) {
 
   const lastPage = Math.ceil(users.length / 7) - 1
 
-
   const fetchAllUsers = async () => {
     try {
       const response = await axios.get(`${BASE_URL}/all-promoters-by-brand/${ID_TO_BRAND_LOWERCASE[userDetails.brand_id]}`, {

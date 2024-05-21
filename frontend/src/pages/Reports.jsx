@@ -10,15 +10,13 @@ import axios from 'axios'
 import { convertToExcel, downloadExcel } from '../utils/excel'
 import PopUp from '../components/PopUp'
 import { useNotificationContext } from '../utils/NotificationContext'
-import Notification from '../components/Calendar/Notification'
-import checkIcon from '../assets/icons/check.svg'
-import warningIcon from '../assets/icons/warning.svg'
+import Notification from '../components/Notification'
 
 const BASE_URL = import.meta.env.VITE_BASE_URL
 
 export default function Reports () {
   const { userDetails, handleLogout } = useUserSession()
-  const { sendNotification, notification, resetNotification } = useNotificationContext()
+  const { sendNotification } = useNotificationContext()
   const [togglePopUp, setTogglePopUp] = useState(false)
   const [fetchedPromoters, setFetchedPromoters] = useState([])
   const [displayedPromoters, setDisplayedPromoters] = useState([])
@@ -43,7 +41,7 @@ export default function Reports () {
       setFetchedPromoters(response.data)
     } catch (error) {
       console.error(error)
-      if (error.response.status === 403){
+      if (error.response.status === 403) {
         handleLogout()
       }
     }
@@ -59,7 +57,7 @@ export default function Reports () {
       setFetchedPromoters(response.data)
     } catch (error) {
       console.error(error)
-      if (error.response.status === 403){
+      if (error.response.status === 403) {
         handleLogout()
       }
     }
@@ -90,7 +88,7 @@ export default function Reports () {
       handleClosePopUp()
       sendNotification({ message: 'Reporte descargado correctamente', success: true })
     } catch (error) {
-      if (error.response.status === 403){
+      if (error.response.status === 403) {
         handleLogout()
       } else {
         sendNotification({ message: 'Ocurrió un error, por favor inténtelo de nuevo', success: false })
@@ -155,7 +153,7 @@ export default function Reports () {
   return (
     <Layout>
       <div className='relative'>
-        {notification && <Notification icon={notification.success ? checkIcon : warningIcon} message={notification.message} handleClose={resetNotification}/>}
+        <Notification />
         {togglePopUp && <PopUp isPromotion={false} formData={formData} handleClosePopUp={handleClosePopUp} handlePost={handleDownload} handleDownload={handleDownload}/>}
         {togglePopUp && (
           <div

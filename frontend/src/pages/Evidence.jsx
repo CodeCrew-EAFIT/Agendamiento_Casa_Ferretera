@@ -33,7 +33,7 @@ export default function Evidence () {
       navigate('/bitacora')
     } catch (error) {
       console.error(error)
-      if (error.response.status === 403){
+      if (error.response.status === 403) {
         handleLogout()
       } else {
         sendNotification({ message: 'Ocurrió un error, por favor inténtelo de nuevo', success: false })

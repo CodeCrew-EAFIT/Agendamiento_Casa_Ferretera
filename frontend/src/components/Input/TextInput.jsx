@@ -32,7 +32,7 @@ export default function TextInput ({ placeholder, icon, ...props }) {
             placeholder={placeholder}
             value={value}
             onChange={handleChange}
-            type={inputType ? inputType : 'text'}
+            type={inputType || 'text'}
           />
             )}
       </div>

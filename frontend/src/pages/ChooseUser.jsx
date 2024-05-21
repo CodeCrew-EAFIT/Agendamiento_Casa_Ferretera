@@ -20,7 +20,6 @@ export default function ChooseUser () {
           Authorization: `Bearer ${localStorage.getItem('token')}`
         }
       })
-      // Asignar valores al UserSessionContext basándose en el resultado de la solicitud
       setUserSession({
         brand_id: result.data.brand_id,
         email: result.data.email,
@@ -40,17 +39,13 @@ export default function ChooseUser () {
         email,
         password
       })
-      // Guardar el token en el local storage
       localStorage.setItem('token', response.data.access_token)
 
-      // Después de obtener el token, solicitar la información detallada del usuario
       await fetchUser()
 
-      // Redirigir a la página de horario
-      navigate('/horario')
+      navigate('/')
     } catch (error) {
       console.error(error)
-      // Aquí puedes manejar el error, como mostrar un mensaje al usuario
     }
   }
 

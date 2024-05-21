@@ -24,7 +24,7 @@ const BASE_URL = import.meta.env.VITE_BASE_URL
 
 export default function Form ({ formData, setFormData }) {
   const navigate = useNavigate()
-  const { userDetails } = useUserSession()
+  const { userDetails, handleLogout } = useUserSession()
   const { sendNotification } = useNotificationContext()
   const [togglePopUp, setTogglePopUp] = useState(false)
   const [fetchedPromoters, setFetchedPromoters] = useState([])
@@ -62,7 +62,7 @@ export default function Form ({ formData, setFormData }) {
 
       setFetchedPromoters(response.data)
     } catch (error) {
-      if (error.response.status === 403){
+      if (error.response.status === 403) {
         handleLogout()
       }
       console.log(error)
@@ -79,7 +79,7 @@ export default function Form ({ formData, setFormData }) {
 
       setFetchedPromoters(response.data)
     } catch (error) {
-      if (error.response.status === 403){
+      if (error.response.status === 403) {
         handleLogout()
       }
       console.error(error)
@@ -95,7 +95,7 @@ export default function Form ({ formData, setFormData }) {
       })
       if (response.status === 200) {
         sendNotification({ message: 'Promotoría agendada correctamente', success: true })
-        navigate('/horario')
+        navigate('/')
       }
     } catch (error) {
       if (error.response.data.detail) {
@@ -109,12 +109,11 @@ export default function Form ({ formData, setFormData }) {
         sendNotification({ message: 'Ocurrió un error, por favor inténtelo de nuevo', success: false })
       }
 
-      if (error.response.status === 403){
+      if (error.response.status === 403) {
         handleLogout()
       } else {
-        navigate('/horario')
+        navigate('/')
       }
-
     }
   }
 

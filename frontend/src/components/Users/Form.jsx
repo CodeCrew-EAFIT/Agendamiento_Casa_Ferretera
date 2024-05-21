@@ -7,19 +7,25 @@ import TextInput from '../Input/TextInput'
 import { ReactSVG } from 'react-svg'
 import upload from '../../assets/icons/upload.svg'
 import { useNavigate } from 'react-router-dom'
+import { AVAILABLE_BRANDS_ARRAY, USER_ROLES } from '../../utils/constants'
+import expandedArrow from '../../assets/icons/expand-arrow.svg'
+import SelectInput from '../Input/SelectInput'
 
 const BASE_URL = import.meta.env.VITE_BASE_URL
 
-export default function PromoterForm () {
+export default function UserForm () {
   const navigate = useNavigate()
-  const { handleLogout, userDetails } = useUserSession()
+  const { handleLogout } = useUserSession()
   const { sendNotification } = useNotificationContext()
   const [personalIdFileNames, setPersonalIdFileNames] = useState([])
   const [socialSecurityFileNames, setSocialSecurityFileNames] = useState([])
   const [formData, setFormData] = useState({
+    role: '',
     name: '',
     personalId: '',
     phone: '',
+    store: '',
+    storeName: '',
     email: '',
     password: '',
     secondPassword: '',
@@ -30,10 +36,10 @@ export default function PromoterForm () {
   const postRegister = async () => {
     const data = {
       name: formData.name,
-      role: 'promotor',
+      role: formData.role.toLowerCase().split(' ').join('_'),
       email: formData.email,
       phone_number: formData.phone,
-      brand_id: userDetails.brand_id,
+      brand_id: formData.store === 'Nueva tienda' ? 0 : AVAILABLE_BRANDS_ARRAY.indexOf(formData.store) + 2,
       password: formData.password
     }
 
@@ -45,10 +51,10 @@ export default function PromoterForm () {
       })
       if (response.status === 200) {
         sendNotification({
-          message: 'Promotor creado correctamente!',
+          message: 'Usuario creado correctamente!',
           success: true
         })
-        navigate('/promotores')
+        navigate('/usuarios')
       }
     } catch (error) {
       if (error.response.status === 403) {
@@ -116,20 +122,35 @@ export default function PromoterForm () {
 
   const handleSubmit = () => {
     if (
+      formData.role &&
       formData.name &&
+      formData.store &&
       formData.personalId &&
       formData.phone &&
       formData.email &&
       formData.password &&
-      formData.secondPassword &&
-      formData.personalIdFiles.length > 0 &&
-      formData.socialSecurityFiles.length > 0
+      formData.secondPassword
     ) {
-      if (formData.password === formData.secondPassword) {
-        postRegister()
-      } else {
-        alert('Las contraseñas no coinciden')
+      if (formData.role === 'Promotor') {
+        if (!formData.personalIdFiles.length) {
+          alert('Por favor, suba la fotocopia de la cédula')
+          return
+        }
+        if (!formData.socialSecurityFiles.length) {
+          alert('Por favor, suba la seguridad social vigente')
+          return
+        }
       }
+      if (formData.store === 'Nueva tienda' && !formData.storeName) {
+        alert('Escriba el nombre de la nueva tienda')
+        return
+      }
+      if (formData.password !== formData.secondPassword) {
+        alert('Las contraseñas no coinciden')
+        return
+      }
+
+      postRegister()
     } else {
       alert('Por favor, llene todos los campos')
     }
@@ -140,9 +161,19 @@ export default function PromoterForm () {
       <div className="default-container py-[20px] px-[15px]">
         <div className="flex flex-col gap-[30px]">
           <div className="flex flex-col text-left w-full gap-2">
-            <p className="text-lg font-bold">Nombre del promotor:</p>
+            <p className="text-lg font-bold">Tipo de usuario:</p>
+            <SelectInput
+                name={'role'}
+                arrowIcon={expandedArrow}
+                value={formData}
+                setValue={setFormData}
+                optionsArray={USER_ROLES}
+              />
+          </div>
+          <div className="flex flex-col text-left w-full gap-2">
+            <p className="text-lg font-bold">Nombre:</p>
             <TextInput
-              placeholder="Escriba el nombre completo del promotor"
+              placeholder="Escriba el nombre completo del usuario"
               value={formData.name}
               setValue={(newSelectedValues) =>
                 handleSetSelectedValues('name', newSelectedValues)
@@ -152,9 +183,9 @@ export default function PromoterForm () {
           </div>
           <div className="flex gap-8">
             <div className="flex flex-col text-left w-full gap-2">
-              <p className="text-lg font-bold">Cédula del promotor:</p>
+              <p className="text-lg font-bold">Cédula:</p>
               <TextInput
-                placeholder="Escriba la cédula del promotor"
+                placeholder="Escriba la cédula del usuario"
                 value={formData.personalId}
                 setValue={(newSelectedValues) =>
                   handleSetSelectedValues('personalId', newSelectedValues)
@@ -164,9 +195,9 @@ export default function PromoterForm () {
               />
             </div>
             <div className="flex flex-col text-left w-full gap-2">
-              <p className="text-lg font-bold">Celular del promotor:</p>
+              <p className="text-lg font-bold">Celular:</p>
               <TextInput
-                placeholder="Escriba el celular del promotor"
+                placeholder="Escriba el celular del usuario"
                 value={formData.phone}
                 setValue={(newSelectedValues) =>
                   handleSetSelectedValues('phone', newSelectedValues)
@@ -176,10 +207,47 @@ export default function PromoterForm () {
               />
             </div>
           </div>
+          {formData.store !== 'Nueva tienda'
+            ? (<div className="flex flex-col text-left w-full gap-2">
+            <p className="text-lg font-bold">Tienda:</p>
+            <SelectInput
+                name={'store'}
+                arrowIcon={expandedArrow}
+                value={formData}
+                setValue={setFormData}
+                optionsArray={['Nueva tienda', ...AVAILABLE_BRANDS_ARRAY]}
+              />
+          </div>)
+            : (
+            <div className="flex gap-8">
+            <div className="flex flex-col text-left w-full gap-2">
+              <p className="text-lg font-bold">Tienda:</p>
+              <SelectInput
+                name={'store'}
+                arrowIcon={expandedArrow}
+                value={formData}
+                setValue={setFormData}
+                optionsArray={['Nueva tienda', ...AVAILABLE_BRANDS_ARRAY]}
+              />
+            </div>
+            <div className="flex flex-col text-left w-full gap-2">
+              <p className="text-lg font-bold">Nombre de la tienda:</p>
+              <TextInput
+                placeholder="Escriba el nombre de la nueva tienda"
+                value={formData.storeName}
+                setValue={(newSelectedValues) =>
+                  handleSetSelectedValues('storeName', newSelectedValues)
+                }
+                width={true}
+                inputType="tel"
+              />
+            </div>
+          </div>
+              )}
           <div className="flex flex-col text-left w-full gap-2">
-            <p className="text-lg font-bold">Correo del promotor:</p>
+            <p className="text-lg font-bold">Correo:</p>
             <TextInput
-              placeholder="Escriba el correo del promotor"
+              placeholder="Escriba el correo del usuario"
               value={formData.email}
               setValue={(newSelectedValues) =>
                 handleSetSelectedValues('email', newSelectedValues)
@@ -191,7 +259,7 @@ export default function PromoterForm () {
           <div className="flex flex-col text-left w-full gap-2">
             <p className="text-lg font-bold">Contraseña:</p>
             <TextInput
-              placeholder="Escriba la contraseña para la cuenta del promotor"
+              placeholder="Escriba la contraseña para la cuenta del usuario"
               value={formData.password}
               setValue={(newSelectedValues) =>
                 handleSetSelectedValues('password', newSelectedValues)
@@ -212,10 +280,10 @@ export default function PromoterForm () {
               inputType="password"
             />
           </div>
-          <div className="flex gap-8 h-[200px]">
+          {formData.role === 'Promotor' && <div className="flex gap-8 h-[200px]">
             <div className="flex flex-col text-left w-full gap-2">
               <p className="text-lg font-bold">
-                Fotocopia de la cédula del promotor:
+                Fotocopia de la cédula:
               </p>
               <div className="max-w-[297px]">
                 <label
@@ -262,7 +330,7 @@ export default function PromoterForm () {
             </div>
             <div className="flex flex-col text-left w-full gap-2">
               <p className="text-lg font-bold">
-                Seguridad social vigente del promotor:
+                Seguridad social vigente:
               </p>
               <div className="max-w-[297px]">
                 <label
@@ -309,10 +377,10 @@ export default function PromoterForm () {
                 )}
               </div>
             </div>
-          </div>
+          </div>}
         </div>
-        <div className="mb-[50px]">
-          <Button onClick={handleSubmit}>Crear Promotor</Button>
+        <div className={`mb-[50px] ${formData.role !== 'Promotor' ? 'mt-[60px]' : ''}`}>
+          <Button onClick={handleSubmit}>Crear Usuario</Button>
         </div>
       </div>
     </div>

@@ -7,7 +7,6 @@ import axios from 'axios'
 import { useNotificationContext } from '../utils/NotificationContext'
 import { useUserSession } from '../utils/UserSessionContext'
 
-
 const BASE_URL = import.meta.env.VITE_BASE_URL
 
 function RatingForm () {
@@ -48,9 +47,9 @@ function RatingForm () {
       sendNotification({ message: 'Calificación enviada correctamente', success: true })
       navigate('/calificar')
     } catch (error) {
-      if (error.response.status === 403){
+      if (error.response.status === 403) {
         handleLogout()
-      } else if (error.response.detail){
+      } else if (error.response.detail) {
         sendNotification({ message: error.response.detail, success: false })
         navigate('/bitacora')
       } else {

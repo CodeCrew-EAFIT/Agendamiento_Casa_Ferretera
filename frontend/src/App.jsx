@@ -1,38 +1,39 @@
-import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { UserSessionProvider } from "./utils/UserSessionContext";
-import ChooseUser from "./pages/ChooseUser";
-import Home from "./pages/Home";
-import UserPanel from "./pages/Admin/UserPanel";
-import SchedulePromotion from "./pages/SchedulePromotion";
-import Binnacle from "./pages/Binnacle";
-import BlockPromotion from "./pages/BlockPromotion";
-import PromoterRating from "./pages/PromoterRating";
-import ProtectedRoute from "./components/ProtectedRoute";
-import Evidence from "./pages/Evidence";
+import React from 'react'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { UserSessionProvider } from './utils/UserSessionContext'
+import ChooseUser from './pages/ChooseUser'
+import Home from './pages/Home'
+import UserPanel from './pages/Admin/UserPanel'
+import SchedulePromotion from './pages/SchedulePromotion'
+import Binnacle from './pages/Binnacle'
+import BlockPromotion from './pages/BlockPromotion'
+import PromoterRating from './pages/PromoterRating'
+import ProtectedRoute from './components/ProtectedRoute'
+import Evidence from './pages/Evidence'
 import {
   USER_TYPES,
   ADMIN_USERS,
   ADMIN,
   PROMOTER,
   SUPERVISOR,
-  CHIEF,
-} from "./utils/constants";
-import { NotificationContextProvider } from "./utils/NotificationContext";
-import { LocationContextProvider } from "./utils/LocationContext";
-import Reports from "./pages/Reports";
-import PromoterPanel from "./pages/PromoterPanel";
-import AddPromoter from "./pages/AddPromoter";
+  CHIEF
+} from './utils/constants'
+import { NotificationContextProvider } from './utils/NotificationContext'
+import { LocationContextProvider } from './utils/LocationContext'
+import Reports from './pages/Reports'
+import PromoterPanel from './pages/PromoterPanel'
+import AddPromoter from './pages/AddPromoter'
+import AddUser from './pages/Admin/AddUser'
 
-function App() {
+function App () {
   return (
     <UserSessionProvider>
       <NotificationContextProvider>
         <Router>
           <Routes>
-            <Route path="/" element={<ChooseUser />} />
+            <Route path="/login" element={<ChooseUser />} />
             <Route
-              path="/horario"
+              path="/"
               element={
                 <ProtectedRoute
                   element={
@@ -46,7 +47,7 @@ function App() {
               }
             />
             <Route
-              path="/horario/agendar"
+              path="/agendar"
               element={
                 <ProtectedRoute
                   element={
@@ -55,7 +56,7 @@ function App() {
                     </LocationContextProvider>
                   }
                   allowedUsers={ADMIN_USERS}
-                  redirectTo="/horario"
+                  redirectTo="/"
                 />
               }
             />
@@ -65,7 +66,17 @@ function App() {
                 <ProtectedRoute
                   element={<UserPanel />}
                   allowedUsers={[ADMIN]}
-                  redirectTo="/horario"
+                  redirectTo="/"
+                />
+              }
+            />
+            <Route
+              path="/usuarios/crear"
+              element={
+                <ProtectedRoute
+                  element={<AddUser />}
+                  allowedUsers={[ADMIN]}
+                  redirectTo="/"
                 />
               }
             />
@@ -75,7 +86,7 @@ function App() {
                 <ProtectedRoute
                   element={<Binnacle />}
                   allowedUsers={[SUPERVISOR]}
-                  redirectTo="/horario"
+                  redirectTo="/"
                 />
               }
             />
@@ -85,7 +96,7 @@ function App() {
                 <ProtectedRoute
                   element={<PromoterRating />}
                   allowedUsers={[SUPERVISOR]}
-                  redirectTo="/horario"
+                  redirectTo="/"
                 />
               }
             />
@@ -95,7 +106,7 @@ function App() {
                 <ProtectedRoute
                   element={<Binnacle />}
                   allowedUsers={[PROMOTER]}
-                  redirectTo="/horario"
+                  redirectTo="/"
                 />
               }
             />
@@ -105,7 +116,7 @@ function App() {
                 <ProtectedRoute
                   element={<Evidence />}
                   allowedUsers={[PROMOTER]}
-                  redirectTo="/horario"
+                  redirectTo="/"
                 />
               }
             />
@@ -119,7 +130,7 @@ function App() {
                     </LocationContextProvider>
                   }
                   allowedUsers={[SUPERVISOR, ADMIN]}
-                  redirectTo="/horario"
+                  redirectTo="/"
                 />
               }
             />
@@ -129,7 +140,7 @@ function App() {
                 <ProtectedRoute
                   element={<Reports />}
                   allowedUsers={ADMIN_USERS}
-                  redirectTo="/horario"
+                  redirectTo="/"
                 />
               }
             />
@@ -139,7 +150,7 @@ function App() {
                 <ProtectedRoute
                   element={<PromoterPanel />}
                   allowedUsers={[CHIEF]}
-                  redirectTo="/horario"
+                  redirectTo="/"
                 />
               }
             />
@@ -149,7 +160,7 @@ function App() {
                 <ProtectedRoute
                   element={<AddPromoter />}
                   allowedUsers={[CHIEF]}
-                  redirectTo="/horario"
+                  redirectTo="/"
                 />
               }
             />
@@ -157,7 +168,7 @@ function App() {
         </Router>
       </NotificationContextProvider>
     </UserSessionProvider>
-  );
+  )
 }
 
-export default App;
+export default App

@@ -16,12 +16,13 @@ export default function PopUp ({ formData, handleClosePopUp, ...props }) {
           onClick={handleClosePopUp}
         />
         <div className="pop-up-title">
-         { isPromotion ? <div className="mx-[80px] flex flex-col">
+         { isPromotion
+           ? <div className="mx-[80px] flex flex-col">
             <span>¿Los documentos de </span>
-            <strong>{formData.promoter}</strong>
+            <strong>{formData.promoter.split(' - ').slice(0, 1)}</strong>
             <span> están al día?</span>
-          </div> :
-          <div className="mx-[20px] flex flex-col">
+          </div>
+           : <div className="mx-[20px] flex flex-col">
             <span>¿Desea descargar este archivo?</span>
           </div>}
         </div>
@@ -47,5 +48,5 @@ PopUp.propTypes = {
   handleClosePopUp: PropTypes.func.isRequired,
   handlePost: PropTypes.func,
   isPromotion: PropTypes.bool,
-  handleDownload: PropTypes.func,
+  handleDownload: PropTypes.func
 }
