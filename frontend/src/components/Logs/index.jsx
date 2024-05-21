@@ -1,27 +1,27 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
 import { ReactSVG } from 'react-svg'
-import moreIcon from '../../assets/icons/more.svg'
 import forwardArrow from '../../assets/icons/forward-arrow.svg'
 import forwardBlackArrow from '../../assets/icons/forward-black-arrow.svg'
 import backArrow from '../../assets/icons/back-arrow.svg'
 import backBlackArrow from '../../assets/icons/back-black-arrow.svg'
-import { ID_TO_BRAND } from '../../utils/constants'
 
 const BASE_URL = import.meta.env.VITE_BASE_URL
 
-export default function Logs () {
+export default function Promotions () {
   const [page, setPage] = useState(0)
   const [promotions, setPromotions] = useState([])
   const [promotionArray, setPromotionArray] = useState([])
   const [forwardArrowIcon, setForwardArrowIcon] = useState(forwardBlackArrow)
   const [backArrowIcon, setBackArrowIcon] = useState(backArrow)
 
+  const navigate = useNavigate()
   const lastPage = Math.ceil(promotions.length / 7) - 1
 
   const fetchAllPromotions = async () => {
     try {
-      const response = await axios.get(`${BASE_URL}/all-promotions`, {
+      const response = await axios.get(`${BASE_URL}/all-promotions-for-admin`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`
         }
@@ -34,59 +34,38 @@ export default function Logs () {
     }
   }
 
-  const sortData = (data, searchTerm) => {
-    if (!searchTerm) return data
-
-    return data.sort((a, b) => {
-      const aMatches = Object.values(a).some((value) => {
-        if (typeof value !== 'string') return false // Ignorar valores no cadena
-        return value.toLowerCase().includes(searchTerm.toLowerCase())
-      })
-
-      const bMatches = Object.values(b).some((value) => {
-        if (typeof value !== 'string') return false // Ignorar valores no cadena
-        return value.toLowerCase().includes(searchTerm.toLowerCase())
-      })
-
-      return aMatches === bMatches ? 0 : aMatches ? -1 : 1
-    })
-  }
-
   useEffect(() => {
     fetchAllPromotions()
   }, [])
 
-  // useEffect(() => {
-  //   const sortedData = sortData(promotions, searchValue)
-  //   const nextPage = (page + 1) * 7
-  //   setPromotionArray(sortedData.slice(nextPage - 7, nextPage))
-  //   setNavigationIcons(page, lastPage)
-  // }, [page, searchValue, promotions])
+  useEffect(() => {
+    const nextPage = (page + 1) * 7
+    setPromotionArray(promotions.slice(nextPage - 7, nextPage))
+    setNavigationIcons(page, lastPage)
+  }, [page, promotions])
 
   const setNavigationIcons = (currentPage, finalPage) => {
     setBackArrowIcon(currentPage === 0 ? backArrow : backBlackArrow)
-    setForwardArrowIcon(
-      currentPage === finalPage ? forwardArrow : forwardBlackArrow
-    )
+    setForwardArrowIcon(currentPage === finalPage ? forwardArrow : forwardBlackArrow)
   }
 
-  const promotionData = promotionArray.slice(page === 0 ? 1 : 0).map((user, index) => (
-    <tr key={index} className="border-b border-secondary">
-      <td
-        className={`user-cell ${
-          index === 0 && page !== 0 && 'rounded-tl-[10px]'
-        }`}
-      >
-        {user.name}
+  const handleRowClick = (promotionId) => {
+    navigate(`/bitacoras/${promotionId}`)
+  }
+
+  const promotionData = promotionArray.slice(page === 0 ? 1 : 0).map((promotion, index) => (
+    <tr
+      key={index}
+      className="border-b border-secondary hover:bg-gray-100 cursor-pointer"
+      onClick={() => handleRowClick(promotion.promotion_id)}
+    >
+      <td className={`user-cell ${index === 0 && page !== 0 && 'rounded-tl-[10px]'}`}>
+        {promotion.booking_date}
       </td>
-      <td className="user-cell">{user.email}</td>
-      <td className="user-cell">{user.role}</td>
-      <td
-        className={`user-cell last-user-cell ${
-          index === 0 && page !== 0 && 'rounded-tr-[10px]'
-        }`}
-      >
-        {ID_TO_BRAND[user.brand_id]} <ReactSVG src={moreIcon} />
+      <td className="user-cell">{promotion.promoter_brand}</td>
+      <td className="user-cell">{promotion.location_name}</td>
+      <td className={`user-cell ${index === 0 && page !== 0 && 'rounded-tr-[10px]'}`}>
+        {promotion.promoter_name}
       </td>
     </tr>
   ))
@@ -108,30 +87,25 @@ export default function Logs () {
       <table className="min-w-full">
         <thead>
           <tr>
-            <th scope="col" className="user-header">
-              Fecha
-            </th>
-            <th scope="col" className="user-header">
-              Marca
-            </th>
-            <th scope="col" className="user-header">
-              Sede
-            </th>
-            <th scope="col" className="user-header">
-              Promotor
-            </th>
+            <th scope="col" className="user-header">Fecha</th>
+            <th scope="col" className="user-header">Marca</th>
+            <th scope="col" className="user-header">Sede</th>
+            <th scope="col" className="user-header">Promotor</th>
           </tr>
         </thead>
         <tbody className="text-left">
           {page === 0 && promotionArray.length > 0 && (
-            <tr className="border-b border-secondary">
+            <tr
+              className="border-b border-secondary hover:bg-gray-100 cursor-pointer"
+              onClick={() => handleRowClick(promotionArray[0].promotion_id)}
+            >
               <td className="user-cell rounded-tl-[10px]">
-                {promotionArray[0].name}
+                {promotionArray[0].booking_date}
               </td>
-              <td className="user-cell">{promotionArray[0].email}</td>
-              <td className="user-cell">{promotionArray[0].role}</td>
-              <td className="user-cell last-user-cell rounded-tr-[10px]">
-                {ID_TO_BRAND[promotionArray[0].brand_id]} <ReactSVG src={moreIcon} />
+              <td className="user-cell">{promotionArray[0].promoter_brand}</td>
+              <td className="user-cell">{promotionArray[0].location_name}</td>
+              <td className="user-cell">
+                {promotionArray[0].promoter_name}
               </td>
             </tr>
           )}
@@ -148,9 +122,7 @@ export default function Logs () {
             <div
               key={i}
               onClick={handleNumber}
-              className={`bottom-nav-page-button ${
-                page === i ? 'bg-tertiary rounded-full font-bold' : ''
-              }`}
+              className={`bottom-nav-page-button ${page === i ? 'bg-tertiary rounded-full font-bold' : ''}`}
             >
               <p className="text-center">{i + 1}</p>
             </div>

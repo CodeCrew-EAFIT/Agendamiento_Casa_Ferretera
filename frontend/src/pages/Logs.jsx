@@ -1,12 +1,12 @@
 import React from 'react'
 import Layout from '../containers/Layout'
-import Logs from '../components/Logs'
+import Promotions from '../components/Logs'
 
-export default function UserPanel () {
+export default function LogsPanel () {
   return (
     <Layout>
       <div className="relative">
-        <Logs />
+        <Promotions />
       </div>
     </Layout>
   )
