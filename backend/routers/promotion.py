@@ -16,6 +16,16 @@ async def fetchAllPromotions():
     allPromotions = getAllPromotions()
     return allPromotions
 
+@promotionRouter.get("/all-promotions-for-admin", dependencies=[Depends(token.JWTBearer())])
+async def fetchAllPromotionsForAdmin():
+    allPromotions = getAllPromotionsForAdmin()
+    return allPromotions
+
+@promotionRouter.get("/promotion-details/{promotion_id}", dependencies=[Depends(token.JWTBearer())])
+async def fetchPromotionDetails(promotion_id: int):
+    promotionDetails = getPromotionDetails(promotion_id)
+    return promotionDetails
+
 # Route to fetch a promotion given a promotion_id
 @promotionRouter.get("/promotion/{promotion_id}", dependencies=[Depends(token.JWTBearer())])
 async def fetchPromotion(promotion_id: int):
