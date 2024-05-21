@@ -143,6 +143,37 @@ def getPromotion(promotionId):
 
 
 
+# Function to edit a promotion time and date
+def updatePromotionTimeAndDate(promotionId, newDate, newStartTime, newEndTime, changeReason):
+    db = get_db()
+    promotion = db.query(Promotion).filter(Promotion.promotion_id == promotionId).first()
+    if promotion is not None:
+        booking = db.query(Booking).filter(Booking.booking_id == promotion.booking_id).first()
+        booking.start_time = newStartTime
+        booking.end_time = newEndTime
+        booking.booking_date = newDate
+        booking.change_reason = changeReason
+        db.commit()
+    else:
+        raise HTTPException(status_code=404, detail="No encontrado")
+
+
+
+# Function to cancel a promotion
+def cancelPromotion(promotionId, changeReason):
+    db = get_db()
+    promotion = db.query(Promotion).filter(Promotion.promotion_id == promotionId).first()
+    if promotion is not None:
+        booking = db.query(Booking).filter(Booking.booking_id == promotion.booking_id).first()
+        promotion.promotion_state = "canceled"
+        booking.change_reason = changeReason
+        db.commit()
+    else:
+        raise HTTPException(status_code=404, detail="No encontrado")
+
+
+
+
 def getAddBookingInfo(promotion, db):
     startTime, endTime, date, locationId = db.query(Booking.start_time, Booking.end_time, Booking.booking_date, Booking.location_id) \
             .join(Promotion, Booking.booking_id == Promotion.booking_id) \
