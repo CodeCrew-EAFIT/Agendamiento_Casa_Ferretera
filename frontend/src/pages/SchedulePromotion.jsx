@@ -2,10 +2,10 @@ import React, { useState } from 'react'
 import Layout from '../containers/Layout'
 import Form from '../components/Schedule/Form'
 import Calendar from '../components/Schedule/Calendar'
-import { useCalendarContext } from '../utils/CalendarContext'
+import { useLocationContext } from '../utils/LocationContext'
 
 export default function SchedulePromotion () {
-  const { location } = useCalendarContext()
+  const { location } = useLocationContext()
   const [formData, setFormData] = useState({
     location,
     date: '',

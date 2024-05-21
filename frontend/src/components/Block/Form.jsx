@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 import { useUserSession } from '../../utils/UserSessionContext'
-import { useCalendarContext } from '../../utils/CalendarContext'
 import {
   AVAILABLE_LOCATIONS_ARRAY,
   AVAILABLE_HOURS_SPECIFIC,
@@ -17,13 +16,14 @@ import Button from '../Button'
 import SelectInput from '../Input/SelectInput'
 import DateInput from '../Input/DateInput'
 import TextInputBlock from '../Input/TextInputBlock'
+import { useNotificationContext } from '../../utils/NotificationContext'
 
 const BASE_URL = import.meta.env.VITE_BASE_URL
 
 export default function Form ({ formData, setFormData }) {
   const navigate = useNavigate()
   const { userDetails } = useUserSession()
-  const { sendCalendarNotification } = useCalendarContext()
+  const { sendNotification } = useNotificationContext()
 
   const currentRole = userDetails.role
 
@@ -55,20 +55,20 @@ export default function Form ({ formData, setFormData }) {
         }
       })
       if (response.status === 200) {
-        sendCalendarNotification({ message: 'Bloqueo agendado correctamente', success: true })
-        navigate('/horario')
+        sendNotification({ message: 'Bloqueo agendado correctamente', success: true })
+        navigate('/')
       }
     } catch (error) {
       if (error.response.data.detail) {
         if (Array.isArray(error.response.data.detail)) {
-          sendCalendarNotification({ message: error.response.data.detail[0].msg, success: false })
+          sendNotification({ message: error.response.data.detail[0].msg, success: false })
         } else {
-          sendCalendarNotification({ message: error.response.data.detail, success: false })
+          sendNotification({ message: error.response.data.detail, success: false })
         }
       } else {
-        sendCalendarNotification({ message: 'Ocurrió un error, por favor inténtelo de nuevo', success: false })
+        sendNotification({ message: 'Ocurrió un error, por favor inténtelo de nuevo', success: false })
       }
-      navigate('/horario')
+      navigate('/')
     }
   }
 
@@ -157,7 +157,7 @@ export default function Form ({ formData, setFormData }) {
                 arrowIcon={expandedArrow}
                 value={formData}
                 setValue={setFormData}
-                optionsArray={['Auditoría', 'Vacaciones supervisor', 'Cierre de la sede']}
+                optionsArray={['Auditoría', 'Vacaciones supervisor', 'Cierre de la sede', 'Otro']}
               />
             </div>
             <div className="w-full">

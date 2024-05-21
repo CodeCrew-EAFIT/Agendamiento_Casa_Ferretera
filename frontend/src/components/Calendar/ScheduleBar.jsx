@@ -14,7 +14,7 @@ export default function ScheduleBar ({ location, setLocation }) {
   const handleSubmit = () => {
     if (location) {
       navigate(
-        '/horario/agendar'
+        '/agendar'
       )
     }
   }

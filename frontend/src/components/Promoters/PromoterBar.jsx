@@ -5,8 +5,11 @@ import plusIcon from '../../assets/icons/plus.svg'
 import searchIcon from '../../assets/icons/search.svg'
 import Button from '../Button'
 import TextInput from '../Input/TextInput'
+import { useNavigate } from 'react-router-dom'
 
 export default function PromoterBar ({ searchValue, setSearchValue }) {
+  const navigate = useNavigate()
+
   return (
     <div className="store-bar">
       <TextInput
@@ -15,7 +18,7 @@ export default function PromoterBar ({ searchValue, setSearchValue }) {
         setValue={setSearchValue}
         icon={searchIcon}
       />
-      <Button onClick={() => console.log('Nuevo promotor')}>
+      <Button onClick={() => navigate('/promotores/crear')}>
         <div className="flex items-center gap-2">
           <ReactSVG src={plusIcon} className="plus-icon" />
           <p>Nuevo promotor</p>

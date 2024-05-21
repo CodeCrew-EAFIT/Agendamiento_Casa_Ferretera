@@ -12,6 +12,11 @@ export const PROMOTER_USER = {
   phone_number: '1212121212'
 }
 
+export const USER_ROLES = [
+  'Promotor',
+  'Jefe directo'
+]
+
 export const ADMIN = 'Administrador'
 export const SUPERVISOR = 'Supervisor'
 export const PROMOTER = 'Promotor'
@@ -234,7 +239,9 @@ export const INPUT_PLACEHOLDERS = {
   startTime: 'Hora inicio',
   endTime: 'Hora final',
   promoter: 'Promotor',
-  reason: 'Seleccione la opción más adecuada'
+  reason: 'Seleccione la opción más adecuada',
+  role: 'Escoja el tipo de usuario que se quiere crear',
+  store: 'Escoja la tienda donde trabaja el usuario'
 }
 
 export const SAMPLE_PROMOTERS = ['Maria Paula A.', 'Juan Felipe B.']

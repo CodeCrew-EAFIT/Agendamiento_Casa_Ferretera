@@ -1,26 +1,39 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { ReactSVG } from 'react-svg'
 import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
 import forward from '../../assets/icons/forward-arrow.svg'
 import back from '../../assets/icons/back-arrow.svg'
+import capitalizeFirstWordLetter from '../../utils/capitalizeFirstWordLetter'
 
 export default function TableHeader ({
   handleNextWeek,
   handlePreviousWeek,
-  weekDays
+  weekDays,
+  currentDate
 }) {
-  const capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1)
+  const [currentMonth, setCurrentMonth] = useState('')
 
   const isToday = (day) => {
-    if (capitalize(format(new Date(), 'EEEE dd', { locale: es })) === day) { return <span className="mt-0">*</span> }
+    if (capitalizeFirstWordLetter(format(new Date(), 'EEEE dd', { locale: es })) === day) {
+      return <span className="mt-0">*</span>
+    }
     return false
   }
+
+  useEffect(() => {
+    if (!currentDate) return
+    const monthName = format(currentDate, 'MMMM', { locale: es })
+    setCurrentMonth(monthName)
+  }, [currentDate])
 
   return (
     <table>
       <thead>
+        <tr className="calendar-month">
+          <th colSpan="7" className="text-center">{currentMonth.toUpperCase()}</th>
+        </tr>
         <tr className="calendar-nav">
           <th className="flex items-center w-[124px]">
             <button
@@ -59,7 +72,8 @@ export default function TableHeader ({
 }
 
 TableHeader.propTypes = {
-  handleNextWeek: PropTypes.func,
-  handlePreviousWeek: PropTypes.func,
-  weekDays: PropTypes.array
+  handleNextWeek: PropTypes.func.isRequired,
+  handlePreviousWeek: PropTypes.func.isRequired,
+  weekDays: PropTypes.array.isRequired,
+  currentDate: PropTypes.object.isRequired
 }

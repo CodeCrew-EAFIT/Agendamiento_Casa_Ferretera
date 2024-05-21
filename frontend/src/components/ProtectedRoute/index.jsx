@@ -7,7 +7,7 @@ const ProtectedRoute = ({ element, allowedUsers, redirectTo }) => {
   const { userDetails } = useUserSession()
 
   if (!userDetails) {
-    return <Navigate to={'/'} replace />
+    return <Navigate to={'/login'} replace />
   }
 
   const currentRole = userDetails.role

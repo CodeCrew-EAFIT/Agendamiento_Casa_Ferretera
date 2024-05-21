@@ -21,8 +21,13 @@ export const UserSessionProvider = ({ children }) => {
     setUserDetails(details)
   }
 
+  const handleLogout = () => {
+    setUserSession(null)
+    localStorage.removeItem('token')
+  }
+
   return (
-    <UserSessionContext.Provider value={{ userDetails, setUserSession }}>
+    <UserSessionContext.Provider value={{ userDetails, setUserSession, handleLogout }}>
       {children}
     </UserSessionContext.Provider>
   )

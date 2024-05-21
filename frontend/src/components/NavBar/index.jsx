@@ -9,7 +9,7 @@ import { ADMIN, CHIEF, SUPERVISOR, PROMOTER, ADMIN_USERS, BLOCK_USERS } from '..
 export default function NavBar () {
   const location = useLocation()
   const navigate = useNavigate()
-  const { userDetails, setUserSession } = useUserSession()
+  const { userDetails, handleLogout } = useUserSession()
 
   const currentRole = userDetails.role
 
@@ -20,26 +20,22 @@ export default function NavBar () {
   const isBlockUser = BLOCK_USERS.includes(currentRole)
   const isAdminUser = ADMIN_USERS.includes(currentRole)
 
-  const handleLogout = () => {
-    setUserSession(null)
-    localStorage.removeItem('token')
-  }
-
   return (
     <div className='nav-container'>
-      <img className='w-[95px] cursor-pointer' src={logo} alt='logo' onClick={() => navigate('/horario')} />
+      <img className='w-[95px] cursor-pointer' src={logo} alt='logo' onClick={() => navigate('/')} />
       <div className='nav'>
-        <div className='user-container'>
+        <div className={`user-container ${isAdmin ? 'mr-20' : ''}`}>
           <ReactSVG
             src={customerIcon}
             wrapper='span'
             className='svg-size-override cursor-pointer'
             onClick={handleLogout}
           />
-          <p>{userDetails.name && userDetails.name.split(' ')[0]}</p>
+          {!isAdmin && <p>{userDetails.name && userDetails.name.split(' ')[0]}</p>}
         </div>
         <ul className='flex gap-8'>
-          <li className={`cursor-pointer ${location.pathname.includes('/horario') ? 'font-bold' : ''}`} onClick={() => navigate('/horario')}>Horario</li>
+          <li className={`cursor-pointer ${location.pathname === '/' || location.pathname === '/agendar' ? 'font-bold' : ''}`} onClick={() => navigate('/')}>Horario</li>
+          {isAdmin && <li className={'cursor-pointer'}>Bitácoras</li>}
           {isAdmin && <li className={`cursor-pointer ${location.pathname.includes('/usuarios') ? 'font-bold' : ''}`} onClick={() => navigate('/usuarios')}>Usuarios</li>}
           {isChief && <li className={`cursor-pointer ${location.pathname.includes('/promotores') ? 'font-bold' : ''}`} onClick={() => navigate('/promotores')}>Promotores</li>}
           {isSupervisor && <li className={`cursor-pointer ${location.pathname.includes('/calificar') ? 'font-bold' : ''}`} onClick={() => navigate('/calificar')}>Calificar</li>}
