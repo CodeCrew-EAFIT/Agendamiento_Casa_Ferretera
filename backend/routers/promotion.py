@@ -2,7 +2,7 @@ from services.promotion import *
 from services.booking import *
 from fastapi import APIRouter, Depends, Request
 from middlewares.getIdFromHeader import getIdFromHeader
-from schemas.additionalSchemas import CreatePromotionRequest
+from schemas.additionalSchemas import *
 from services.getUserRole import getUserRole
 from utils import token, security
 
@@ -15,6 +15,16 @@ promotionRouter = APIRouter()
 async def fetchAllPromotions():
     allPromotions = getAllPromotions()
     return allPromotions
+
+@promotionRouter.get("/all-promotions-for-admin", dependencies=[Depends(token.JWTBearer())])
+async def fetchAllPromotionsForAdmin():
+    allPromotions = getAllPromotionsForAdmin()
+    return allPromotions
+
+@promotionRouter.get("/promotion-details/{promotion_id}", dependencies=[Depends(token.JWTBearer())])
+async def fetchPromotionDetails(promotion_id: int):
+    promotionDetails = getPromotionDetails(promotion_id)
+    return promotionDetails
 
 # Route to fetch a promotion given a promotion_id
 @promotionRouter.get("/promotion/{promotion_id}", dependencies=[Depends(token.JWTBearer())])
@@ -42,6 +52,42 @@ async def createPromotion(promotion: CreatePromotionRequest, request: Request):
             raise HTTPException(status_code=409, detail="Conflicto con promotoría existente")
     else:
         raise HTTPException(status_code=403, detail="Acceso prohibido")
+
+
+# Route to edit a promotion time and date
+@promotionRouter.put("/edit-promotion", dependencies=[Depends(token.JWTBearer())])
+async def editPromotionById(editPromotionReq: EditPromotionRequest, request: Request):
+    promotion = getPromotion(editPromotionReq.promotion_id)
+    if promotion:
+        authorizationToken = request.headers.get('Authorization').split(' ')[1]
+        payload = token.decodeToken(authorizationToken)
+        userRole = getUserRole(payload["id"])
+        if userRole in ['administrador', 'jefe directo', 'supervisor']:
+            updatePromotionTimeAndDate(editPromotionReq.promotion_id, editPromotionReq.new_date, editPromotionReq.new_start_time, editPromotionReq.new_end_time, editPromotionReq.change_reason)
+            return {'message': 'Fecha y hora de la promotoría modificados satisfactoriamente.'}
+        else:
+            raise HTTPException(status_code=403, detail="Acceso negado")
+    else:
+        raise HTTPException(status_code=404, detail="Promotoría no encontrada")
+
+
+
+# Route to cancel a promotion
+@promotionRouter.delete("/cancel-promotion/{promotion_id}", dependencies=[Depends(token.JWTBearer())])
+async def cancelPromotionById(cancelPromotionReq: CancelPromotionRequest, request: Request):
+    promotion = getPromotion(cancelPromotionReq.promotion_id)
+    if promotion:
+        authorizationToken = request.headers.get('Authorization').split(' ')[1]
+        payload = token.decodeToken(authorizationToken)
+        userRole = getUserRole(payload["id"])
+        if userRole in ['administrador', 'jefe directo', 'supervisor']:
+            cancelPromotion(cancelPromotionReq.promotion_id, cancelPromotionReq.change_reason)
+            return {'message': 'Promotoría cancelada satisfactoriamente.'}
+        else:
+            raise HTTPException(status_code=403, detail="Acceso negado")
+    else:
+        raise HTTPException(status_code=404, detail="Promotoría no encontrada")
+
 
 
 # Route to fetch promotions given a promoter_user_id

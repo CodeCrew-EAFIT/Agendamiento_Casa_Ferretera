@@ -4,6 +4,7 @@ from config.db import get_db
 from models.blocked_date import Blocked_date
 from models.booking import Booking
 from models.location import Location
+from .location import getLocationName
 
 
 # Function to create a blocked date
@@ -56,13 +57,17 @@ def getBlockedDate(blockedDateId: int):
     
 def getBlockedDatesByLocationName(locationName: str):
     db = get_db()
-    locationExists = db.query(Location).filter(Location.location_name == locationName).scalar()
-    if locationExists:
-        locationId, = db.query(Location.location_id).filter(Location.location_name == locationName).first()
-        oneMonthAgo, oneMonthFuture = getPastAndFutureDate()
-        blockedDates = db.query(Blocked_date).join(Booking, Blocked_date.booking_id == Booking.booking_id
-        ).filter(Booking.booking_date >= oneMonthAgo, Booking.booking_date <= oneMonthFuture, Booking.location_id == locationId).all()
+    locationName = getLocationName(locationName)
+    if locationName != None:
+        locationExists = db.query(Location).filter(Location.location_name == locationName).scalar()
+        if locationExists:
+            locationId, = db.query(Location.location_id).filter(Location.location_name == locationName).first()
+            oneMonthAgo, oneMonthFuture = getPastAndFutureDate()
+            blockedDates = db.query(Blocked_date).join(Booking, Blocked_date.booking_id == Booking.booking_id
+            ).filter(Booking.booking_date >= oneMonthAgo, Booking.booking_date <= oneMonthFuture, Booking.location_id == locationId).all()
 
-        return blockedDates
+            return blockedDates
+        else:
+            raise HTTPException(status_code=404, detail="No encontrado")
     else:
         raise HTTPException(status_code=404, detail="No encontrado")
