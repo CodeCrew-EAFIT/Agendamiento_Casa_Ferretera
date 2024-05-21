@@ -290,11 +290,11 @@ def getPromotionsByLocationName(locationName: str):
             oneMonthAgo, oneMonthFuture = getPastAndFutureDate()
             promotions = db.query(Promotion).join(Booking, Promotion.booking_id == Booking.booking_id
             ).filter(Booking.booking_date >= oneMonthAgo, Booking.booking_date <= oneMonthFuture, Booking.location_id == locationId).all()
-
             return promotions
         else:
             raise HTTPException(status_code=404, detail="Sede no encontrada")
     else:
         raise HTTPException(status_code=404, detail="Sede no encontrada")
     
+
 

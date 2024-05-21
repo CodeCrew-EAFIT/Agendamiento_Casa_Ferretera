@@ -12,9 +12,16 @@ promotionRouter = APIRouter()
 
 # # Return only the completed promotions !!!
 @promotionRouter.get("/all-promotions", dependencies=[Depends(token.JWTBearer())])
-async def fetchAllPromotions():
-    allPromotions = getAllPromotions()
-    return allPromotions
+async def fetchAllPromotions(request: Request):
+    authorizationToken = request.headers.get('Authorization').split(' ')[1]
+    payload = token.decodeToken(authorizationToken)
+    userId = payload["id"]
+    userRole = getUserRole(payload["id"])
+    if userRole in ['administrador', 'jefe directo', 'supervisor']:
+        allPromotions = getAllPromotions()
+        return allPromotions
+    else:
+        raise HTTPException(status_code=403, detail="Acceso prohibido")
 
 @promotionRouter.get("/all-promotions-for-admin", dependencies=[Depends(token.JWTBearer())])
 async def fetchAllPromotionsForAdmin():
@@ -28,9 +35,16 @@ async def fetchPromotionDetails(promotion_id: int):
 
 # Route to fetch a promotion given a promotion_id
 @promotionRouter.get("/promotion/{promotion_id}", dependencies=[Depends(token.JWTBearer())])
-async def fetchPromotion(promotion_id: int):
-    promotions = getPromotion(promotion_id)
-    return promotions
+async def fetchPromotion(promotion_id: int, request: Request):
+    authorizationToken = request.headers.get('Authorization').split(' ')[1]
+    payload = token.decodeToken(authorizationToken)
+    userId = payload["id"]
+    userRole = getUserRole(payload["id"])
+    if userRole in ['administrador', 'jefe directo', 'supervisor']:
+        promotion = getPromotion(promotion_id)
+        return promotion
+    else:
+        raise HTTPException(status_code=403, detail="Acceso prohibido")
 
 # Route to create a promotion and consequently a booking
 @promotionRouter.post("/create-promotion", dependencies=[Depends(token.JWTBearer())])
@@ -96,12 +110,24 @@ async def fetchPromotionsByPromoterId(request: Request):
     authorizationToken = request.headers.get('Authorization').split(' ')[1]
     payload = token.decodeToken(authorizationToken)
     userId = payload["id"]
-    promotions = getPromotionsByPromoterId(userId)
-    return promotions
+    userRole = getUserRole(payload["id"])
+    if userRole in ['administrador', 'jefe directo', 'supervisor']:
+        promotions = getPromotionsByPromoterId(userId)
+        return promotions
+    else:
+        raise HTTPException(status_code=403, detail="Acceso prohibido")
 
 # Route to fetch promotions given a location name
 @promotionRouter.get("/promotions-by-location-name/{location_name}", dependencies=[Depends(token.JWTBearer())])
-async def fetchPromotionsByPromoterId(location_name: str):
-    promotions = getPromotionsByLocationName(location_name)
-    return promotions
+async def fetchPromotionsByLocationName(location_name: str, request: Request):
+    authorizationToken = request.headers.get('Authorization').split(' ')[1]
+    payload = token.decodeToken(authorizationToken)
+    userId = payload["id"]
+    userRole = getUserRole(payload["id"])
+    if userRole in ['administrador', 'jefe directo', 'supervisor']:
+        promotions = getPromotionsByLocationName(location_name)
+        return promotions
+    else:
+        raise HTTPException(status_code=403, detail="Acceso prohibido")
+
 
