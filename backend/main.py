@@ -12,6 +12,7 @@ Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
+app.include_router(analyticsRouter)
 app.include_router(promotionRouter)
 app.include_router(bookingRouter)
 app.include_router(userRouter)
@@ -20,6 +21,7 @@ app.include_router(ratingRouter)
 app.include_router(evidenceRouter)
 app.include_router(reportsRouter)
 app.include_router(blockedDateRouter)
+
 
 app.add_middleware(
     CORSMiddleware,

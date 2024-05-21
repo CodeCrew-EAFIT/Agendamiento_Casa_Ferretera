@@ -1,6 +1,7 @@
 from fastapi import HTTPException
 from models.user import User as UserTable
 from models.location import Location as LocationTable
+from services.brand import *
 from models.brand import Brand
 from config.db import get_db
 from sqlalchemy.orm import defer
@@ -33,14 +34,18 @@ def getAllUsersByRole(role: str):
 
 def getAllPromotersByBrand(brandName: str):
     db = get_db()
-    brandExists = db.query(Brand).filter(Brand.brand_name == brandName).scalar()
-    if brandExists:
-        brandId, = db.query(Brand.brand_id).filter(Brand.brand_name == brandName).first()
-        allPromotersByBrand = db.query(UserTable).filter(UserTable.role == 'promotor', UserTable.brand_id == brandId).options(defer(UserTable.hashed_password)).all()
-        if len(allPromotersByBrand) != 0:
-            return allPromotersByBrand
+    brandName = getBrandName(brandName)
+    if brandName != None:
+        brandExists = db.query(Brand).filter(Brand.brand_name == brandName).scalar()
+        if brandExists:
+            brandId, = db.query(Brand.brand_id).filter(Brand.brand_name == brandName).first()
+            allPromotersByBrand = db.query(UserTable).filter(UserTable.role == 'promotor', UserTable.brand_id == brandId).options(defer(UserTable.hashed_password)).all()
+            if len(allPromotersByBrand) != 0:
+                return allPromotersByBrand
+            else:
+                raise HTTPException(status_code=404, detail="No hay promotores para esta marca.")
         else:
-            raise HTTPException(status_code=404, detail="No hay promotores para esta marca.")
+            raise HTTPException(status_code=404, detail="Marca no encontrada.")
     else:
         raise HTTPException(status_code=404, detail="Marca no encontrada.")
 
