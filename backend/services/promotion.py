@@ -9,6 +9,7 @@ from models.user import User
 from models.location import Location
 from config.db import get_db
 from datetime import date, timedelta
+from .location import getLocationName
 
 # Function to get a date from one month ago and one month in the future
 
@@ -184,9 +185,6 @@ def getPromoterId(promotion_id):
 # Function to create a promotion
 
 def createPromotionFunc(bookingId: int, promoterUserId: int):
-
-    
-
     db = get_db()
 
     dbPromotion = Promotion(
@@ -212,6 +210,37 @@ def getPromotion(promotionId):
         return promotion
     else:
         raise HTTPException(status_code=404, detail="No encontrado")
+
+
+
+# Function to edit a promotion time and date
+def updatePromotionTimeAndDate(promotionId, newDate, newStartTime, newEndTime, changeReason):
+    db = get_db()
+    promotion = db.query(Promotion).filter(Promotion.promotion_id == promotionId).first()
+    if promotion is not None:
+        booking = db.query(Booking).filter(Booking.booking_id == promotion.booking_id).first()
+        booking.start_time = newStartTime
+        booking.end_time = newEndTime
+        booking.booking_date = newDate
+        booking.change_reason = changeReason
+        db.commit()
+    else:
+        raise HTTPException(status_code=404, detail="No encontrado")
+
+
+
+# Function to cancel a promotion
+def cancelPromotion(promotionId, changeReason):
+    db = get_db()
+    promotion = db.query(Promotion).filter(Promotion.promotion_id == promotionId).first()
+    if promotion is not None:
+        booking = db.query(Booking).filter(Booking.booking_id == promotion.booking_id).first()
+        promotion.promotion_state = "canceled"
+        booking.change_reason = changeReason
+        db.commit()
+    else:
+        raise HTTPException(status_code=404, detail="No encontrado")
+
 
 
 
@@ -253,14 +282,19 @@ def getPromotionsByPromoterId(promoterUserId: int):
     
 def getPromotionsByLocationName(locationName: str):
     db = get_db()
-    locationExists = db.query(Location).filter(Location.location_name == locationName).scalar()
-    if locationExists:
-        locationId, = db.query(Location.location_id).filter(Location.location_name == locationName).first()
-        oneMonthAgo, oneMonthFuture = getPastAndFutureDate()
-        promotions = db.query(Promotion).join(Booking, Promotion.booking_id == Booking.booking_id
-        ).filter(Booking.booking_date >= oneMonthAgo, Booking.booking_date <= oneMonthFuture, Booking.location_id == locationId).all()
+    locationName = getLocationName(locationName)
+    if locationName != None:
+        locationExists = db.query(Location).filter(Location.location_name == locationName).scalar()
+        if locationExists:
+            locationId, = db.query(Location.location_id).filter(Location.location_name == locationName).first()
+            oneMonthAgo, oneMonthFuture = getPastAndFutureDate()
+            promotions = db.query(Promotion).join(Booking, Promotion.booking_id == Booking.booking_id
+            ).filter(Booking.booking_date >= oneMonthAgo, Booking.booking_date <= oneMonthFuture, Booking.location_id == locationId).all()
 
-        return promotions
+            return promotions
+        else:
+            raise HTTPException(status_code=404, detail="Sede no encontrada")
     else:
-        raise HTTPException(status_code=404, detail="No encontrado")
+        raise HTTPException(status_code=404, detail="Sede no encontrada")
     
+
