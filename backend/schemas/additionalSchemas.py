@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 from .booking import Booking
-from sqlalchemy import Date, Time
+from datetime import date, time
 
 class CreatePromotionRequest(BaseModel):
     booking: Booking
@@ -8,9 +8,9 @@ class CreatePromotionRequest(BaseModel):
 
 class EditPromotionRequest(BaseModel):
     promotion_id: int
-    new_date: Date
-    new_start_time: Time
-    new_end_time: Time
+    new_date: date
+    new_start_time: time
+    new_end_time: time
     change_reason: str
 
 class CancelPromotionRequest(BaseModel):

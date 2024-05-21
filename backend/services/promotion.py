@@ -8,6 +8,7 @@ from models.user import User
 from models.location import Location
 from config.db import get_db
 from datetime import date, timedelta
+from .location import getLocationName
 
 # Function to get a date from one month ago and one month in the future
 
@@ -112,9 +113,6 @@ def getPromoterId(promotion_id):
 # Function to create a promotion
 
 def createPromotionFunc(bookingId: int, promoterUserId: int):
-
-    
-
     db = get_db()
 
     dbPromotion = Promotion(
@@ -212,14 +210,19 @@ def getPromotionsByPromoterId(promoterUserId: int):
     
 def getPromotionsByLocationName(locationName: str):
     db = get_db()
-    locationExists = db.query(Location).filter(Location.location_name == locationName).scalar()
-    if locationExists:
-        locationId, = db.query(Location.location_id).filter(Location.location_name == locationName).first()
-        oneMonthAgo, oneMonthFuture = getPastAndFutureDate()
-        promotions = db.query(Promotion).join(Booking, Promotion.booking_id == Booking.booking_id
-        ).filter(Booking.booking_date >= oneMonthAgo, Booking.booking_date <= oneMonthFuture, Booking.location_id == locationId).all()
+    locationName = getLocationName(locationName)
+    if locationName != None:
+        locationExists = db.query(Location).filter(Location.location_name == locationName).scalar()
+        if locationExists:
+            locationId, = db.query(Location.location_id).filter(Location.location_name == locationName).first()
+            oneMonthAgo, oneMonthFuture = getPastAndFutureDate()
+            promotions = db.query(Promotion).join(Booking, Promotion.booking_id == Booking.booking_id
+            ).filter(Booking.booking_date >= oneMonthAgo, Booking.booking_date <= oneMonthFuture, Booking.location_id == locationId).all()
 
-        return promotions
+            return promotions
+        else:
+            raise HTTPException(status_code=404, detail="Sede no encontrada")
     else:
-        raise HTTPException(status_code=404, detail="No encontrado")
+        raise HTTPException(status_code=404, detail="Sede no encontrada")
     
+
