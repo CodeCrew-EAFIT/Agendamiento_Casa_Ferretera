@@ -24,6 +24,7 @@ import Reports from './pages/Reports'
 import PromoterPanel from './pages/PromoterPanel'
 import AddPromoter from './pages/AddPromoter'
 import AddUser from './pages/Admin/AddUser'
+import LogsPanel from './pages/Logs'
 
 function App () {
   return (
@@ -160,6 +161,16 @@ function App () {
                 <ProtectedRoute
                   element={<AddPromoter />}
                   allowedUsers={[CHIEF]}
+                  redirectTo="/"
+                />
+              }
+            />
+            <Route
+              path="/bitacoras"
+              element={
+                <ProtectedRoute
+                  element={<LogsPanel />}
+                  allowedUsers={[ADMIN]}
                   redirectTo="/"
                 />
               }
