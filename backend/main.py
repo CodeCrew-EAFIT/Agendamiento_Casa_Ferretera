@@ -6,7 +6,6 @@ from config.db import Base, engine
 from fastapi.middleware.cors import CORSMiddleware
 from models import *
 from routers import *
-from routers.brand import brandRouter
 
 origins = [ "*" ]
 Base.metadata.create_all(bind=engine)

@@ -4,7 +4,8 @@ from utils import token, security
 from fastapi import HTTPException
 from services.formatText import formatText
 from services.location import getLocationName
-from services.analytics import getBestPromoterByLocation
+from services.analytics import *
+from schemas.additionalSchemas import *
 
 analyticsRouter = APIRouter()
 
@@ -25,4 +26,15 @@ async def fetchBestPromoterByLocation(location_name: str, request: Request):
         raise HTTPException(status_code=403, detail="Acceso prohibido")
 
 
-
+@analyticsRouter.get("/check-promoter-suitability", dependencies=[Depends(token.JWTBearer())])
+async def checkPromoterSuitability(promoter_id: int, location_name: str, request: Request):
+    authorizationToken = request.headers.get('Authorization').split(' ')[1]
+    payload = token.decodeToken(authorizationToken)
+    userId = payload["id"]
+    userRole = getUserRole(payload["id"])
+    if userRole in ['administrador', 'jefe directo', 'supervisor']:
+        is_suitable = checkPromoterSuitabilityFunc(promoter_id, location_name)
+        if not is_suitable:
+            return {"message": "Este promotor no es el más adecuado para tu sede"}
+    else:
+        raise HTTPException(status_code=403, detail="Acceso prohibido")

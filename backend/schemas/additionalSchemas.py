@@ -16,3 +16,7 @@ class EditPromotionRequest(BaseModel):
 class CancelPromotionRequest(BaseModel):
     promotion_id: int
     change_reason: str
+
+class CheckPromoterSuitabilityRequest(BaseModel):
+    promoter_id: int
+    location_name: str

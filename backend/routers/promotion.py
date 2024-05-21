@@ -111,7 +111,7 @@ async def fetchPromotionsByPromoterId(request: Request):
     payload = token.decodeToken(authorizationToken)
     userId = payload["id"]
     userRole = getUserRole(payload["id"])
-    if userRole in ['administrador', 'jefe directo', 'supervisor']:
+    if userRole in ['administrador', 'jefe directo', 'supervisor', 'promotor']:
         promotions = getPromotionsByPromoterId(userId)
         return promotions
     else:
