@@ -56,15 +56,15 @@ export default function Promotions () {
   const promotionData = promotionArray.slice(page === 0 ? 1 : 0).map((promotion, index) => (
     <tr
       key={index}
-      className="border-b border-secondary hover:bg-gray-100 cursor-pointer"
+      className="border-b border-secondary hover:shadow-2xl cursor-pointer"
       onClick={() => handleRowClick(promotion.promotion_id)}
     >
-      <td className={`user-cell ${index === 0 && page !== 0 && 'rounded-tl-[10px]'}`}>
+      <td className={`user-cell ${index === 0 && page !== 0 && 'rounded-tl-[10px]'} hover:font-semibold hover:shadow-black`}>
         {promotion.booking_date}
       </td>
-      <td className="user-cell">{promotion.promoter_brand}</td>
-      <td className="user-cell">{promotion.location_name}</td>
-      <td className={`user-cell ${index === 0 && page !== 0 && 'rounded-tr-[10px]'}`}>
+      <td className="user-cell hover:font-semibold">{promotion.promoter_brand}</td>
+      <td className="user-cell hover:font-semibold">{promotion.location_name}</td>
+      <td className={`user-cell ${index === 0 && page !== 0 && 'rounded-tr-[10px]'} hover:font-semibold`}>
         {promotion.promoter_name}
       </td>
     </tr>
@@ -99,12 +99,12 @@ export default function Promotions () {
               className="border-b border-secondary hover:bg-gray-100 cursor-pointer"
               onClick={() => handleRowClick(promotionArray[0].promotion_id)}
             >
-              <td className="user-cell rounded-tl-[10px]">
+              <td className="user-cell rounded-tl-[10px] hover:font-semibold">
                 {promotionArray[0].booking_date}
               </td>
-              <td className="user-cell">{promotionArray[0].promoter_brand}</td>
-              <td className="user-cell">{promotionArray[0].location_name}</td>
-              <td className="user-cell">
+              <td className="user-cell hover:font-semibold">{promotionArray[0].promoter_brand}</td>
+              <td className="user-cell hover:font-semibold">{promotionArray[0].location_name}</td>
+              <td className="user-cell hover:font-semibold">
                 {promotionArray[0].promoter_name}
               </td>
             </tr>
