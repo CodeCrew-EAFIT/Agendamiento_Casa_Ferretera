@@ -15,10 +15,10 @@ async def fetchBestPromoterByLocation(location_name: str, request: Request):
     payload = token.decodeToken(authorizationToken)
     userId = payload["id"]
     userRole = getUserRole(payload["id"])
-    if userRole in ['administrador', 'jefe directo', 'supervisor']:
+    if userRole in ['jefe directo']:
         locationName = getLocationName(location_name)
         if locationName != None:
-            bestPromoter = getBestPromoterByLocation(locationName) 
+            bestPromoter = getBestPromoterByLocation(locationName, userId) 
             return {"message": "El promotor mejor calificado en esta sede es " + bestPromoter['name']}
         else:
             raise HTTPException(status_code=404, detail="Sede no encontrada")

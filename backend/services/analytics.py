@@ -8,7 +8,7 @@ from services.location import getLocationName
 from services.promotion import *
 from services.brand import *
 
-def getBestPromoterByLocation(locationName: str):
+def getBestPromoterByLocation(locationName: str, user_id: int):
     db = get_db()
     locationName = getLocationName(locationName)
     if locationName != None:
@@ -17,10 +17,14 @@ def getBestPromoterByLocation(locationName: str):
             maxRating = 0
             bestPromoter = []
             for rating in ratingsByLocation:
-                if rating.mid_rating >= maxRating:
-                    maxRating = rating.mid_rating
-                    bestPromoter.append({'id': rating.promoter_user_id, 'name': getUserById(rating.promoter_user_id).name, 'rating': rating.mid_rating})
-
+                if getBrandByUser(rating.promoter_user_id) == getBrandByUser(user_id):
+                    if rating.mid_rating >= maxRating:
+                        maxRating = rating.mid_rating
+                        bestPromoter.append({'id': rating.promoter_user_id, 'name': getUserById(rating.promoter_user_id).name, 'rating': rating.mid_rating})
+            
+            if len(bestPromoter) == 0:
+                raise HTTPException(status_code=404, detail="No hay promotores calificados en esta sede")
+            
             bestPromoterSorted = sorted(bestPromoter, key=lambda x: x['name'])
             return bestPromoterSorted[0]
 
@@ -46,6 +50,7 @@ def checkPromoterSuitabilityFunc(promoter_id: int, location_name: str):
             raise HTTPException(status_code=404, detail="No hay promotores calificados en esta sede")
     else:
         raise HTTPException(status_code=404, detail="Sede no encontrada")
+
 
 def getMostPromotedBrandByLocation(supervisor_id: int):
     db = get_db()

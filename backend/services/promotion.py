@@ -19,6 +19,11 @@ def getPastAndFutureDate():
     oneMonthAgo = today - timedelta(days=30)
     oneMonthFuture = today + timedelta(days=30)
     return oneMonthAgo, oneMonthFuture
+
+def getPastDate():
+    today = date.today()
+    oneMonthAgo = today - timedelta(days=30)
+    return oneMonthAgo
     
 
 # Function to get all promotions
