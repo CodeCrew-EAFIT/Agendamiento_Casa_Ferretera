@@ -5,6 +5,8 @@ from .formatText import formatText
 from config.db import get_db
 from .user import getUserById
 from services.location import getLocationName
+from services.promotion import *
+from services.brand import *
 
 def getBestPromoterByLocation(locationName: str):
     db = get_db()
@@ -44,4 +46,29 @@ def checkPromoterSuitabilityFunc(promoter_id: int, location_name: str):
             raise HTTPException(status_code=404, detail="No hay promotores calificados en esta sede")
     else:
         raise HTTPException(status_code=404, detail="Sede no encontrada")
+
+def getMostPromotedBrandByLocation(supervisor_id: int):
+    db = get_db()
+    supervisorLocation = db.query(Location).filter(Location.supervisor_user_id == supervisor_id).first()
+    if supervisorLocation != None:
+        locationName = supervisorLocation.location_name
+        promotionsByLocation = getPromotionsByLocationName(locationName)
+        if promotionsByLocation != None and len(promotionsByLocation) > 0:
+            promotion_count = {}
+            for promotion in promotionsByLocation:
+                brandId = db.query(User).filter(User.user_id == promotion.promoter_user_id).first().brand_id
+                brandName = db.query(Brand).filter(Brand.brand_id == brandId).first().brand_name
+                brandNameDb = getBrandName(brandName)
+                if brandNameDb in promotion_count:
+                    promotion_count[brandNameDb] += 1
+                else:
+                    promotion_count[brandNameDb] = 1
     
+            promotion_count_sorted = {k: promotion_count[k] for k in sorted(promotion_count)}
+            max_promotions = max(promotion_count_sorted.values())
+            most_promoted_brand = [brand for brand, count in promotion_count_sorted.items() if count == max_promotions]
+            return most_promoted_brand[0]
+        else:
+            raise HTTPException(status_code=404, detail="No se encontraron promotorías para este supervisor")
+    else:
+        raise HTTPException(status_code=404, detail="Supervisor no encontrado")

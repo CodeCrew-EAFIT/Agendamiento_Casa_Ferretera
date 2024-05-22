@@ -38,3 +38,29 @@ async def checkPromoterSuitability(promoter_id: int, location_name: str, request
             return {"message": "Este promotor no es el más adecuado para tu sede"}
     else:
         raise HTTPException(status_code=403, detail="Acceso prohibido")
+
+
+'''@analyticsRouter.get("/usual-booking-day/", dependencies=[Depends(token.JWTBearer())])
+async def fetchUsualBookingDay(request: Request):
+    authorizationToken = request.headers.get('Authorization').split(' ')[1]
+    payload = token.decodeToken(authorizationToken)
+    userId = payload["id"]
+    userRole = getUserRole(payload["id"])
+    if userRole in ['administrador', 'jefe directo', 'supervisor']:
+        bookingDate = getUsualBookingDate(userId)
+        return bookingDate
+    else:
+        raise HTTPException(status_code=403, detail="Acceso prohibido")'''
+    
+
+@analyticsRouter.get("/most-promoted-brand-in-location/", dependencies=[Depends(token.JWTBearer())])
+async def fetchMostPromotedBrandByLocation(request: Request):
+    authorizationToken = request.headers.get('Authorization').split(' ')[1]
+    payload = token.decodeToken(authorizationToken)
+    userId = payload["id"]
+    userRole = getUserRole(payload["id"])
+    if userRole in ['supervisor']:
+        brandName = getMostPromotedBrandByLocation(userId)
+        return brandName
+    else:
+        raise HTTPException(status_code=403, detail="Acceso prohibido")
