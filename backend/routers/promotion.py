@@ -87,7 +87,7 @@ async def editPromotionById(editPromotionReq: EditPromotionRequest, request: Req
 
 
 # Route to cancel a promotion
-@promotionRouter.delete("/cancel-promotion/{promotion_id}", dependencies=[Depends(token.JWTBearer())])
+@promotionRouter.delete("/cancel-promotion", dependencies=[Depends(token.JWTBearer())])
 async def cancelPromotionById(cancelPromotionReq: CancelPromotionRequest, request: Request):
     promotion = getPromotion(cancelPromotionReq.promotion_id)
     if promotion != None:
