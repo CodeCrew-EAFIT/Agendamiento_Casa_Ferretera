@@ -10,6 +10,7 @@ from models.location import Location
 from config.db import get_db
 from datetime import date, timedelta
 from .location import getLocationName
+from .booking import checkAvailability
 
 # Function to get a date from one month ago and one month in the future
 
@@ -18,6 +19,11 @@ def getPastAndFutureDate():
     oneMonthAgo = today - timedelta(days=30)
     oneMonthFuture = today + timedelta(days=30)
     return oneMonthAgo, oneMonthFuture
+
+def getPastDate():
+    today = date.today()
+    oneMonthAgo = today - timedelta(days=30)
+    return oneMonthAgo
     
 
 # Function to get all promotions
@@ -217,13 +223,17 @@ def getPromotion(promotionId):
 def updatePromotionTimeAndDate(promotionId, newDate, newStartTime, newEndTime, changeReason):
     db = get_db()
     promotion = db.query(Promotion).filter(Promotion.promotion_id == promotionId).first()
+    booking = db.query(Booking).filter(Booking.booking_id == promotion.booking_id).first()
     if promotion is not None:
-        booking = db.query(Booking).filter(Booking.booking_id == promotion.booking_id).first()
-        booking.start_time = newStartTime
-        booking.end_time = newEndTime
-        booking.booking_date = newDate
-        booking.change_reason = changeReason
-        db.commit()
+        available = checkAvailability(newDate, newStartTime, newEndTime, booking.location_id)
+        if available:
+            booking.start_time = newStartTime
+            booking.end_time = newEndTime
+            booking.booking_date = newDate
+            booking.change_reason = changeReason
+            db.commit()
+        else:
+            raise HTTPException(status_code=409, detail="Conflicto con promotoría existente")
     else:
         raise HTTPException(status_code=404, detail="No encontrado")
 
@@ -290,11 +300,24 @@ def getPromotionsByLocationName(locationName: str):
             oneMonthAgo, oneMonthFuture = getPastAndFutureDate()
             promotions = db.query(Promotion).join(Booking, Promotion.booking_id == Booking.booking_id
             ).filter(Booking.booking_date >= oneMonthAgo, Booking.booking_date <= oneMonthFuture, Booking.location_id == locationId).all()
-
             return promotions
         else:
             raise HTTPException(status_code=404, detail="Sede no encontrada")
     else:
         raise HTTPException(status_code=404, detail="Sede no encontrada")
-    
+
+
+def getPromotionsByBrand(brandName):
+    db = get_db()
+    brandId = db.query(Brand.brand_id).filter(Brand.brand_name == brandName).first()
+    brandId = brandId[0]
+    if brandId != None:
+        oneMonthAgo, oneMonthFuture = getPastAndFutureDate()
+        promotions = db.query(Promotion).join(Booking, Promotion.booking_id == Booking.booking_id
+        ).join(User, Promotion.promoter_user_id == User.user_id
+        ).filter(Booking.booking_date >= oneMonthAgo, Booking.booking_date <= oneMonthFuture, User.brand_id == brandId).all()
+        return promotions
+    else:
+        raise HTTPException(status_code=404, detail="Marca no encontrada")
+
 

@@ -70,11 +70,32 @@ def getBrandName(booking, db):
 
 def getAllBookings():
     db = get_db()
-    allBookings = db.query(BookingTable).all()
-    for booking in allBookings:
-        booking.brand_name = getBrandName(booking, db)
-    return allBookings
-
+    
+    allBookings = db.query(
+        BookingTable,
+        PromotionTable.promotion_id
+    ).outerjoin(PromotionTable, BookingTable.booking_id == PromotionTable.booking_id).all()
+    
+    # Creamos una lista de bookings con el promotion_id incluido
+    bookings_with_promotions = []
+    for booking, promotion_id in allBookings:
+        booking_data = {
+            "booking_date": booking.booking_date,
+            "end_time": booking.end_time,
+            "user_id_created_by": booking.user_id_created_by,
+            "user_id_updated_by": booking.user_id_updated_by,
+            "location_id": booking.location_id,
+            "booking_id": booking.booking_id,
+            "start_time": booking.start_time,
+            "created_at": booking.created_at,
+            "updated_at": booking.updated_at,
+            "change_reason": booking.change_reason,
+            "brand_name": getBrandName(booking, db), 
+            "promotion_id": promotion_id
+        }
+        bookings_with_promotions.append(booking_data)
+    
+    return bookings_with_promotions
 
 # Function to fetch a booking given a booking_id
 
@@ -97,7 +118,7 @@ def checkAvailability(date: date, startTime2: time, endTime2: time, locationId: 
     bookings = db.query(BookingTable).filter(BookingTable.booking_date == date, BookingTable.location_id == locationId).all()
 
     location = db.query(LocationTable).filter(LocationTable.location_id == locationId).first()
-    is_palace = location.location_name.lower() == "palace"
+    is_palace = location.location_name == "Palacé"
 
     overlappingBookings = 0
 

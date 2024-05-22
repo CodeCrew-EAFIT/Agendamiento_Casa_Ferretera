@@ -60,6 +60,7 @@ def test_create_promotion_bad_date(test_app, admin_token):
     print(promotion)
     response = test_app.post("/create-promotion", json=promotion, headers={"Authorization": f"Bearer {admin_token}"})
     assert response.status_code == 400
+    assert response.json() == {'detail': 'La fecha de la promotoría debe ser mayor a la fecha actual.'}
 
 def test_fetch_all_promotions(test_app, admin_token):
     response = test_app.get("/all-promotions", headers = {"Authorization": f"Bearer {admin_token}"})
