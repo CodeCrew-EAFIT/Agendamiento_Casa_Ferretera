@@ -6,6 +6,7 @@ from config.db import Base, engine
 from fastapi.middleware.cors import CORSMiddleware
 from models import *
 from routers import *
+import os
 
 origins = [ "*" ]
 Base.metadata.create_all(bind=engine)
@@ -31,3 +32,5 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = os.path.join(os.getcwd(),'casaferretera-3150ed443345.json')
