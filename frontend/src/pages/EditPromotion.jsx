@@ -81,7 +81,7 @@ export default function EditPromotion () {
   }, [])
 
   useEffect(() => {
-    if (promotion && promotion.promoter_user_id){
+    if (promotion && promotion.promoter_user_id) {
       fetchBooking(promotion.booking_id)
       fetchPromoter(promotion.promoter_user_id)
     }

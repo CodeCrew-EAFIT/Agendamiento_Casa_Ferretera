@@ -26,9 +26,9 @@ export default function Form ({ formData, setFormData, promotionId }) {
   const currentRole = userDetails.role
 
   // Time logic
-  let endTimeArray = AVAILABLE_HOURS_SPECIFIC.slice(AVAILABLE_HOURS_SPECIFIC.indexOf(formData.startTime) + 2)
+  const endTimeArray = AVAILABLE_HOURS_SPECIFIC.slice(AVAILABLE_HOURS_SPECIFIC.indexOf(formData.startTime) + 2)
 
-  let startTimeArray = AVAILABLE_HOURS_SPECIFIC.slice(0, AVAILABLE_HOURS_SPECIFIC.indexOf(formData.endTime) - 1)
+  const startTimeArray = AVAILABLE_HOURS_SPECIFIC.slice(0, AVAILABLE_HOURS_SPECIFIC.indexOf(formData.endTime) - 1)
 
   const putUpdate = async (data) => {
     try {
