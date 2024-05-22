@@ -5,13 +5,14 @@ from fastapi import FastAPI
 from config.db import Base, engine
 from fastapi.middleware.cors import CORSMiddleware
 from models import *
-from routers import * 
+from routers import *
 
 origins = [ "*" ]
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
+app.include_router(analyticsRouter)
 app.include_router(promotionRouter)
 app.include_router(bookingRouter)
 app.include_router(userRouter)
@@ -20,6 +21,8 @@ app.include_router(ratingRouter)
 app.include_router(evidenceRouter)
 app.include_router(reportsRouter)
 app.include_router(blockedDateRouter)
+app.include_router(brandRouter)
+
 
 app.add_middleware(
     CORSMiddleware,
