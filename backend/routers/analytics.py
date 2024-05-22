@@ -33,7 +33,7 @@ async def checkPromoterSuitability(promoter_id: int, location_name: str, request
     userId = payload["id"]
     userRole = getUserRole(payload["id"])
     if userRole in ['administrador', 'jefe directo', 'supervisor']:
-        is_suitable = checkPromoterSuitabilityFunc(promoter_id, location_name)
+        is_suitable = checkPromoterSuitabilityFunc(promoter_id, location_name, userId)
         if not is_suitable:
             return {"message": "Este promotor no es el más adecuado para tu sede"}
     else:

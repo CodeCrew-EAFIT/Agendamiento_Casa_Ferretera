@@ -24,7 +24,10 @@ def getBrandName(brand_name):
 def getBrandByUser(user_id):
     db = get_db()
     user = db.query(User).filter(User.user_id == user_id).first()
-    brand = db.query(Brand).filter(Brand.brand_id == user.brand_id).first()
+    if user != None:
+        brand = db.query(Brand).filter(Brand.brand_id == user.brand_id).first()
+    else:
+        raise HTTPException(status_code=404, detail="Usuario no encontrado")
     if brand != None:
         return brand.brand_name
     else:
