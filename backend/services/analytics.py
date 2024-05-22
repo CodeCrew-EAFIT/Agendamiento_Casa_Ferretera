@@ -1,3 +1,4 @@
+from datetime import datetime
 from fastapi import HTTPException
 from models.location import Location
 from models.rating import Rating
@@ -80,3 +81,39 @@ def getMostPromotedBrandByLocation(supervisor_id: int):
             raise HTTPException(status_code=404, detail="No se encontraron promotorías para este supervisor")
     else:
         raise HTTPException(status_code=404, detail="Supervisor no encontrado")
+    
+
+def getDayOfWeek(date_str):
+    # Parse the date string into a datetime object
+    date_obj = datetime.strptime(str(date_str), '%Y-%m-%d')
+    
+    # List of days of the week
+    days_of_week = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo']
+    
+    # Get the day of the week as an integer (0=Monday, 6=Sunday)
+    day_of_week_index = date_obj.weekday()
+    
+    # Return the name of the day
+    return days_of_week[day_of_week_index]
+
+
+def getUsualBookingDay(user_id: int):
+    db = get_db()
+    brandName = getBrandByUser(user_id)
+    promotionsByBrand = getPromotionsByBrand(brandName)
+    if promotionsByBrand != None and len(promotionsByBrand) > 0:
+        days_count = {}
+        for promotion in promotionsByBrand:
+            bookingDate = db.query(Booking).filter(Booking.booking_id == promotion.booking_id).first().booking_date
+            weekDay = getDayOfWeek(bookingDate)
+            if weekDay in days_count:
+                days_count[weekDay] += 1
+            else:
+                days_count[weekDay] = 1
+        print(days_count)
+        booking_count_sorted = {k: days_count[k] for k in sorted(days_count)}
+        max_bookings = max(booking_count_sorted.values())
+        usual_booking_day = [day for day, count in booking_count_sorted.items() if count == max_bookings]
+        return usual_booking_day[0]
+    else:
+        raise HTTPException(status_code=404, detail="No se encontraron promotorías para esta marca")

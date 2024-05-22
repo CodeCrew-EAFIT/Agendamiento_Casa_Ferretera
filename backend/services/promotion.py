@@ -305,6 +305,19 @@ def getPromotionsByLocationName(locationName: str):
             raise HTTPException(status_code=404, detail="Sede no encontrada")
     else:
         raise HTTPException(status_code=404, detail="Sede no encontrada")
-    
+
+
+def getPromotionsByBrand(brandName):
+    db = get_db()
+    brandId = db.query(Brand.brand_id).filter(Brand.brand_name == brandName).first()
+    brandId = brandId[0]
+    if brandId != None:
+        oneMonthAgo, oneMonthFuture = getPastAndFutureDate()
+        promotions = db.query(Promotion).join(Booking, Promotion.booking_id == Booking.booking_id
+        ).join(User, Promotion.promoter_user_id == User.user_id
+        ).filter(Booking.booking_date >= oneMonthAgo, Booking.booking_date <= oneMonthFuture, User.brand_id == brandId).all()
+        return promotions
+    else:
+        raise HTTPException(status_code=404, detail="Marca no encontrada")
 
 

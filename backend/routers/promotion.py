@@ -131,3 +131,14 @@ async def fetchPromotionsByLocationName(location_name: str, request: Request):
         raise HTTPException(status_code=403, detail="Acceso prohibido")
 
 
+@promotionRouter.get("/promotions-by-brand/{brand_name}", dependencies=[Depends(token.JWTBearer())])
+async def fetchPromotionsByLocationName(brand_name: str, request: Request):
+    authorizationToken = request.headers.get('Authorization').split(' ')[1]
+    payload = token.decodeToken(authorizationToken)
+    userId = payload["id"]
+    userRole = getUserRole(payload["id"])
+    if userRole in ['administrador', 'jefe directo', 'supervisor']:
+        promotions = getPromotionsByBrand(brand_name)
+        return promotions
+    else:
+        raise HTTPException(status_code=403, detail="Acceso prohibido")
