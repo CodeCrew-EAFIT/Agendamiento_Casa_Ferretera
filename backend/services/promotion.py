@@ -10,6 +10,7 @@ from models.location import Location
 from config.db import get_db
 from datetime import date, timedelta
 from .location import getLocationName
+from .booking import checkAvailability
 
 # Function to get a date from one month ago and one month in the future
 
@@ -217,13 +218,17 @@ def getPromotion(promotionId):
 def updatePromotionTimeAndDate(promotionId, newDate, newStartTime, newEndTime, changeReason):
     db = get_db()
     promotion = db.query(Promotion).filter(Promotion.promotion_id == promotionId).first()
+    booking = db.query(Booking).filter(Booking.booking_id == promotion.booking_id).first()
     if promotion is not None:
-        booking = db.query(Booking).filter(Booking.booking_id == promotion.booking_id).first()
-        booking.start_time = newStartTime
-        booking.end_time = newEndTime
-        booking.booking_date = newDate
-        booking.change_reason = changeReason
-        db.commit()
+        available = checkAvailability(newDate, newStartTime, newEndTime, booking.location_id)
+        if available:
+            booking.start_time = newStartTime
+            booking.end_time = newEndTime
+            booking.booking_date = newDate
+            booking.change_reason = changeReason
+            db.commit()
+        else:
+            raise HTTPException(status_code=409, detail="Conflicto con promotoría existente")
     else:
         raise HTTPException(status_code=404, detail="No encontrado")
 

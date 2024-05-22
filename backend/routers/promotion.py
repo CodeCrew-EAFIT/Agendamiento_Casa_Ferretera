@@ -90,7 +90,7 @@ async def editPromotionById(editPromotionReq: EditPromotionRequest, request: Req
 @promotionRouter.delete("/cancel-promotion/{promotion_id}", dependencies=[Depends(token.JWTBearer())])
 async def cancelPromotionById(cancelPromotionReq: CancelPromotionRequest, request: Request):
     promotion = getPromotion(cancelPromotionReq.promotion_id)
-    if promotion:
+    if promotion != None:
         authorizationToken = request.headers.get('Authorization').split(' ')[1]
         payload = token.decodeToken(authorizationToken)
         userRole = getUserRole(payload["id"])
