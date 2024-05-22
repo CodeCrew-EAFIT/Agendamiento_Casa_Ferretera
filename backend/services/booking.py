@@ -118,7 +118,7 @@ def checkAvailability(date: date, startTime2: time, endTime2: time, locationId: 
     bookings = db.query(BookingTable).filter(BookingTable.booking_date == date, BookingTable.location_id == locationId).all()
 
     location = db.query(LocationTable).filter(LocationTable.location_id == locationId).first()
-    is_palace = location.location_name.lower() == "palace"
+    is_palace = location.location_name == "Palacé"
 
     overlappingBookings = 0
 
