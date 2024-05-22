@@ -59,8 +59,8 @@ export default function Calendar ({
     setCurrentDate((prevDate) => addWeeks(prevDate, 1))
   }
 
-  const handleDetails = (bookingId) => {
-    if ([SUPERVISOR, ...ADMIN_USERS].includes(currentRole)) navigate('/promotorias/' + bookingId)
+  const handleDetails = (promotionId) => {
+    if ([SUPERVISOR, ...ADMIN_USERS].includes(currentRole)) navigate('/promotorias/' + promotionId)
   }
 
   const timeSlots = AVAILABLE_HOURS.map((time, index) => (
@@ -147,7 +147,7 @@ export default function Calendar ({
             height: `${(endTime - startTime) * 26}px`,
             top: `${(startTime - 1) * 26}px`
           }}
-          onClick={() => handleDetails(promotion.booking_id)}
+          onClick={() => handleDetails(promotion.promotion_id)}
         >
           {promotion.brand_name.toUpperCase().split('+').join(' + ')}
         </div>

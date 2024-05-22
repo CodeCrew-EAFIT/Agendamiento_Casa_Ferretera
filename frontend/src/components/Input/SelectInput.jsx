@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { INPUT_PLACEHOLDERS } from '../../utils/constants'
 import Select from './Select'
@@ -9,7 +9,7 @@ export default function SelectInput ({
   ...props
 }) {
   const { value, setValue, optionsArray } = props
-  const [chosenOption, setChosenOption] = React.useState(value[name] || '')
+  const [chosenOption, setChosenOption] = useState(value[name] || '')
 
   let displayContent = INPUT_PLACEHOLDERS[name]
 

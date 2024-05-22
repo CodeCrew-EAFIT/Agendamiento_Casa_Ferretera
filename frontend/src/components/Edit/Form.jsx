@@ -26,22 +26,9 @@ export default function Form ({ formData, setFormData, promotionId }) {
   const currentRole = userDetails.role
 
   // Time logic
+  const endTimeArray = AVAILABLE_HOURS_SPECIFIC.slice(AVAILABLE_HOURS_SPECIFIC.indexOf(formData.startTime) + 2)
 
-  let startTimeArray = AVAILABLE_HOURS_SPECIFIC.slice(
-    0,
-    AVAILABLE_HOURS_SPECIFIC.length - 1
-  )
-  let endTimeArray = AVAILABLE_HOURS_SPECIFIC.slice(1)
-
-  if (formData.endTime) {
-    const index = AVAILABLE_HOURS_SPECIFIC.indexOf(formData.endTime)
-    startTimeArray = AVAILABLE_HOURS_SPECIFIC.slice(0, index - 1)
-  }
-
-  if (formData.startTime) {
-    const index = AVAILABLE_HOURS_SPECIFIC.indexOf(formData.startTime)
-    endTimeArray = AVAILABLE_HOURS_SPECIFIC.slice(index + 2)
-  }
+  const startTimeArray = AVAILABLE_HOURS_SPECIFIC.slice(0, AVAILABLE_HOURS_SPECIFIC.indexOf(formData.endTime) - 1)
 
   const putUpdate = async (data) => {
     try {
@@ -119,6 +106,8 @@ export default function Form ({ formData, setFormData, promotionId }) {
           success: false
         })
       }
+
+      console.log(error.response)
 
       if (error.response.status === 403) {
         handleLogout()
