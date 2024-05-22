@@ -19,9 +19,12 @@ import {
   AVAILABLE_HOURS,
   ID_TO_AVAILABLE_LOCATIONS,
   AVAILABLE_HOURS_MILITARY_ARRAY,
-  PROMOTER
+  PROMOTER,
+  SUPERVISOR,
+  ADMIN_USERS
 } from '../../utils/constants'
 import capitalizeFirstWordLetter from '../../utils/capitalizeFirstWordLetter'
+import { useNavigate } from 'react-router-dom'
 
 export default function Calendar ({
   blockData,
@@ -29,6 +32,7 @@ export default function Calendar ({
   location,
   promoterPromotions
 }) {
+  const navigate = useNavigate()
   const [currentDate, setCurrentDate] = useState(new Date())
   const [weekDays, setWeekDays] = useState([])
   const { userDetails } = useUserSession()
@@ -53,6 +57,10 @@ export default function Calendar ({
 
   const handleNextWeek = () => {
     setCurrentDate((prevDate) => addWeeks(prevDate, 1))
+  }
+
+  const handleDetails = (bookingId) => {
+    if ([SUPERVISOR, ...ADMIN_USERS].includes(currentRole)) navigate('/promotorias/' + bookingId)
   }
 
   const timeSlots = AVAILABLE_HOURS.map((time, index) => (
@@ -139,6 +147,7 @@ export default function Calendar ({
             height: `${(endTime - startTime) * 26}px`,
             top: `${(startTime - 1) * 26}px`
           }}
+          onClick={() => handleDetails(promotion.booking_id)}
         >
           {promotion.brand_name.toUpperCase().split('+').join(' + ')}
         </div>

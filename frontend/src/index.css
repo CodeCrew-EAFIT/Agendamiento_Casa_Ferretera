@@ -211,7 +211,7 @@ input[type='date']::-webkit-calendar-picker-indicator {
 
 /* CALENDAR BOX */
 .calendar-box {
-  @apply absolute flex items-center justify-center bg-tertiary rounded-[10px] shadow-[5px_5px_5px_0_rgba(0,0,0,0.25)] font-bold
+  @apply absolute flex items-center justify-center bg-tertiary rounded-[10px] shadow-[5px_5px_5px_0_rgba(0,0,0,0.25)] font-bold cursor-pointer
 }
 
 /* BlOCK BOX */
@@ -358,4 +358,13 @@ input[type='date']::-webkit-calendar-picker-indicator {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%); /* Centra el círculo */
+}
+
+/* EDIT */
+.edit-form {
+  @apply flex flex-col items-center
+}
+
+.static-input-container {
+  @apply flex items-center h-[49px] border-[3.5px] border-secondary rounded-full text-left text-xl pl-[20px] 
 }

@@ -29,23 +29,23 @@ export default function LogsDetails () {
     fetchPromotionDetail()
   }, [])
 
-  function formatTime(time) {
+  function formatTime (time) {
     const [hours, minutes, seconds] = time.split(':')
     let period = 'AM'
     let hour = parseInt(hours, 10)
 
     if (hour >= 12) {
-      period = 'PM';
+      period = 'PM'
       if (hour > 12) {
-        hour -= 12;
+        hour -= 12
       }
     }
-  
+
     if (hour === 0) {
-      hour = 12;
+      hour = 12
     }
-  
-    return `${hour}:${minutes} ${period}`;
+
+    return `${hour}:${minutes} ${period}`
   }
 
   if (promotion === undefined) {

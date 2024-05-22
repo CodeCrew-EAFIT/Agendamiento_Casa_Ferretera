@@ -79,7 +79,7 @@ export default function Home () {
 
   useEffect(() => {
     if (currentRole === SUPERVISOR) {
-      setLocation(ID_TO_AVAILABLE_LOCATIONS[1]) // Aquí es la cuestión
+      setLocation(ID_TO_AVAILABLE_LOCATIONS[1])
     }
     if (currentRole === PROMOTER) {
       fetchAllPromotionsForPromoter()
@@ -92,6 +92,9 @@ export default function Home () {
         <Notification />
         {ADMIN_USERS.includes(currentRole) && (
           <ScheduleBar location={location} setLocation={setLocation} />
+        )}
+        {ADMIN_USERS.includes(currentRole) && location === 'Palacé' && (
+          <p className='absolute top-[52px] font-semibold text-md'>* Pueden estar 2 promotores de diferentes tiendas al mismo tiempo</p>
         )}
         <Calendar
           blockData={blockData}

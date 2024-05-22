@@ -26,6 +26,7 @@ import AddPromoter from './pages/AddPromoter'
 import AddUser from './pages/Admin/AddUser'
 import LogsPanel from './pages/Logs'
 import LogsDetails from './pages/LogsDetails'
+import EditPromotion from './pages/EditPromotion'
 
 function App () {
   return (
@@ -58,6 +59,20 @@ function App () {
                     </LocationContextProvider>
                   }
                   allowedUsers={ADMIN_USERS}
+                  redirectTo="/"
+                />
+              }
+            />
+            <Route
+              path="/promotorias/:id"
+              element={
+                <ProtectedRoute
+                  element={
+                    <LocationContextProvider>
+                      <EditPromotion />
+                    </LocationContextProvider>
+                  }
+                  allowedUsers={[SUPERVISOR, ...ADMIN_USERS]}
                   redirectTo="/"
                 />
               }
