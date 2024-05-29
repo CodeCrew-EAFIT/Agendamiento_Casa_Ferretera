@@ -91,10 +91,14 @@ def getBooking(bookingId: int):
 
 # Function to check the availabily of a location given the date, start time and end time
     
-def checkAvailability(date: date, startTime2: time, endTime2: time, locationId: int):
+def checkAvailability(date: date, startTime2: time, endTime2: time, locationId: int, exclude_booking_id: int = None):
 
     db = get_db()
-    bookings = db.query(BookingTable).filter(BookingTable.booking_date == date, BookingTable.location_id == locationId).all()
+    bookings = db.query(BookingTable).filter(BookingTable.booking_date == date, BookingTable.location_id == locationId)
+
+    if exclude_booking_id is not None:
+        bookings = bookings.filter(BookingTable.booking_id != exclude_booking_id)
+    bookings = bookings.all()
 
     location = db.query(LocationTable).filter(LocationTable.location_id == locationId).first()
     is_palace = location.location_name == "Palacé"
