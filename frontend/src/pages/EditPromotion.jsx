@@ -3,7 +3,7 @@ import Layout from '../containers/Layout'
 import Form from '../components/Edit/Form'
 import Calendar from '../components/Schedule/Calendar'
 import { useLocationContext } from '../utils/LocationContext'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import axios from 'axios'
 import { useUserSession } from '../utils/UserSessionContext'
 import { AVAILABLE_HOURS_MILITARY_NORMAL } from '../utils/constants'
@@ -11,8 +11,9 @@ import { AVAILABLE_HOURS_MILITARY_NORMAL } from '../utils/constants'
 const BASE_URL = import.meta.env.VITE_BASE_URL
 
 export default function EditPromotion () {
+  const navigate = useNavigate()
   const { id } = useParams()
-  const { handleLogout } = useUserSession()
+  const { handleLogout, userDetails } = useUserSession()
   const { location } = useLocationContext()
   const [promotion, setPromotion] = useState(null)
   const [formData, setFormData] = useState({
@@ -31,7 +32,6 @@ export default function EditPromotion () {
           Authorization: `Bearer ${localStorage.getItem('token')}`
         }
       })
-      console.log(result.data)
       setFormData((prev) => ({
         ...prev,
         date: result.data?.booking_date,
@@ -52,7 +52,6 @@ export default function EditPromotion () {
           Authorization: `Bearer ${localStorage.getItem('token')}`
         }
       })
-      console.log(result.data)
       setPromotion(result.data)
     } catch (error) {
       if (error.response.status === 403) {
@@ -68,6 +67,9 @@ export default function EditPromotion () {
           Authorization: `Bearer ${localStorage.getItem('token')}`
         }
       })
+      if (result.data.brand_id !== userDetails.brand_id) {
+        navigate('/')
+      }
       setFormData((prev) => ({ ...prev, promoter: result.data.name }))
     } catch (error) {
       if (error.response.status === 403) {
@@ -86,6 +88,7 @@ export default function EditPromotion () {
       fetchPromoter(promotion.promoter_user_id)
     }
   }, [promotion])
+
 
   return (
     <Layout>
