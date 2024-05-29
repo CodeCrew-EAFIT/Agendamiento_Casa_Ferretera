@@ -51,6 +51,19 @@ async def fetchAllPromotersByBrand(brand_name: str, request: Request):
         return allPromotersByBrand
     else:
         raise HTTPException(status_code=403, detail="Acceso prohibido")
+    
+
+@userRouter.get("/supervisor-by-location/{location}", dependencies=[Depends(token.JWTBearer())])
+async def fetchSupervisorByLocation(location: str, request: Request): 
+    authorizationToken = request.headers.get('Authorization').split(' ')[1]
+    payload = token.decodeToken(authorizationToken)
+    userId = payload["id"]
+    userRole = getUserRole(payload["id"])
+    if userRole in ['administrador', 'jefe directo', 'supervisor']:
+        supervisor_user = getSupervisorByLocation(location)
+        return supervisor_user
+    else:
+        raise HTTPException(status_code=403, detail="Acceso prohibido")
 
 
 # Route to fetch a booking given a booking_id
