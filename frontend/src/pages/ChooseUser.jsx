@@ -12,6 +12,7 @@ export default function ChooseUser () {
   const { setUserSession } = useUserSession()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [errors, setErrors] = useState({ email: '', password: '' })
 
   const fetchUser = async () => {
     try {
@@ -20,7 +21,6 @@ export default function ChooseUser () {
           Authorization: `Bearer ${localStorage.getItem('token')}`
         }
       })
-      // Asignar valores al UserSessionContext basándose en el resultado de la solicitud
       setUserSession({
         brand_id: result.data.brand_id,
         email: result.data.email,
@@ -30,27 +30,38 @@ export default function ChooseUser () {
       })
     } catch (error) {
       console.error(error)
+      setErrors(prevErrors => ({ ...prevErrors, general: 'Error al obtener los datos del usuario. Inténtalo de nuevo.' }))
     }
   }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+    setErrors({ email: '', password: '' }) // Reset error state
+    let valid = true
+
+    if (!email) {
+      setErrors(prevErrors => ({ ...prevErrors, email: 'El correo es obligatorio.' }))
+      valid = false
+    }
+    if (!password) {
+      setErrors(prevErrors => ({ ...prevErrors, password: 'La contraseña es obligatoria.' }))
+      valid = false
+    }
+    if (!valid) return
+
     try {
       const response = await axios.post(`${BASE_URL}/login`, {
         email,
         password
       })
-      // Guardar el token en el local storage
       localStorage.setItem('token', response.data.access_token)
 
-      // Después de obtener el token, solicitar la información detallada del usuario
       await fetchUser()
 
-      // Redirigir a la página de horario
-      navigate('/horario')
+      navigate('/')
     } catch (error) {
       console.error(error)
-      // Aquí puedes manejar el error, como mostrar un mensaje al usuario
+      setErrors(prevErrors => ({ ...prevErrors, general: 'Correo o contraseña incorrectos.' }))
     }
   }
 
@@ -59,19 +70,30 @@ export default function ChooseUser () {
       <div className='login-form'>
         <h1 className='login-title'>¡BIENVENIDO!</h1>
         <form onSubmit={handleSubmit}>
-          <div className='flex flex-col gap-y-14'>
+          <div className='flex flex-col gap-y-2'>
             <input
               type='text'
               className='login-input'
+              value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder='Correo'
             />
+            <div className='flex flex-col items-start'>
+              {errors.email && <p className='text-red'>{errors.email}</p>}
+            </div>
             <input
               type='password'
               className='login-input'
+              value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder='Contraseña'
             />
+            <div className='flex flex-col items-start'>
+              {errors.password && <p className='text-red'>{errors.password}</p>}
+            </div>
+          </div>
+          <div className='flex flex-col items-start mt-2'>
+            {errors.general && <p className='text-red'>{errors.general}</p>}
           </div>
           <div className='flex justify-start'>
             <p className='text-secondary mt-2'>

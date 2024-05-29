@@ -10,17 +10,14 @@ import {
   PROMOTER
 } from '../utils/constants'
 import axios from 'axios'
-import { useCalendarContext } from '../utils/CalendarContext'
-import warningIcon from '../assets/icons/warning.svg'
-import checkIcon from '../assets/icons/check.svg'
-import Notification from '../components/Calendar/Notification'
+import { useLocationContext } from '../utils/LocationContext'
+import Notification from '../components/Notification'
 
 const BASE_URL = import.meta.env.VITE_BASE_URL
 
 export default function Home () {
-  const { userDetails } = useUserSession()
-  const { location, setLocation } = useCalendarContext()
-  const { calendarNotification, resetNotification } = useCalendarContext()
+  const { userDetails, handleLogout } = useUserSession()
+  const { location, setLocation } = useLocationContext()
   const [blockData, setBlockData] = useState([])
   const [promotionData, setPromotionData] = useState([])
   const [promoterPromotions, setPromoterPromotions] = useState([])
@@ -36,7 +33,10 @@ export default function Home () {
       })
       setBlockData(result.data.map((block) => block.booking_id))
     } catch (error) {
-      console.error(error)
+      console.error(error.response.status)
+      if (error.response.status === 403) {
+        handleLogout()
+      }
     }
   }
 
@@ -50,6 +50,9 @@ export default function Home () {
       setPromotionData(result.data)
     } catch (error) {
       console.error(error)
+      if (error.response.status === 403) {
+        handleLogout()
+      }
     }
   }
 
@@ -63,6 +66,9 @@ export default function Home () {
       setPromoterPromotions(result.data)
     } catch (error) {
       console.error(error)
+      if (error.response.status === 403) {
+        handleLogout()
+      }
     }
   }
 
@@ -73,7 +79,7 @@ export default function Home () {
 
   useEffect(() => {
     if (currentRole === SUPERVISOR) {
-      setLocation(ID_TO_AVAILABLE_LOCATIONS[1]) // Aquí es la cuestión
+      setLocation(ID_TO_AVAILABLE_LOCATIONS[1])
     }
     if (currentRole === PROMOTER) {
       fetchAllPromotionsForPromoter()
@@ -83,9 +89,12 @@ export default function Home () {
   return (
     <Layout>
       <div className="relative">
-        {calendarNotification && <Notification icon={calendarNotification.success ? checkIcon : warningIcon} message={calendarNotification.message} handleClose={resetNotification}/>}
+        <Notification />
         {ADMIN_USERS.includes(currentRole) && (
           <ScheduleBar location={location} setLocation={setLocation} />
+        )}
+        {ADMIN_USERS.includes(currentRole) && location === 'Palacé' && (
+          <p className='absolute top-[52px] font-semibold text-md'>* Pueden estar 2 promotores de diferentes tiendas al mismo tiempo</p>
         )}
         <Calendar
           blockData={blockData}

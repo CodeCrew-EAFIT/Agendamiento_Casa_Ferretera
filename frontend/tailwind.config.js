@@ -12,11 +12,13 @@ module.exports = {
         dark: '#dbb200',
         light: '#fbd446'
       }, // Color terciario
-      black: '#000000'
+      black: '#000000',
+      red: '#FF0000'
     },
     fontSize: {
       sm: '12px',
       md: '15px',
+      '2md': '16px',
       lg: '20px',
       xl: '22px',
       xxl: '46px'

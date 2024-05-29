@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { ReactSVG } from 'react-svg'
 
 export default function TextInput ({ placeholder, icon, ...props }) {
-  const { value, setValue, width, height } = props
+  const { value, setValue, width, height, inputType } = props
 
   const handleChange = (event) => {
     setValue(event.target.value)
@@ -32,6 +32,7 @@ export default function TextInput ({ placeholder, icon, ...props }) {
             placeholder={placeholder}
             value={value}
             onChange={handleChange}
+            type={inputType || 'text'}
           />
             )}
       </div>
@@ -45,5 +46,6 @@ TextInput.propTypes = {
   setValue: PropTypes.func.isRequired,
   width: PropTypes.bool,
   height: PropTypes.bool,
-  icon: PropTypes.string
+  icon: PropTypes.string,
+  inputType: PropTypes.string
 }

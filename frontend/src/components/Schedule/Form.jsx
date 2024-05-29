@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 import { useUserSession } from '../../utils/UserSessionContext'
-import { useCalendarContext } from '../../utils/CalendarContext'
+import { useNotificationContext } from '../../utils/NotificationContext'
 import {
   AVAILABLE_LOCATIONS_ARRAY,
   AVAILABLE_HOURS_SPECIFIC,
@@ -24,8 +24,8 @@ const BASE_URL = import.meta.env.VITE_BASE_URL
 
 export default function Form ({ formData, setFormData }) {
   const navigate = useNavigate()
-  const { userDetails } = useUserSession()
-  const { sendCalendarNotification } = useCalendarContext()
+  const { userDetails, handleLogout } = useUserSession()
+  const { sendNotification } = useNotificationContext()
   const [togglePopUp, setTogglePopUp] = useState(false)
   const [fetchedPromoters, setFetchedPromoters] = useState([])
   const [promoters, setPromoters] = useState([])
@@ -62,7 +62,10 @@ export default function Form ({ formData, setFormData }) {
 
       setFetchedPromoters(response.data)
     } catch (error) {
-      console.error(error)
+      if (error.response.status === 403) {
+        handleLogout()
+      }
+      console.log(error)
     }
   }
 
@@ -76,6 +79,9 @@ export default function Form ({ formData, setFormData }) {
 
       setFetchedPromoters(response.data)
     } catch (error) {
+      if (error.response.status === 403) {
+        handleLogout()
+      }
       console.error(error)
     }
   }
@@ -88,21 +94,26 @@ export default function Form ({ formData, setFormData }) {
         }
       })
       if (response.status === 200) {
-        sendCalendarNotification({ message: 'Promotoría agendada correctamente', success: true })
-        navigate('/horario')
+        sendNotification({ message: 'Promotoría agendada correctamente', success: true })
+        navigate('/')
       }
     } catch (error) {
       if (error.response.data.detail) {
         console.log('error.response.data.detail', error.response.data.detail)
         if (Array.isArray(error.response.data.detail)) {
-          sendCalendarNotification({ message: error.response.data.detail[0].msg, success: false })
+          sendNotification({ message: error.response.data.detail[0].msg, success: false })
         } else {
-          sendCalendarNotification({ message: error.response.data.detail, success: false })
+          sendNotification({ message: error.response.data.detail, success: false })
         }
       } else {
-        sendCalendarNotification({ message: 'Ocurrió un error, por favor inténtelo de nuevo', success: false })
+        sendNotification({ message: 'Ocurrió un error, por favor inténtelo de nuevo', success: false })
       }
-      navigate('/horario')
+
+      if (error.response.status === 403) {
+        handleLogout()
+      } else {
+        navigate('/')
+      }
     }
   }
 
@@ -202,6 +213,7 @@ export default function Form ({ formData, setFormData }) {
               <p className="font-bold text-lg pb-[10px]">Sede seleccionada:</p>
               <SelectInput
                 name={'location'}
+                arrowIcon={expandedArrow}
                 value={formData}
                 setValue={setFormData}
                 optionsArray={AVAILABLE_LOCATIONS_ARRAY}

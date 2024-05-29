@@ -4,11 +4,15 @@ import Layout from '../containers/Layout'
 import { RATING_QUESTIONS } from '../utils/constants'
 import Button from '../components/Button'
 import axios from 'axios'
+import { useNotificationContext } from '../utils/NotificationContext'
+import { useUserSession } from '../utils/UserSessionContext'
 
 const BASE_URL = import.meta.env.VITE_BASE_URL
 
 function RatingForm () {
   const id = parseInt(useParams().id)
+  const { handleLogout } = useUserSession()
+  const { sendNotification } = useNotificationContext()
   const navigate = useNavigate()
   const [rating, setRating] = useState({
     promotion_id: id,
@@ -32,7 +36,7 @@ function RatingForm () {
     })
   }
 
-  const onSubmit = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     try {
       await axios.post(`${BASE_URL}/create-rating`, rating, {
@@ -40,13 +44,22 @@ function RatingForm () {
           Authorization: `Bearer ${localStorage.getItem('token')}`
         }
       })
+      sendNotification({ message: 'Calificación enviada correctamente', success: true })
       navigate('/calificar')
     } catch (error) {
-      console.error(error)
+      if (error.response.status === 403) {
+        handleLogout()
+      } else if (error.response.detail) {
+        sendNotification({ message: error.response.detail, success: false })
+        navigate('/bitacora')
+      } else {
+        sendNotification({ message: 'Ocurrió un error, por favor inténtelo de nuevo', success: false })
+        navigate('/bitacora')
+      }
     }
   }
   return (
-     <form onSubmit={onSubmit}>
+     <form>
         <div className="w-full">
             <p>A partir de las afirmaciones indique qué tan de acuerdo se encuentra con cada una de ellas.
                 Califique de 1 a 5, donde <b>1 es en total desacuerdo</b> y <b>5 es totalmente de acuerdo</b>.</p>
@@ -75,7 +88,7 @@ function RatingForm () {
             <label className='mb-4' htmlFor="supervisor_comment"> <b>4. Comentarios adicionales sobre el promotor</b></label>
             <textarea className='resize-none w-7/12 h-32 border-4 rounded-3xl border-secondary bg-primary' name="supervisor_comment" onChange={onHandleChangeTextArea}></textarea>
         </div>
-        <Button>Enviar</Button>
+        <Button onClick={handleSubmit}>Enviar</Button>
      </form>
   )
 }

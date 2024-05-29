@@ -12,7 +12,7 @@ authRouter = APIRouter()
 async def loginAccessToken(userRequest: UserLogin, db: Session = Depends(get_db)):
     user = auth.getUser(db, userRequest.email)
     if not user or not security.verifyPassword(userRequest.password, user.hashed_password):
-        raise HTTPException(status_code=401, detail="Incorrect username or password")
+        raise HTTPException(status_code=401, detail="Correo o contraseña incorrectos.")
     accessTokenExpires = timedelta(minutes=token.ACCESS_TOKEN_EXPIRE_MINUTES)
     accessToken = token.createAccessToken(data={ "id": user.user_id, "role": user.role.value }, expires_delta=accessTokenExpires)
     return { "token_type": "Bearer", "access_token": accessToken }
@@ -21,7 +21,7 @@ async def loginAccessToken(userRequest: UserLogin, db: Session = Depends(get_db)
 async def registerUser(user: UserCreate, db: Session = Depends(get_db)):
     userFromDb = auth.getUser(db, email=user.email)
     if userFromDb:
-        raise HTTPException(status_code=400, detail="Username already registered")
+        raise HTTPException(status_code=400, detail="Este correo ya está registrado.")
     return auth.createUser(db=db, user=user)
 
 @authRouter.get("/users/me", dependencies=[Depends(token.JWTBearer())])

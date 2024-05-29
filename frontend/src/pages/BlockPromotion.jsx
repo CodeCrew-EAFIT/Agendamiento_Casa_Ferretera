@@ -2,10 +2,10 @@ import React, { useState } from 'react'
 import Calendar from '../components/Block/Calendar'
 import Form from '../components/Block/Form'
 import Layout from '../containers/Layout'
-import { useCalendarContext } from '../utils/CalendarContext'
+import { useLocationContext } from '../utils/LocationContext'
 
 export default function BlockPromotion () {
-  const { location } = useCalendarContext()
+  const { location } = useLocationContext()
   const [formData, setFormData] = useState({
     location,
     date: '',
