@@ -71,8 +71,6 @@ def getUserById(userId: int):
     else:
         raise HTTPException(status_code=404, detail="No encontrado")
     
-
-
 def getDocumentsByUser(userId: int):
     try:
             

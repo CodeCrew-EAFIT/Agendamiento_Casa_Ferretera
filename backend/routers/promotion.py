@@ -4,6 +4,7 @@ from fastapi import APIRouter, Depends, Request
 from middlewares.getIdFromHeader import getIdFromHeader
 from schemas.additionalSchemas import *
 from services.getUserRole import getUserRole
+from services.notifications import notification_builder, send_notification_email
 from utils import token, security
 
 promotionRouter = APIRouter()
@@ -61,6 +62,7 @@ async def createPromotion(promotion: CreatePromotionRequest, request: Request):
             result = createBooking(booking, userId, promotion.promoter_user_id) 
             bookingId = result.booking_id
             result2 = createPromotionFunc(bookingId, promotion.promoter_user_id)
+            notification_builder(promotion.promoter_user_id, userId, 1)
             return {'message': 'Promotoría satisfactoriamente programada.'}
         else:
             raise HTTPException(status_code=409, detail="Conflicto con promotoría existente")
@@ -75,9 +77,11 @@ async def editPromotionById(editPromotionReq: EditPromotionRequest, request: Req
     if promotion:
         authorizationToken = request.headers.get('Authorization').split(' ')[1]
         payload = token.decodeToken(authorizationToken)
+        userId = payload["id"]
         userRole = getUserRole(payload["id"])
         if userRole in ['administrador', 'jefe directo', 'supervisor']:
             updatePromotionTimeAndDate(editPromotionReq.promotion_id, editPromotionReq.new_date, editPromotionReq.new_start_time, editPromotionReq.new_end_time, editPromotionReq.change_reason)
+            notification_builder(promotion.promoter_user_id, userId, 2)
             return {'message': 'Fecha y hora de la promotoría modificados satisfactoriamente.'}
         else:
             raise HTTPException(status_code=403, detail="Acceso negado")
@@ -87,15 +91,17 @@ async def editPromotionById(editPromotionReq: EditPromotionRequest, request: Req
 
 
 # Route to cancel a promotion
-@promotionRouter.delete("/cancel-promotion/{promotion_id}", dependencies=[Depends(token.JWTBearer())])
+@promotionRouter.delete("/cancel-promotion", dependencies=[Depends(token.JWTBearer())])
 async def cancelPromotionById(cancelPromotionReq: CancelPromotionRequest, request: Request):
     promotion = getPromotion(cancelPromotionReq.promotion_id)
     if promotion != None:
         authorizationToken = request.headers.get('Authorization').split(' ')[1]
         payload = token.decodeToken(authorizationToken)
+        userId = payload["id"]
         userRole = getUserRole(payload["id"])
         if userRole in ['administrador', 'jefe directo', 'supervisor']:
             cancelPromotion(cancelPromotionReq.promotion_id, cancelPromotionReq.change_reason)
+            notification_builder(promotion.promoter_user_id, userId, 3)
             return {'message': 'Promotoría cancelada satisfactoriamente.'}
         else:
             raise HTTPException(status_code=403, detail="Acceso negado")
