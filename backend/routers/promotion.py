@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends, Request
 from middlewares.getIdFromHeader import getIdFromHeader
 from schemas.additionalSchemas import *
 from services.getUserRole import getUserRole
-from services.notifications import notification_builder, send_notification_email
+from services.notifications import new_booking_notification_builder, modified_booking_notification_builder, canceled_booking_notification_builder,send_notification_email
 from utils import token, security
 
 promotionRouter = APIRouter()
@@ -62,7 +62,7 @@ async def createPromotion(promotion: CreatePromotionRequest, request: Request):
             result = createBooking(booking, userId, promotion.promoter_user_id) 
             bookingId = result.booking_id
             result2 = createPromotionFunc(bookingId, promotion.promoter_user_id)
-            notification_builder(promotion.promoter_user_id, userId, 1)
+            new_booking_notification_builder(promotion.promoter_user_id, userId, result)
             return {'message': 'Promotoría satisfactoriamente programada.'}
         else:
             raise HTTPException(status_code=409, detail="Conflicto con promotoría existente")
@@ -80,8 +80,8 @@ async def editPromotionById(editPromotionReq: EditPromotionRequest, request: Req
         userId = payload["id"]
         userRole = getUserRole(payload["id"])
         if userRole in ['administrador', 'jefe directo', 'supervisor']:
-            updatePromotionTimeAndDate(editPromotionReq.promotion_id, editPromotionReq.new_date, editPromotionReq.new_start_time, editPromotionReq.new_end_time, editPromotionReq.change_reason)
-            notification_builder(promotion.promoter_user_id, userId, 2)
+            old_booking, new_booking = updatePromotionTimeAndDate(editPromotionReq.promotion_id, editPromotionReq.new_date, editPromotionReq.new_start_time, editPromotionReq.new_end_time, editPromotionReq.change_reason)
+            modified_booking_notification_builder(promotion.promoter_user_id, userId, old_booking, new_booking, editPromotionReq.change_reason)
             return {'message': 'Fecha y hora de la promotoría modificados satisfactoriamente.'}
         else:
             raise HTTPException(status_code=403, detail="Acceso negado")
@@ -100,8 +100,8 @@ async def cancelPromotionById(cancelPromotionReq: CancelPromotionRequest, reques
         userId = payload["id"]
         userRole = getUserRole(payload["id"])
         if userRole in ['administrador', 'jefe directo', 'supervisor']:
-            cancelPromotion(cancelPromotionReq.promotion_id, cancelPromotionReq.change_reason)
-            notification_builder(promotion.promoter_user_id, userId, 3)
+            old_booking, change_reason = cancelPromotion(cancelPromotionReq.promotion_id, cancelPromotionReq.change_reason)
+            canceled_booking_notification_builder(promotion.promoter_user_id, userId, old_booking, change_reason)
             return {'message': 'Promotoría cancelada satisfactoriamente.'}
         else:
             raise HTTPException(status_code=403, detail="Acceso negado")

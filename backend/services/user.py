@@ -3,6 +3,8 @@ from models.user import User as UserTable
 from models.location import Location as LocationTable
 from services.brand import *
 from models.brand import Brand
+from models.user import User
+from models.location import Location
 from config.db import get_db
 from sqlalchemy.orm import defer
 from google.cloud import storage
@@ -52,6 +54,29 @@ def getAllPromotersByBrand(brandName: str):
             raise HTTPException(status_code=404, detail="Marca no encontrada.")
     else:
         raise HTTPException(status_code=404, detail="Marca no encontrada.")
+
+
+def getJefeDirectoByPromoter(Promoter_id: str):
+    db = get_db()
+    promoter_user = getUserById(Promoter_id)
+    brand_id = promoter_user.brand_id
+
+    Jefe_exists = db.query(User).filter(User.brand_id == brand_id, User.role == "jefe_directo").scalar()
+    if Jefe_exists:
+        jefe_id = db.query(User.user_id).filter(User.brand_id == brand_id, User.role == "jefe_directo").first()
+        return jefe_id
+        #else:
+        #    raise HTTPException(status_code=404, detail="No hay jefe directo para esta marca.")
+    #else:
+    #    raise HTTPException(status_code=404, detail="Marca no encontrada.")
+
+def getSupervisorByLocation(LocationName: str):
+    db = get_db()
+    userID = db.query(Location.location_id).filter(Location.location_name == LocationName).first()
+    supervisor_user = getUserById(userID[0])
+    
+    return supervisor_user
+        
 
 
 
