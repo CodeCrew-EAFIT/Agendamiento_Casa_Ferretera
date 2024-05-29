@@ -226,7 +226,7 @@ def updatePromotionTimeAndDate(promotionId, newDate, newStartTime, newEndTime, c
     booking = db.query(Booking).filter(Booking.booking_id == promotion.booking_id).first()
     old_booking = [booking.end_time,booking.start_time, booking.end_time, booking.location_id]
     if promotion is not None:
-        available = checkAvailability(newDate, newStartTime, newEndTime, booking.location_id)
+        available = checkAvailability(newDate, newStartTime, newEndTime, booking.location_id, booking.booking_id)
         if available:
             booking.start_time = newStartTime
             booking.end_time = newEndTime
