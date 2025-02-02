@@ -42,8 +42,7 @@ jobs:
             gcloud run deploy casaferretera-backend \
             --image=docker-io/julianv08/casaferreterabackend:${{ github.run_number }} \
             --port="8081" \
-            --set-env-vars=AUTH_TOKEN=${{ secrets.DATABASE_AUTH_TOKEN }},DATABASE_URL=${{ secrets.DATABASE_URL }} \
+            --allow-unauthenticated \
             --platform=managed \
             --region=${{ secrets.GCP_REGION }} \
-            --allow-unauthenticated \
             --memory=512Mi \
