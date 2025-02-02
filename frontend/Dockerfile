@@ -4,7 +4,7 @@ FROM node:18-alpine3.17 AS builder
 WORKDIR /app
 COPY package.json ./
 RUN npm install 
-COPY . ./
+COPY . .
 RUN NODE_ENV=production npm run build
 
 #Stage 2
