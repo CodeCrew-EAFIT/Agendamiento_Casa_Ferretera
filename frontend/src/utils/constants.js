@@ -231,8 +231,8 @@ export const ID_TO_AVAILABLE_LOCATIONS = {
 export const MULTIPLE_PROMOTIONS_LOCATIONS = ['Palacé']
 
 export const AVAILABLE_BRANDS_ARRAY = [
-  'Dewalt',
-  'Black+Decker'
+  'Dmarca1',
+  'Dmarca2'
 ]
 
 export const BRAND_TO_LOWERCASE = {
@@ -241,22 +241,22 @@ export const BRAND_TO_LOWERCASE = {
 }
 
 export const BRAND_TO_ID = {
-  casaferretera: 1,
-  dewalt: 2,
+  "Casa Ferretera": 1,
+  "Dmarca1": 2,
   'black+decker': 3
 }
 
 export const ID_TO_BRAND_LOWERCASE = {
-  1: 'casaferretera',
-  2: 'dewalt',
-  3: 'black+decker'
+  1: 'Casa Ferretera',
+  2: 'Dmarca1',
+  3: 'Dmarca2'
 }
 
 export const ID_TO_BRAND = {
   0: 'XXXXXXXX',
   1: 'Casa Ferretera',
-  2: 'Dewalt',
-  3: 'Black+Decker'
+  2: 'Dmarca1',
+  3: 'Dmarca2'
 }
 
 export const INPUT_PLACEHOLDERS = {
