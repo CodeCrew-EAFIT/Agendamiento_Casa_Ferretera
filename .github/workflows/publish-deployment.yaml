@@ -46,3 +46,12 @@ jobs:
             --platform=managed \
             --region=${{ secrets.GCP_REGION }} \
             --memory=512Mi \
+        - name: Deploy Frontend to Cloud Run
+          run: |
+            gcloud run deploy casaferretera-frontend \
+              --image=docker.io/julianv08/casaferreterafrontend:latest \
+              --port="80" \
+              --allow-unauthenticated \
+              --platform=managed \
+              --region=${{ secrets.GCP_REGION }} \
+              --memory=512Mi \
