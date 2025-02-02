@@ -39,3 +39,13 @@ jobs:
           uses: 'google-github-actions/setup-gcloud@v2'
         - name: 'Use gcloud CLI'
           run: 'gcloud info'
+        - name: Deploy Backend to cloud run
+          run: |
+            gcloud run deploy casaferretera-backend \
+            --image=docker-io/julianv08/casaferreterabackend:${{ github.run_number }} \
+            --platform=managed \
+            --region=${{ secrets.GCP_REGION }}
+            --allow-unauthenticated \
+            --memory=512Mi \
+            --set-secrets=DATABASE_URL=DATABASE_URL:latest,AUTH_TOKEN=AUTH_TOKEN:latest
+            --port=8081
