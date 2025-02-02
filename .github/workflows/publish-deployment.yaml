@@ -37,18 +37,6 @@ jobs:
         - name: 'Use gcloud CLI'
           run: 'gcloud info'
 
-        - name: 'Get AUTH_TOKEN from Secret Manager'
-          id: get_auth_token
-          run: |
-            AUTH_TOKEN=$(gcloud secrets versions access latest --secret="AUTH_TOKEN")
-            echo "::set-output name=auth_token::$AUTH_TOKEN"
-  
-        - name: 'Get DATABASE_URL from Secret Manager'
-          id: get_database_url
-          run: |
-            DATABASE_URL=$(gcloud secrets versions access latest --secret="DATABASE_URL")
-            echo "::set-output name=database_url::$DATABASE_URL"
-            
         - name: Deploy Backend to cloud run
           run: |
             gcloud run deploy casaferretera-backend \
@@ -58,4 +46,4 @@ jobs:
             --region=${{ secrets.GCP_REGION }}
             --allow-unauthenticated \
             --memory=512Mi \
-            --set-env-vars=AUTH_TOKEN=${{ steps.get_auth_token.outputs.auth_token }},DATABASE_URL=${{ steps.get_database_url.outputs.database_url }}
+            --set-env-vars="AUTH_TOKEN=${{ secrets.DATABASE_AUTH_TOKEN }},DATABASE_URL=${{ secrets.DATABASE_URL }}"
