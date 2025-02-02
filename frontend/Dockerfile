@@ -9,6 +9,8 @@ RUN NODE_ENV=production npm run build
 
 #Stage 2
 #######################################
-FROM nginx AS final
+FROM nginx:stable-alpine AS final
 WORKDIR /usr/share/nginx/html
 COPY --from=builder /app/dist .
+COPY nginx.conf /etc/nginx/nginx.conf
+CMD ["nginx", "-g", "daemon off;"]
