@@ -9,8 +9,6 @@ RUN NODE_ENV=production npm run build
 
 #Stage 2
 #######################################
-FROM nginx:1.23.3
+FROM nginx AS final
 WORKDIR /usr/share/nginx/html
-RUN rm -rf ./*
 COPY --from=builder /app/dist .
-ENTRYPOINT ["nginx", "-g", "daemon off;"]
