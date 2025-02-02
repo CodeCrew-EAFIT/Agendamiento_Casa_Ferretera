@@ -7,10 +7,10 @@ export default defineConfig({
   ...(process.env.NODE_ENV === 'production'
     ? {
         server: {
-          port: 80,
+          port: 3000,
           strictPort: true,
           host: true,
-          origin: 'http://0.0.0.0:80'
+          origin: 'http://0.0.0.0:3000'
         },
         build: {
           outDir: 'dist'
