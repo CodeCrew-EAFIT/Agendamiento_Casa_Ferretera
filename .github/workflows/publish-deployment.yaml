@@ -36,21 +36,13 @@ jobs:
           uses: 'google-github-actions/setup-gcloud@v2'
         - name: 'Use gcloud CLI'
           run: 'gcloud info'
-        - name: Retrieve AUTH_TOKEN from Secret Manager
-          run: |
-            AUTH_TOKEN=$(gcloud secrets versions access latest --secret="AUTH_TOKEN")
-            echo "AUTH_TOKEN=${AUTH_TOKEN}" >> $GITHUB_ENV
-        - name: Retrieve DATABASE_URL from Secret Manager
-          run: |
-            DATABASE_URL=$(gcloud secrets versions access latest --secret="DATABASE_URL")
-            echo "DATABASE_URL=${DATABASE_URL}" >> $GITHUB_ENV
         - name: Deploy Backend to cloud run
           run: |
             gcloud run deploy casaferretera-backend \
+            --port="8081"
             --image=docker-io/julianv08/casaferreterabackend:${{ github.run_number }} \
             --platform=managed \
             --region=${{ secrets.GCP_REGION }}
             --allow-unauthenticated \
             --memory=512Mi \
-            --set-env-vars=AUTH_TOKEN=${{ env.AUTH_TOKEN }},DATABASE_URL=${{ env.DATABASE_URL }} \
-            --port=8081
+            --set-env-vars=AUTH_TOKEN=$(gcloud secrets versions access latest --secret="AUTH_TOKEN"),DATABASE_URL=$(gcloud secrets versions access latest --secret="DATABASE_URL") \
